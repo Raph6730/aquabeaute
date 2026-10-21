@@ -735,8 +735,9 @@ $('#ddMenu').innerHTML=GAL_CATS.map(([k,l,d,i])=>`<a href="#galerie/${k}" role="
 $('#mMenu').innerHTML=GAL_CATS.map(([k,l])=>`<a href="#galerie/${k}">${l}</a>`).join('');
 const dd=$('#ddPhotos'),ddBtn=dd.querySelector('button');
 const setDD=o=>{dd.classList.toggle('open',o);ddBtn.setAttribute('aria-expanded',o);};
-ddBtn.onclick=e=>{e.stopPropagation();setDD(!dd.classList.contains('open'));};
-dd.addEventListener('mouseenter',()=>{if(matchMedia('(hover:hover)').matches)setDD(true);});
+let hoverAt=0;
+ddBtn.onclick=e=>{e.stopPropagation();if(Date.now()-hoverAt<600){setDD(true);return;}setDD(!dd.classList.contains('open'));};
+dd.addEventListener('mouseenter',()=>{if(matchMedia('(hover:hover)').matches){hoverAt=Date.now();setDD(true);}});
 dd.addEventListener('mouseleave',()=>{if(matchMedia('(hover:hover)').matches)setDD(false);});
 document.addEventListener('click',e=>{if(!dd.contains(e.target))setDD(false);});
 /* carrousel */
