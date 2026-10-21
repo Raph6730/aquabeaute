@@ -297,6 +297,54 @@ section{padding:60px 0}
 .success{text-align:center;padding:26px 6px}
 .success .ok{width:64px;height:64px;border-radius:50%;background:var(--pink-soft);color:var(--magenta);display:grid;place-items:center;margin:0 auto 14px;font-size:1.8rem}
 
+/* menu déroulant Photos */
+.dd{position:relative}
+.dd>button{border:0;background:none;padding:8px 13px;border-radius:999px;font-size:.9rem;color:var(--ink-soft);font-weight:500;display:inline-flex;align-items:center;gap:4px}
+.dd>button.on{color:var(--blue-deep);background:var(--blue-soft)}
+.dd>button svg{width:14px;height:14px;transition:transform .2s}
+.dd.open>button svg{transform:rotate(180deg)}
+.dd-menu{position:absolute;top:calc(100% + 8px);left:50%;transform:translateX(-50%);background:var(--surface);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);padding:8px;min-width:260px;display:none;z-index:45}
+.dd.open .dd-menu{display:grid;gap:2px}
+.dd-menu a{display:flex;align-items:center;gap:12px;padding:8px 10px;border-radius:12px;text-decoration:none;font-size:.9rem;color:var(--ink)}
+.dd-menu a:hover{background:var(--soft)}
+.dd-menu img{width:46px;height:46px;border-radius:10px;object-fit:cover;background:var(--soft);flex:none}
+.dd-menu small{display:block;color:var(--muted);font-size:.76rem}
+.m-dd summary{list-style:none;padding:13px 4px;font-size:1.02rem;font-weight:500;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;cursor:pointer}
+.m-dd summary::-webkit-details-marker{display:none}
+.m-dd summary::after{content:"▾";color:var(--muted)}
+.m-dd[open] summary::after{content:"▴"}
+.m-dd a{padding:11px 4px 11px 18px!important;font-size:.95rem!important;color:var(--ink-soft)}
+
+/* carrousel */
+.carousel{position:relative}
+.car-track{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-behavior:smooth;scrollbar-width:none;padding-bottom:4px}
+.car-track::-webkit-scrollbar{display:none}
+.car-item{flex:0 0 82%;scroll-snap-align:start;position:relative;border-radius:18px;overflow:hidden;aspect-ratio:4/3;background:var(--soft);border:0;padding:0;cursor:zoom-in}
+@media(min-width:700px){.car-item{flex-basis:calc((100% - 24px)/3)}}
+.car-item img{width:100%;height:100%;object-fit:cover;transition:transform .5s}
+.car-item:hover img{transform:scale(1.04)}
+.car-item span{position:absolute;left:10px;bottom:10px;background:rgba(255,255,255,.92);color:#2A2A33;font-size:.8rem;font-weight:500;padding:4px 10px;border-radius:999px}
+.car-btn{position:absolute;top:50%;transform:translateY(-50%);width:44px;height:44px;border-radius:50%;border:1px solid var(--line);background:var(--surface);box-shadow:var(--shadow);display:none;place-items:center;z-index:2}
+.car-btn svg{width:20px;height:20px}
+.car-btn.prev{left:-14px}.car-btn.next{right:-14px}
+@media(min-width:700px){.car-btn{display:grid}}
+.car-dots{display:flex;justify-content:center;gap:6px;margin-top:14px}
+.car-dots button{width:8px;height:8px;border-radius:50%;border:0;padding:0;background:var(--line)}
+.car-dots button.on{background:var(--magenta);width:22px;border-radius:4px}
+
+/* page galerie */
+.gal-grid{columns:2;column-gap:12px}
+@media(min-width:760px){.gal-grid{columns:3}}
+.gal-grid button{display:block;width:100%;margin:0 0 12px;break-inside:avoid;border:0;padding:0;border-radius:16px;overflow:hidden;background:var(--soft);cursor:zoom-in;position:relative}
+.gal-grid img{width:100%;height:auto;display:block}
+.gal-grid span{position:absolute;left:8px;bottom:8px;background:rgba(255,255,255,.92);color:#2A2A33;font-size:.75rem;font-weight:500;padding:3px 9px;border-radius:999px}
+.lb{position:fixed;inset:0;background:rgba(10,10,14,.92);z-index:80;display:none;flex-direction:column;align-items:center;justify-content:center;padding:20px}
+.lb.on{display:flex}
+.lb img{max-width:100%;max-height:78vh;border-radius:12px;object-fit:contain}
+.lb p{color:#fff;margin:14px 0 0;font-size:.95rem;text-align:center}
+.lb button{position:absolute;border:0;background:rgba(255,255,255,.14);color:#fff;width:48px;height:48px;border-radius:50%;font-size:1.4rem;display:grid;place-items:center}
+.lb .x{top:16px;right:16px}.lb .l{left:12px;top:50%}.lb .r{right:12px;top:50%}
+
 footer.site{background:var(--soft);padding:40px 0 30px;font-size:.88rem;color:var(--ink-soft)}
 footer.site .wrap{display:grid;gap:24px}
 @media(min-width:760px){footer.site .wrap{grid-template-columns:1.2fr 1fr 1fr}}
@@ -332,6 +380,10 @@ footer.site a{text-decoration:none;display:block;padding:3px 0}
       <a href="#soins" data-nav="soins">Soins & tarifs</a>
       <a href="#bons-cadeaux" data-nav="bons-cadeaux" class="gift-link">Bons cadeaux</a>
       <a href="#produits" data-nav="produits">Produits</a>
+      <div class="dd" id="ddPhotos">
+        <button type="button" aria-expanded="false" aria-haspopup="true" data-navbtn="galerie">Photos <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></button>
+        <div class="dd-menu" id="ddMenu"></div>
+      </div>
       <a href="#contact" data-nav="contact">Contact</a>
     </nav>
     <div class="top-actions">
@@ -345,6 +397,7 @@ footer.site a{text-decoration:none;display:block;padding:3px 0}
     <a href="#soins">Soins & tarifs</a>
     <a href="#bons-cadeaux" style="color:var(--magenta)">Bons cadeaux</a>
     <a href="#produits">Produits</a>
+    <details class="m-dd"><summary>Photos</summary><div id="mMenu" style="display:grid"></div></details>
     <a href="#contact">Contact & horaires</a>
   </div>
 </header>
@@ -390,6 +443,19 @@ footer.site a{text-decoration:none;display:block;padding:3px 0}
         <a class="btn btn-gift" href="#bons-cadeaux">Créer mon bon cadeau</a>
         <div class="pp-note">Paiement sécurisé par <span class="pp-logo"><span class="p1">Pay</span><span class="p2">Pal</span></span></div>
       </div>
+    </div>
+  </section>
+
+  <section style="padding-bottom:20px">
+    <div class="wrap">
+      <div class="sec-head center"><span class="kicker">Visitez l'institut</span><h2>Bienvenue chez <em>Aqua Beauté</em></h2></div>
+      <div class="carousel">
+        <button class="car-btn prev" id="carPrev" aria-label="Photo précédente"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 6l-6 6 6 6"/></svg></button>
+        <div class="car-track" id="carTrack"></div>
+        <button class="car-btn next" id="carNext" aria-label="Photo suivante"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg></button>
+      </div>
+      <div class="car-dots" id="carDots"></div>
+      <div style="text-align:center;margin-top:18px"><a class="btn btn-ghost" href="#galerie">Voir toutes les photos</a></div>
     </div>
   </section>
 
@@ -556,6 +622,17 @@ footer.site a{text-decoration:none;display:block;padding:3px 0}
   </section>
 </div>
 
+<div class="page" id="p-galerie">
+  <section>
+    <div class="wrap">
+      <div class="sec-head"><span class="kicker">En images</span><h2>Les photos de l'institut</h2><p>L'accueil, l'espace boutique, les cabines de soin et quelques soins en cours. Touchez une photo pour l'agrandir.</p></div>
+      <div class="tabs" id="galTabs"></div>
+      <div class="gal-grid" id="galGrid"></div>
+      <div class="ctas" style="margin-top:20px"><a class="btn btn-blue" href="tel:0388230098">Prendre rendez-vous</a><a class="btn btn-gift" href="#bons-cadeaux">Offrir un bon cadeau</a></div>
+    </div>
+  </section>
+</div>
+
 <div class="page" id="p-contact">
   <section>
     <div class="wrap">
@@ -590,7 +667,7 @@ footer.site a{text-decoration:none;display:block;padding:3px 0}
   <div class="wrap">
     <div><h4>Aqua Beauté</h4>Institut de beauté SPA<br>8 rue du Maréchal Foch, 67190 Mutzig<br><a href="tel:0388230098">03 88 23 00 98</a><a href="mailto:contact@aquabeaute-esthetique.fr">contact@aquabeaute-esthetique.fr</a></div>
     <div><h4>Nos soins & services</h4><a href="#soins/visage">Soins visage</a><a href="#soins/corps">Soins corps</a><a href="#soins/epilation">Épilation</a><a href="#soins/lumiere">Lumière pulsée</a><a href="#soins/minceur">Méthodes amincissantes</a></div>
-    <div><h4>Boutique</h4><a href="#bons-cadeaux">Bons cadeaux</a><a href="#produits">Produits & accessoires</a><a href="#contact">Retrait à l'institut</a><a href="#contact">Conditions de vente</a></div>
+    <div><h4>Boutique</h4><a href="#bons-cadeaux">Bons cadeaux</a><a href="#produits">Produits & accessoires</a><a href="#galerie">Photos de l'institut</a><a href="#contact">Retrait à l'institut</a><a href="#contact">Conditions de vente</a></div>
     <div class="legal">© Aqua Beauté · SIREN 798 632 329 · Mentions légales · CGV · Confidentialité — Proposition de refonte, démonstration non contractuelle.</div>
   </div>
 </footer>
@@ -607,6 +684,7 @@ footer.site a{text-decoration:none;display:block;padding:3px 0}
   <footer id="drawerFooter"></footer>
 </aside>
 <div class="toast" id="toast"></div>
+<div class="lb" id="lb" role="dialog" aria-modal="true" aria-label="Photo agrandie"><button class="x" id="lbX" aria-label="Fermer">✕</button><button class="l" id="lbL" aria-label="Précédente">‹</button><img id="lbImg" alt=""><p id="lbCap"></p><button class="r" id="lbR" aria-label="Suivante">›</button></div>
 
 <script>
 /* ===================== RÉGLAGES ===================== */
@@ -633,6 +711,67 @@ bg($('#hlMinceur'),IMG+'2023/05/african-american-lady-having-skin-scrubbing-proc
 const BRANDS=[['2022/12/Frame-2-1.png','Institut Esthederm'],['2022/12/Frame-6.png','Bernard Cassière'],['2022/12/image-4-1.png','Parisax'],['2022/12/Frame-5-1.png','Autour du Bain'],['2023/03/heromo-1.png','Hérôme'],['2023/03/Acorelle-1.png','Acorelle'],['2023/03/senteurs.png','Les Senteurs Gourmandes'],['2022/12/Frame-3-1.png','Cellutec'],['2023/05/image-17.png','Ariane Expert'],['2023/05/Group-93.png','Roxils · Parisax']];
 $('#brandLogos').innerHTML=BRANDS.map(([u,n],i)=>`<div><img src="${IMG+u}" alt="${n}" loading="lazy" data-bi="${i}"></div>`).join('');
 $$('#brandLogos img').forEach(im=>im.onerror=()=>{im.parentNode.textContent=BRANDS[+im.dataset.bi][1];});
+
+/* photos de l'institut */
+const PHOTOS=[
+ ['2023/08/IMG_9330-1.png','La façade, rue du Maréchal Foch','institut'],
+ ['2023/05/IMG_9330-2.png','L\'accueil et l\'espace boutique','institut'],
+ ['2023/05/IMG_9330-3.png','Produits et accessoires en vente','institut'],
+ ['2023/08/IMG_9330-7.png','Une cabine de soin','cabines'],
+ ['2023/05/IMG_9330-6.png','Cabine de soin et d\'épilation','cabines'],
+ ['2023/05/IMG_9330-5.png','Le solarium','cabines'],
+ ['2022/12/image-2-1.png','Soin du visage','soins'],
+ ['2025/01/soin-chocolat-saint-valentin.jpg','Pause gourmande au chocolat','soins'],
+ ['2025/01/relaxing-back-massage-2025-01-29-08-15-31-utc-scaled.webp','Modelage relaxant','soins'],
+ ['2023/05/j-ai-teste-les-soins-du-visage-1b.webp','Soin visage relaxant','soins'],
+ ['2023/05/african-american-lady-having-skin-scrubbing-proced-2022-12-16-07-52-57-utc-2.png','Minceur : Cellutec G5','soins'],
+ ['elementor/thumbs/IMG_79783-q98wqxlcbcnv5ahsuv63u1rzwd3n2uy58e8pher454.png','Le bon cadeau dans son enveloppe','soins']
+].map(([u,c,g])=>({src:IMG+u,cap:c,g}));
+const GAL_CATS=[['tout','Toutes les photos','Les 12 photos',0],['institut','L\'institut','Façade, accueil, boutique',1],['cabines','Les cabines','Cabines de soin, solarium',3],['soins','Les soins','Visage, corps, minceur',6]];
+let galFilter='tout';
+const shown=()=>PHOTOS.filter(p=>galFilter==='tout'||p.g===galFilter);
+/* menu déroulant */
+$('#ddMenu').innerHTML=GAL_CATS.map(([k,l,d,i])=>`<a href="#galerie/${k}" role="menuitem"><img src="${PHOTOS[i].src}" alt="" loading="lazy" onerror="this.style.visibility='hidden'"><span>${l}<small>${d}</small></span></a>`).join('');
+$('#mMenu').innerHTML=GAL_CATS.map(([k,l])=>`<a href="#galerie/${k}">${l}</a>`).join('');
+const dd=$('#ddPhotos'),ddBtn=dd.querySelector('button');
+const setDD=o=>{dd.classList.toggle('open',o);ddBtn.setAttribute('aria-expanded',o);};
+ddBtn.onclick=e=>{e.stopPropagation();setDD(!dd.classList.contains('open'));};
+dd.addEventListener('mouseenter',()=>{if(matchMedia('(hover:hover)').matches)setDD(true);});
+dd.addEventListener('mouseleave',()=>{if(matchMedia('(hover:hover)').matches)setDD(false);});
+document.addEventListener('click',e=>{if(!dd.contains(e.target))setDD(false);});
+/* carrousel */
+const track=$('#carTrack');
+track.innerHTML=PHOTOS.map((p,i)=>`<button class="car-item" data-lb="${i}" aria-label="Agrandir : ${p.cap}"><img src="${p.src}" alt="${p.cap}" loading="lazy" onerror="this.parentNode.remove()"><span>${p.cap}</span></button>`).join('');
+const items=()=>[...track.children];
+const curIdx=()=>{const x=track.scrollLeft;let best=0,d=1e9;items().forEach((it,i)=>{const dd=Math.abs(it.offsetLeft-track.offsetLeft-x);if(dd<d){d=dd;best=i;}});return best;};
+const goTo=i=>{const its=items();if(!its.length)return;i=(i+its.length)%its.length;track.scrollTo({left:its[i].offsetLeft-track.offsetLeft});};
+const paintDots=()=>{const n=items().length,c=curIdx();$('#carDots').innerHTML=Array.from({length:n},(_,i)=>`<button class="${i===c?'on':''}" data-dot="${i}" aria-label="Photo ${i+1}"></button>`).join('');};
+$('#carPrev').onclick=()=>goTo(curIdx()-1);$('#carNext').onclick=()=>goTo(curIdx()+1);
+$('#carDots').addEventListener('click',e=>{const b=e.target.closest('[data-dot]');if(b)goTo(+b.dataset.dot);});
+let st;track.addEventListener('scroll',()=>{clearTimeout(st);st=setTimeout(paintDots,80);});
+let auto=null,paused=false;
+const startAuto=()=>{stopAuto();if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;auto=setInterval(()=>{if(!paused&&!document.hidden&&$('#p-accueil').classList.contains('on'))goTo(curIdx()+1);},4000);};
+const stopAuto=()=>{if(auto)clearInterval(auto);auto=null;};
+['mouseenter','touchstart','focusin'].forEach(ev=>track.parentNode.addEventListener(ev,()=>paused=true,{passive:true}));
+['mouseleave','touchend','focusout'].forEach(ev=>track.parentNode.addEventListener(ev,()=>setTimeout(()=>paused=false,3000),{passive:true}));
+setTimeout(()=>{paintDots();startAuto();},300);
+/* galerie */
+function renderGal(){
+  $('#galTabs').innerHTML=GAL_CATS.map(([k,l])=>`<button class="tab ${k===galFilter?'on':''}" data-g="${k}">${l}</button>`).join('');
+  $('#galGrid').innerHTML=shown().map((p,i)=>`<button data-lbg="${i}" aria-label="Agrandir : ${p.cap}"><img src="${p.src}" alt="${p.cap}" loading="lazy" onerror="this.parentNode.remove()"><span>${p.cap}</span></button>`).join('');
+}
+$('#galTabs').addEventListener('click',e=>{const b=e.target.closest('[data-g]');if(b)location.hash='galerie/'+b.dataset.g;});
+/* visionneuse */
+let lbList=[],lbI=0;
+const lbShow=()=>{const p=lbList[lbI];$('#lbImg').src=p.src;$('#lbImg').alt=p.cap;$('#lbCap').textContent=p.cap+'  ·  '+(lbI+1)+' / '+lbList.length;};
+const lbOpen=(list,i)=>{lbList=list;lbI=i;lbShow();$('#lb').classList.add('on');};
+const lbClose=()=>$('#lb').classList.remove('on');
+track.addEventListener('click',e=>{const b=e.target.closest('[data-lb]');if(b)lbOpen(PHOTOS,+b.dataset.lb);});
+$('#galGrid').addEventListener('click',e=>{const b=e.target.closest('[data-lbg]');if(b)lbOpen(shown(),+b.dataset.lbg);});
+$('#lbX').onclick=lbClose;$('#lbL').onclick=()=>{lbI=(lbI-1+lbList.length)%lbList.length;lbShow();};$('#lbR').onclick=()=>{lbI=(lbI+1)%lbList.length;lbShow();};
+$('#lb').addEventListener('click',e=>{if(e.target.id==='lb')lbClose();});
+document.addEventListener('keydown',e=>{if(!$('#lb').classList.contains('on'))return;if(e.key==='Escape')lbClose();if(e.key==='ArrowLeft')$('#lbL').click();if(e.key==='ArrowRight')$('#lbR').click();});
+let tx=null;$('#lb').addEventListener('touchstart',e=>{tx=e.touches[0].clientX;},{passive:true});$('#lb').addEventListener('touchend',e=>{if(tx==null)return;const dx=e.changedTouches[0].clientX-tx;if(Math.abs(dx)>50)(dx>0?$('#lbL'):$('#lbR')).click();tx=null;});
 
 /* thème */
 const root=document.documentElement;
@@ -876,7 +1015,7 @@ $('#menuBtn').onclick=()=>$('#mobileNav').classList.toggle('open');
 $('#contactForm').onsubmit=e=>{e.preventDefault();toast('Démonstration : message non envoyé');e.target.reset();};
 
 /* navigation */
-const PAGES=['accueil','soins','bons-cadeaux','produits','contact'];
+const PAGES=['accueil','soins','bons-cadeaux','produits','galerie','contact'];
 function route(){
   const h=(location.hash.slice(1)||'accueil').split('/');
   const page=PAGES.includes(h[0])?h[0]:(h[0]==='boutique'?'bons-cadeaux':'accueil');
@@ -885,6 +1024,8 @@ function route(){
   $('#mobileNav').classList.remove('open');
   if(page==='soins'){if(h[1]&&CATS.some(c=>c.id===h[1]))curCat=h[1];renderSvc();}
   if(page==='bons-cadeaux')renderGC();
+  if(page==='galerie'){galFilter=GAL_CATS.some(c=>c[0]===h[1])?h[1]:'tout';renderGal();}
+  ddBtn.classList.toggle('on',page==='galerie');setDD(false);lbClose();
   closeDrawer();
   window.scrollTo(0,0);
 }
