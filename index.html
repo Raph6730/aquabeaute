@@ -379,7 +379,6 @@ footer.site a{text-decoration:none;display:block;padding:3px 0}
       <a href="#accueil" data-nav="accueil">Accueil</a>
       <a href="#soins" data-nav="soins">Soins & tarifs</a>
       <a href="#bons-cadeaux" data-nav="bons-cadeaux" class="gift-link">Bons cadeaux</a>
-      <a href="#produits" data-nav="produits">Produits</a>
       <div class="dd" id="ddPhotos">
         <button type="button" aria-expanded="false" aria-haspopup="true" data-navbtn="galerie">Photos <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></button>
         <div class="dd-menu" id="ddMenu"></div>
@@ -396,7 +395,6 @@ footer.site a{text-decoration:none;display:block;padding:3px 0}
     <a href="#accueil">Accueil</a>
     <a href="#soins">Soins & tarifs</a>
     <a href="#bons-cadeaux" style="color:var(--magenta)">Bons cadeaux</a>
-    <a href="#produits">Produits</a>
     <details class="m-dd"><summary>Photos</summary><div id="mMenu" style="display:grid"></div></details>
     <a href="#contact">Contact & horaires</a>
   </div>
@@ -606,22 +604,6 @@ footer.site a{text-decoration:none;display:block;padding:3px 0}
   </section>
 </div>
 
-<div class="page" id="p-produits">
-  <section>
-    <div class="wrap">
-      <div class="sec-head"><span class="kicker">En vente à l'institut</span><h2>Nos produits & accessoires</h2><p>Commandez en ligne, retirez à l'institut ou recevez chez vous.</p></div>
-      <div class="filters" id="prodFilters"></div>
-      <div class="note">Produits et prix donnés à titre d'exemple : le catalogue réel sera rempli avec les références vendues à l'institut.</div>
-      <div class="products" id="prodGrid"></div>
-      <div class="trust">
-        <div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg><span><b>Paiement PayPal</b><br>Compte PayPal ou carte bancaire</span></div>
-        <div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 10l9-6 9 6v10H3z"/><path d="M9 20v-6h6v6"/></svg><span><b>Retrait gratuit</b><br>À l'institut, 8 rue du Maréchal Foch</span></div>
-        <div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 21s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 11c0 5.6-7 10-7 10z"/></svg><span><b>Conseils personnalisés</b><br>Une question ? Appelez Christelle</span></div>
-      </div>
-    </div>
-  </section>
-</div>
-
 <div class="page" id="p-galerie">
   <section>
     <div class="wrap">
@@ -667,7 +649,7 @@ footer.site a{text-decoration:none;display:block;padding:3px 0}
   <div class="wrap">
     <div><h4>Aqua Beauté</h4>Institut de beauté SPA<br>8 rue du Maréchal Foch, 67190 Mutzig<br><a href="tel:0388230098">03 88 23 00 98</a><a href="mailto:contact@aquabeaute-esthetique.fr">contact@aquabeaute-esthetique.fr</a></div>
     <div><h4>Nos soins & services</h4><a href="#soins/visage">Soins visage</a><a href="#soins/corps">Soins corps</a><a href="#soins/epilation">Épilation</a><a href="#soins/lumiere">Lumière pulsée</a><a href="#soins/minceur">Méthodes amincissantes</a></div>
-    <div><h4>Boutique</h4><a href="#bons-cadeaux">Bons cadeaux</a><a href="#produits">Produits & accessoires</a><a href="#galerie">Photos de l'institut</a><a href="#contact">Retrait à l'institut</a><a href="#contact">Conditions de vente</a></div>
+    <div><h4>Boutique</h4><a href="#bons-cadeaux">Bons cadeaux</a><a href="#galerie">Photos de l'institut</a><a href="#contact">Retrait à l'institut</a><a href="#contact">Conditions de vente</a></div>
     <div class="legal">© Aqua Beauté · SIREN 798 632 329 · Mentions légales · CGV · Confidentialité — Proposition de refonte, démonstration non contractuelle.</div>
   </div>
 </footer>
@@ -879,25 +861,6 @@ $('#gcAdd').onclick=()=>{
   openDrawer();
 };
 
-/* produits (exemples, marques de l'institut) */
-const P=(id,cat,brand,name,price,color,shape,tag)=>({id,cat,brand,name,price,color,shape,tag});
-const PRODUCTS=[
- P('p1','soin','Institut Esthederm','Crème hydratante éclat 50 ml',49,'#E9D7EA','jar','Best-seller'),
- P('p2','soin','Institut Esthederm','Sérum jeunesse 30 ml',72,'#CDE9F6','dropper'),
- P('p3','soin','Institut Esthederm','Brume d\'eau cellulaire 100 ml',29,'#DCEBF2','spray'),
- P('p4','soin','Bernard Cassière','Gommage visage doux 50 ml',26,'#F6D5E4','tube'),
- P('p5','soin','Bernard Cassière','Masque hydratant 50 ml',28,'#D5E8D4','jar','Nouveau'),
- P('p6','corps','Autour du Bain','Huile de massage relaxante 100 ml',24,'#F3E3B8','bottle'),
- P('p7','corps','Les Senteurs Gourmandes','Eau de toilette gourmande 100 ml',32,'#F6E0EC','perfume'),
- P('p8','corps','Acorelle','Eau de parfum bio 50 ml',39,'#E8D3E6','perfume'),
- P('p9','corps','Hérôme','Crème mains réparatrice 75 ml',16,'#E7F5FB','tube'),
- P('p10','corps','Parisax','Gel jambes légères 150 ml',22,'#CFEBEF','tube'),
- P('p11','accessoire','Accessoires','Foulard léger imprimé',25,'#6EC1E4','scarf'),
- P('p12','accessoire','Accessoires','Bracelet perles et doré',18,'#D9B46A','bracelet','Idée cadeau'),
- P('p13','accessoire','Accessoires','Sac cabas',45,'#B88768','bag'),
- P('p14','accessoire','Accessoires','Chapeau de paille',29,'#E2C98F','hat'),
- P('p15','soin','Coffrets','Coffret découverte visage',59,'#FBE8F2','box','Coffret')
-];
 function shapeSVG(s,c){
   const o='stroke="rgba(42,42,51,.22)" stroke-width="1.5"';
   const S={
@@ -915,17 +878,8 @@ function shapeSVG(s,c){
   };
   return `<svg viewBox="0 0 100 100" aria-hidden="true">${S[s]||S.jar}</svg>`;
 }
-const FILTERS=[['tous','Tout'],['soin','Soins visage'],['corps','Corps & parfums'],['accessoire','Accessoires']];
-let curFilter='tous';
-function renderProducts(){
-  $('#prodFilters').innerHTML=FILTERS.map(([k,l])=>`<button class="tab ${k===curFilter?'on':''}" data-f="${k}">${l}</button>`).join('');
-  $('#prodGrid').innerHTML=PRODUCTS.filter(p=>curFilter==='tous'||p.cat===curFilter).map(p=>`<article class="prod"><div class="pic">${p.tag?`<span class="tag">${p.tag}</span>`:''}${shapeSVG(p.shape,p.color)}</div><div class="body"><span class="brand-n">${p.brand}</span><h4>${esc(p.name)}</h4><div class="row"><span class="price">${eur(p.price)}</span><button class="add" data-add="${p.id}" aria-label="Ajouter ${esc(p.name)} au panier">+</button></div></div></article>`).join('');
-}
-$('#prodFilters').addEventListener('click',e=>{const b=e.target.closest('[data-f]');if(b){curFilter=b.dataset.f;renderProducts();}});
-$('#prodGrid').addEventListener('click',e=>{const b=e.target.closest('[data-add]');if(!b)return;const p=PRODUCTS.find(x=>x.id===b.dataset.add);addToCart({id:p.id,kind:'prod',name:p.name,sub:p.brand,price:p.price,qty:1,shape:p.shape,color:p.color});toast('Ajouté au panier');b.classList.add('done');b.textContent='✓';setTimeout(()=>{b.classList.remove('done');b.textContent='+'},1200);});
-
 /* panier */
-let cart=[];try{cart=JSON.parse(localStorage.getItem('ab-cart')||'[]')}catch(e){cart=[]}
+let cart=[];try{cart=JSON.parse(localStorage.getItem('ab-cart')||'[]').filter(x=>x.kind==='gc')}catch(e){cart=[]}
 const save=()=>{try{localStorage.setItem('ab-cart',JSON.stringify(cart))}catch(e){}};
 function addToCart(item){const ex=item.kind==='prod'&&cart.find(x=>x.id===item.id);if(ex)ex.qty++;else cart.push(item);save();updateBadge();}
 function updateBadge(){const n=cart.reduce((a,b)=>a+b.qty,0);$('#cartCount').textContent=n;$('#cartCount').hidden=!n;}
@@ -961,7 +915,7 @@ function renderDrawer(){
   const C=$('#drawerContent'),F=$('#drawerFooter');
   if(step===3){
     $('#drawerTitle').textContent='Merci !';
-    C.innerHTML=`<div class="success"><div class="ok">✓</div><h3 style="font-size:1.35rem">Paiement confirmé</h3><p style="color:var(--ink-soft)">Merci ${esc(buyer.name||'')} ! Commande n° <b>${orderRef}</b>.<br>${buyer._allE?'Christelle vous envoie le bon cadeau par e-mail sous 24 h (jours d\'ouverture).':'Christelle vous prévient dès que votre commande est prête à l\'institut.'}</p>${LIVE?'':'<div class="note pink" style="text-align:left">Démonstration : aucun paiement n\'a été effectué.</div>'}</div>`;
+    C.innerHTML=`<div class="success"><div class="ok">✓</div><h3 style="font-size:1.35rem">Paiement confirmé</h3><p style="color:var(--ink-soft)">Merci ${esc(buyer.name||'')} ! Commande n° <b>${orderRef}</b>.<br>${buyer._allE?'Christelle vous envoie le bon cadeau par e-mail sous 24 h (jours d\'ouverture).':'Votre bon cadeau vous attend à l\'institut dans sa jolie enveloppe.'}</p>${LIVE?'':'<div class="note pink" style="text-align:left">Démonstration : aucun paiement n\'a été effectué.</div>'}</div>`;
     F.innerHTML=`<button class="btn btn-blue" id="dDone">Retour au site</button>`;$('#dDone').onclick=()=>{closeDrawer();location.hash='accueil';};return;
   }
   if(!cart.length){
@@ -972,7 +926,7 @@ function renderDrawer(){
   if(step===0){
     $('#drawerTitle').textContent='Votre panier';
     C.innerHTML=bar()+cart.map(lineHTML).join('')+`<div style="margin-top:14px"><a class="btn btn-ghost btn-sm" href="#bons-cadeaux" id="dMoreGc">+ Un autre bon cadeau</a></div>`;
-    F.innerHTML=totalsHTML()+`<button class="btn btn-gift" id="dNext">Commander</button><button class="btn btn-ghost" id="dCont">Continuer mes achats</button>`;
+    F.innerHTML=totalsHTML()+`<button class="btn btn-gift" id="dNext">Commander</button><button class="btn btn-ghost" id="dCont">Continuer la visite</button>`;
     $('#dMoreGc').onclick=closeDrawer;$('#dNext').onclick=()=>{step=1;renderDrawer();};$('#dCont').onclick=closeDrawer;
   }else if(step===1){
     $('#drawerTitle').textContent='Vos coordonnées';
@@ -1016,10 +970,10 @@ $('#menuBtn').onclick=()=>$('#mobileNav').classList.toggle('open');
 $('#contactForm').onsubmit=e=>{e.preventDefault();toast('Démonstration : message non envoyé');e.target.reset();};
 
 /* navigation */
-const PAGES=['accueil','soins','bons-cadeaux','produits','galerie','contact'];
+const PAGES=['accueil','soins','bons-cadeaux','galerie','contact'];
 function route(){
   const h=(location.hash.slice(1)||'accueil').split('/');
-  const page=PAGES.includes(h[0])?h[0]:(h[0]==='boutique'?'bons-cadeaux':'accueil');
+  const page=PAGES.includes(h[0])?h[0]:(['boutique','produits'].includes(h[0])?'bons-cadeaux':'accueil');
   $$('.page').forEach(p=>p.classList.toggle('on',p.id==='p-'+page));
   $$('[data-nav]').forEach(a=>a.classList.toggle('on',a.dataset.nav===page));
   $('#mobileNav').classList.remove('open');
@@ -1031,7 +985,7 @@ function route(){
   window.scrollTo(0,0);
 }
 window.addEventListener('hashchange',route);
-renderGC();renderProducts();updateBadge();route();
+renderGC();updateBadge();route();
 })();
 </script>
 </body>
