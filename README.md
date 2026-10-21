@@ -2,7 +2,7 @@
 
 Proposition de refonte du site de l'institut Aqua Beauté, 8 rue du Maréchal Foch, 67190 Mutzig.
 
-**Voir le site :** https://raph6730.github.io/aquabeaut-/
+**Voir le site :** https://raph6730.github.io/aquabeaute/
 
 ## Ce que contient le site
 - **Accueil** : présentation, statut ouvert/fermé en direct, avis Google, marques.
