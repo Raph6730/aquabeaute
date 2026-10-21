@@ -699,13 +699,16 @@ footer.site a{text-decoration:none;display:block;padding:3px 0}
 /* Identifiant client PayPal de l'institut : compte PayPal Business → developer.paypal.com → Apps & Credentials → mode "Live" → "Client ID".
    Tant qu'il est vide, le paiement reste en mode démonstration. */
 const PAYPAL_CLIENT_ID = '';
+/* Adresse du moteur des bons cadeaux (Cloudflare), ex. 'https://aquabeaute-bons-cadeaux.xxxx.workers.dev'.
+   Les deux réglages doivent être remplis pour que les vrais paiements s'activent. */
+const API_URL = '';
 const IMG = 'https://aquabeaute-esthetique.fr/wp-content/uploads/';
 /* ==================================================== */
 (function(){
 const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
 const eur=n=>(Math.round(n*100)/100).toLocaleString('fr-FR',{minimumFractionDigits:n%1?2:0,maximumFractionDigits:2})+' €';
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const LIVE=!!PAYPAL_CLIENT_ID;
+const LIVE=!!(PAYPAL_CLIENT_ID&&API_URL);
 
 /* images de l'institut (chargées depuis le site actuel, avec repli si indisponibles) */
 function bg(el,url){const i=new Image();i.onload=()=>{el.style.backgroundImage=`url("${url}")`};i.src=url;}
@@ -834,7 +837,7 @@ const CATS=[
    {g:'Bonne mine & solarium',items:[S('Soin bonne mine visage',12,'10 min','Teint hâlé avec un activateur de mélanine végétal.'),S('Soin bonne mine corps complet',33),S('Solarium, la minute',0.8,'','Interdit aux moins de 18 ans. Lunettes de protection obligatoires (6 €).')]}]},
  {id:'minceur',name:'Minceur',short:'Cellutec G5, algues, presso esthétique.',logo:'2022/12/Frame-3-1.png',intro:'Diagnostic offert pour construire votre cure minceur personnalisée.',groups:[
    {g:'Cellutec G5 visage',items:[S('Soin visage anti-rides, remodelant',66,'1 h'),S('Cure de 5 séances',300,'','Au lieu de 330 €.')]},
-   {g:'Cellutec G5 corps',items:[S('1 séance',48,'30 min'),S('10 séances + 1 d\'entretien offerte',480,'30 min'),S('1 séance',53,'40 min'),S('10 séances + 1 d\'entretien offerte',530,'40 min'),S('5 séances + 5 enveloppements d\'algues',430),S('5 séances + 5 presso esthétique',465)]},
+   {g:'Cellutec G5 corps',items:[S('Cellutec G5 corps · 1 séance de 30 min',48),S('10 séances de 30 min + 1 d\'entretien offerte',480),S('Cellutec G5 corps · 1 séance de 40 min',53),S('10 séances de 40 min + 1 d\'entretien offerte',530),S('5 séances + 5 enveloppements d\'algues',430),S('5 séances + 5 presso esthétique',465)]},
    {g:'Soins & cures',items:[S('Cure Silhouette à l\'ananas',620,'8 × 1 h 30','Gommage, enveloppement ananas-thé vert-café, modelage aux ventouses. Gel minceur offert.'),S('Enveloppement d\'algues',39,'30 min','Reminéralisant et amincissant. Forfait 10 + 1 offerte : 390 €.'),S('Presso esthétique',46,'30 min','Drainage, jambes lourdes. Forfait 10 + 1 offerte : 460 €.')]}]}
 ];
 const giftable=(c,it)=>it.p>=25&&it.p<=200&&c.id!=='lumiere';
@@ -873,7 +876,7 @@ function cardHTML(o){
       ${amt}
       ${o.msg?`<div class="gc-msg">« ${esc(o.msg)} »</div>`:''}
     </div>
-    <div class="gc-bottom"><div><small>${valid}</small>${o.code?`<br><span class="gc-code">${o.code}</span>`:''}</div>${o.code?`<div class="qr" data-qr="${o.code}"></div>`:''}</div>
+    <div class="gc-bottom"><div><small>${valid}</small>${o.code?`<br><span class="gc-code">${o.code}</span>`:''}</div>${o.code?`<div class="qr" data-qr="${LIVE?API_URL.replace(/\/$/,'')+'/verifier?code='+o.code:o.code}"></div>`:''}</div>
   </div>`;
 }
 const gcPrice=()=>gc.type==='montant'?gc.amount:GIFTABLE.find(x=>x.n===gc.soin).p;
@@ -942,14 +945,7 @@ function totalsHTML(){const s=subtotal(),sh=shipCost();return `<div class="sum">
 const bar=()=>`<div class="stepbar">${[0,1,2].map(i=>`<span class="${i<=step?'on':''}"></span>`).join('')}</div>`;
 function keepBuyer(){const g=id=>{const el=$(id);return el?el.value.trim():''};buyer={...buyer,name:g('#bName'),mail:g('#bMail'),tel:g('#bTel'),addr:g('#bAddr')};}
 
-/* commande transmise à PayPal : Christelle la retrouve dans le détail du paiement */
-function paypalOrder(){
-  const items=cart.map(x=>({name:(x.name+(x.to?' pour '+x.to:'')).slice(0,127),description:(x.kind==='gc'?(x.design==='fete'?x.occasion+' · ':'Classique · ')+(x.format==='e'?'Envoi par e-mail':'Retrait à l\'institut')+(x.msg?' · Mot : '+x.msg:''):x.sub).slice(0,127),quantity:String(x.qty),unit_amount:{currency_code:'EUR',value:x.price.toFixed(2)},category:x.kind==='gc'?'DIGITAL_GOODS':'PHYSICAL_GOODS'}));
-  const sh=shipCost(),s=subtotal();
-  return {intent:'CAPTURE',purchase_units:[{reference_id:orderRef,custom_id:orderRef,
-    description:('Aqua Beauté · '+buyer.name+' · '+buyer.tel+(hasProducts()?' · '+(ship==='poste'?'Envoi : '+buyer.addr:'Retrait institut'):'')).slice(0,127),
-    amount:{currency_code:'EUR',value:(s+sh).toFixed(2),breakdown:{item_total:{currency_code:'EUR',value:s.toFixed(2)},shipping:{currency_code:'EUR',value:sh.toFixed(2)}}},items}]};
-}
+/* paiement : la commande est créée et vérifiée par le moteur (API_URL), jamais par le navigateur */
 let sdkLoading=null;
 function loadPayPal(){if(window.paypal)return Promise.resolve();if(sdkLoading)return sdkLoading;sdkLoading=new Promise((ok,ko)=>{const s=document.createElement('script');s.src='https://www.paypal.com/sdk/js?client-id='+encodeURIComponent(PAYPAL_CLIENT_ID)+'&currency=EUR&locale=fr_FR&intent=capture';s.onload=ok;s.onerror=()=>{sdkLoading=null;ko();};document.head.appendChild(s);});return sdkLoading;}
 const ALPH='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
@@ -957,9 +953,10 @@ const newCode=()=>{const r=n=>Array.from(crypto.getRandomValues(new Uint8Array(n
 let qrLib=null;
 const loadQR=()=>qrLib||(qrLib=new Promise((ok,ko)=>{const s=document.createElement('script');s.src='https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js';s.onload=ok;s.onerror=()=>{qrLib=null;ko();};document.head.appendChild(s);}));
 function paintQR(root){const els=[...root.querySelectorAll('[data-qr]')];if(!els.length)return;loadQR().then(()=>els.forEach(el=>{el.innerHTML='';new QRCode(el,{text:el.dataset.qr,width:128,height:128,colorDark:'#2A2A33',colorLight:'#ffffff'});})).catch(()=>els.forEach(el=>el.remove()));}
-function done(){buyer._allE=cart.every(x=>x.kind==='gc'&&x.format==='e');
+async function apiPost(path,body){const r=await fetch(API_URL.replace(/\/$/,'')+path,{method:'POST',headers:{'content-type':'application/json'},body:body?JSON.stringify(body):undefined});const j=await r.json().catch(()=>({}));if(!r.ok)throw new Error(j.error||'Le paiement n\'a pas abouti, réessayez.');return j;}
+function done(serverVouchers){buyer._allE=cart.every(x=>x.kind==='gc'&&x.format==='e');
   const until=new Date(Date.now()+365*864e5).toLocaleDateString('fr-FR',{day:'numeric',month:'long',year:'numeric'});
-  buyer._vouchers=cart.filter(x=>x.kind==='gc').flatMap(x=>Array.from({length:x.qty},()=>({...x,code:newCode(),until})));
+  buyer._vouchers=serverVouchers||cart.filter(x=>x.kind==='gc').flatMap(x=>Array.from({length:x.qty},()=>({...x,code:newCode(),until})));
   cart=[];save();updateBadge();step=3;renderDrawer();}
 
 function renderDrawer(){
@@ -1008,13 +1005,14 @@ function renderDrawer(){
     if(LIVE){
       box.innerHTML='<p style="text-align:center;color:var(--muted);font-size:.85rem">Chargement de PayPal…</p>';
       loadPayPal().then(()=>{box.innerHTML='';window.paypal.Buttons({style:{layout:'vertical',color:'gold',shape:'rect',label:'paypal'},
-        createOrder:(d,actions)=>actions.order.create(paypalOrder()),
-        onApprove:(d,actions)=>actions.order.capture().then(()=>done()),
+        createOrder:()=>apiPost('/api/orders',{buyer:{name:buyer.name,email:buyer.mail,tel:buyer.tel},
+          items:cart.map(x=>({type:x.type,amount:x.price,soin:x.soin,design:x.design,occasion:x.occasion,to:x.to,msg:x.msg,format:x.format,qty:x.qty}))}).then(r=>r.id),
+        onApprove:d=>apiPost('/api/orders/'+d.orderID+'/capture').then(r=>{orderRef=r.ref;done(r.vouchers);}).catch(e=>{toast(e.message);}),
         onError:()=>toast('Le paiement n\'a pas abouti, réessayez')}).render(box);})
       .catch(()=>{box.innerHTML='<p style="color:#D2563F;font-size:.85rem">PayPal est indisponible pour le moment. Appelez l\'institut au 03 88 23 00 98.</p>';});
     }else{
       box.innerHTML=`<div style="display:grid;gap:8px"><button class="pp-btn" id="dPay" aria-label="Payer avec PayPal (démonstration)"><span class="pp-logo" style="font-size:1.2rem"><span class="p1">Pay</span><span class="p2">Pal</span></span></button><button class="card-btn" id="dPayCard">Carte de débit ou de crédit</button><small style="text-align:center;color:var(--muted)">Démonstration : les vrais boutons PayPal s'afficheront ici</small></div>`;
-      $('#dPay').onclick=done;$('#dPayCard').onclick=done;
+      $('#dPay').onclick=()=>done();$('#dPayCard').onclick=()=>done();
     }
   }
 }

@@ -1,0 +1,25 @@
+# Moteur des bons cadeaux Aqua Beauté (Cloudflare Workers)
+name = "aquabeaute-bons-cadeaux"
+main = "src/index.js"
+compatibility_date = "2026-10-01"
+
+# Registre des bons cadeaux et des commandes.
+# Remplacer l'id par celui du namespace KV créé dans Cloudflare (voir INSTALLATION.md).
+[[kv_namespaces]]
+binding = "BONS"
+id = "A_REMPLACER_PAR_L_ID_DU_NAMESPACE_KV"
+
+[vars]
+# "sandbox" pour les essais, "live" pour les vrais paiements
+PAYPAL_ENV = "sandbox"
+# Adresse du site autorisée à appeler le moteur
+ALLOWED_ORIGIN = "https://raph6730.github.io"
+# Expéditeur des e-mails (doit être validé dans Brevo)
+SENDER_EMAIL = "contact@aquabeaute-esthetique.fr"
+SENDER_NAME = "Aqua Beauté"
+# Copie de chaque bon envoyée à l'institut
+SHOP_EMAIL = "contact@aquabeaute-esthetique.fr"
+SITE_URL = "https://raph6730.github.io/aquabeaute/"
+
+# Secrets à saisir dans Cloudflare (Settings > Variables and Secrets), jamais ici :
+#   PAYPAL_CLIENT_ID, PAYPAL_SECRET, BREVO_API_KEY, STAFF_PIN

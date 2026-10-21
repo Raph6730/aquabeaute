@@ -11,6 +11,9 @@ Proposition de refonte du site de l'institut Aqua Beauté, 8 rue du Maréchal Fo
 - **Photos** : menu déroulant, carrousel sur l'accueil et page avec toutes les photos de l'institut.
 - **L'institut** et **Contact** : horaires, plan d'accès, demande de rappel.
 
+## Bons cadeaux automatiques
+Le dossier `worker/` contient le moteur qui encaisse les paiements PayPal, crée les bons (code unique + QR code), les envoie par e-mail et permet de les vérifier à l'institut. Mise en service : voir **[INSTALLATION.md](INSTALLATION.md)**.
+
 ## Ce qui reste à valider ensemble
 - [ ] Compte PayPal Business et identifiant « Client ID »
 - [ ] Photos de l'institut et de Christelle

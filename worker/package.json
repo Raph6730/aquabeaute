@@ -1,0 +1,14 @@
+{
+  "name": "aquabeaute-bons-cadeaux",
+  "private": true,
+  "type": "module",
+  "description": "Moteur des bons cadeaux Aqua Beauté : paiement PayPal vérifié, codes uniques, PDF, e-mails et vérification en magasin.",
+  "scripts": {
+    "test": "node test/run.mjs",
+    "deploy": "npx wrangler deploy"
+  },
+  "dependencies": {
+    "pdf-lib": "^1.17.1",
+    "qrcode-generator": "^1.5.2"
+  }
+}

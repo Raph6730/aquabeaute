@@ -1,0 +1,131 @@
+// Page privée de l'institut : vérifier et valider les bons cadeaux (protégée par code PIN).
+export const VERIFIER_HTML = `<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow"><title>Vérifier un bon · Aqua Beauté</title>
+<style>
+:root{--ink:#2A2A33;--soft:#5B6470;--muted:#8A929C;--blue:#2B8DBB;--blue-soft:#E7F5FB;--mag:#B8006E;--pink:#FBE8F2;--line:#E6ECF0;--ok:#1F8A4C;--ok-soft:#E3F5EA;--ko:#C0392B;--ko-soft:#FCE8E6;--warn:#B26A00;--warn-soft:#FFF3DC}
+*{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:#F4FAFD;color:var(--ink)}
+header{background:#fff;border-bottom:1px solid var(--line);padding:12px 16px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:2}
+header b{font-family:Georgia,serif;font-style:italic;color:var(--mag);font-size:1.4rem;font-weight:400}
+main{max-width:560px;margin:0 auto;padding:16px}
+.card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:18px;margin-bottom:14px}
+h1{font-size:1.15rem;margin:0 0 10px;color:var(--blue)}
+label{font-size:.85rem;font-weight:600;display:block;margin-bottom:6px}
+input{width:100%;padding:14px;border:1px solid var(--line);border-radius:12px;font:inherit;font-size:1.1rem}
+input.code{text-transform:uppercase;letter-spacing:.08em;font-family:ui-monospace,Menlo,monospace}
+.btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:14px;border:0;border-radius:12px;font:inherit;font-weight:600;font-size:1rem;cursor:pointer;margin-top:10px}
+.b1{background:var(--blue);color:#fff}.b2{background:#fff;border:1px solid var(--line);color:var(--ink)}.bok{background:var(--ok);color:#fff}.bmag{background:var(--mag);color:#fff}
+.row{display:flex;gap:8px}.row .btn{margin-top:0}
+.res{border-radius:16px;padding:18px;margin-bottom:14px;border:2px solid}
+.res.ok{background:var(--ok-soft);border-color:var(--ok)}.res.ko{background:var(--ko-soft);border-color:var(--ko)}.res.warn{background:var(--warn-soft);border-color:var(--warn)}
+.res .big{font-size:1.25rem;font-weight:700;margin-bottom:6px}
+.res.ok .big{color:var(--ok)}.res.ko .big{color:var(--ko)}.res.warn .big{color:var(--warn)}
+.res .what{font-size:1.4rem;font-weight:700;margin:8px 0 2px}
+.res dl{display:grid;grid-template-columns:auto 1fr;gap:4px 12px;margin:10px 0 0;font-size:.92rem}.res dt{color:var(--soft)}.res dd{margin:0}
+.tabs{display:flex;gap:6px;margin-bottom:12px}.tabs button{flex:1;padding:10px;border-radius:10px;border:1px solid var(--line);background:#fff;font:inherit;font-weight:600;cursor:pointer}.tabs button.on{background:var(--blue);color:#fff;border-color:var(--blue)}
+.list{display:grid;gap:8px}.it{background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px;display:grid;grid-template-columns:1fr auto;gap:2px 10px;cursor:pointer}
+.it .c{font-family:ui-monospace,Menlo,monospace;font-weight:700}.it small{color:var(--muted)}
+.pill{font-size:.75rem;font-weight:700;padding:3px 9px;border-radius:999px;align-self:start}
+.p-v{background:var(--ok-soft);color:var(--ok)}.p-u{background:#EEE;color:#666}.p-e{background:var(--warn-soft);color:var(--warn)}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}.stats div{background:#fff;border:1px solid var(--line);border-radius:12px;padding:10px;text-align:center}.stats b{display:block;font-size:1.2rem;color:var(--blue)}.stats span{font-size:.75rem;color:var(--soft)}
+.muted{color:var(--muted);font-size:.85rem}.err{color:var(--ko);font-size:.9rem;margin-top:8px}
+video{width:100%;border-radius:12px;background:#000;margin-top:10px}
+.hidden{display:none!important}
+</style></head><body>
+<header><b>Aqua Beauté</b><span class="muted" id="who">Vérification des bons</span></header>
+<main>
+  <section id="login" class="card hidden">
+    <h1>Accès réservé à l'institut</h1>
+    <label for="pin">Code PIN</label><input id="pin" type="password" inputmode="numeric" autocomplete="current-password">
+    <label style="display:flex;gap:8px;align-items:center;font-weight:400;margin-top:12px"><input type="checkbox" id="remember" checked style="width:auto"> Se souvenir de ce téléphone</label>
+    <button class="btn b1" id="go">Entrer</button><div class="err" id="loginErr"></div>
+  </section>
+
+  <section id="app" class="hidden">
+    <div class="tabs"><button class="on" data-t="check">Vérifier un bon</button><button data-t="all">Tous les bons</button></div>
+    <div id="t-check">
+      <div id="result"></div>
+      <div class="card">
+        <label for="code">Code du bon</label>
+        <input id="code" class="code" placeholder="AQB-XXXX-XXXX" autocomplete="off" autocapitalize="characters">
+        <div class="row" style="margin-top:10px"><button class="btn b1" id="check">Vérifier</button><button class="btn b2 hidden" id="scan">📷 Scanner</button></div>
+        <video id="cam" class="hidden" playsinline muted></video>
+        <p class="muted" id="scanHint">Astuce : scannez le QR code du bon avec l'appareil photo du téléphone, cette page s'ouvre directement sur le bon.</p>
+      </div>
+    </div>
+    <div id="t-all" class="hidden">
+      <div class="stats" id="stats"></div>
+      <div class="tabs" id="filters"><button class="on" data-f="valide">Valables</button><button data-f="utilisé">Utilisés</button><button data-f="expiré">Expirés</button></div>
+      <div class="list" id="list"></div>
+    </div>
+    <button class="btn b2" id="logout" style="margin-top:20px">Se déconnecter de ce téléphone</button>
+  </section>
+</main>
+<script>
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const d=t=>t?new Date(t).toLocaleDateString('fr-FR',{day:'numeric',month:'long',year:'numeric'}):'';
+const dt=t=>t?new Date(t).toLocaleString('fr-FR',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'}):'';
+let PIN='';try{PIN=localStorage.getItem('ab-pin')||sessionStorage.getItem('ab-pin')||''}catch(e){}
+async function api(path,opt={}){const r=await fetch(path,{...opt,headers:{'x-staff-pin':PIN,'content-type':'application/json'}});const j=await r.json().catch(()=>({}));if(r.status===401){logout();throw new Error(j.error||'PIN incorrect');}return{ok:r.ok,status:r.status,data:j};}
+function show(){ $('#login').classList.toggle('hidden',!!PIN); $('#app').classList.toggle('hidden',!PIN); }
+function logout(){PIN='';try{localStorage.removeItem('ab-pin');sessionStorage.removeItem('ab-pin')}catch(e){}show();}
+$('#go').onclick=async()=>{PIN=$('#pin').value.trim();$('#loginErr').textContent='';
+  const r=await fetch('/api/vouchers?limit=1',{headers:{'x-staff-pin':PIN}});
+  if(!r.ok){const j=await r.json().catch(()=>({}));$('#loginErr').textContent=j.error||'Code PIN incorrect.';PIN='';return;}
+  try{($('#remember').checked?localStorage:sessionStorage).setItem('ab-pin',PIN)}catch(e){}
+  show();start();};
+$('#pin').addEventListener('keydown',e=>{if(e.key==='Enter')$('#go').click();});
+$('#logout').onclick=logout;
+document.querySelectorAll('.tabs:not(#filters) button').forEach(b=>b.onclick=()=>{document.querySelectorAll('.tabs:not(#filters) button').forEach(x=>x.classList.toggle('on',x===b));$('#t-check').classList.toggle('hidden',b.dataset.t!=='check');$('#t-all').classList.toggle('hidden',b.dataset.t!=='all');if(b.dataset.t==='all')loadAll();});
+
+function norm(c){c=String(c||'').toUpperCase().replace(/[^A-Z0-9]/g,'');if(c.startsWith('AQB'))c=c.slice(3);return c.length===8?'AQB-'+c.slice(0,4)+'-'+c.slice(4):null;}
+function render(v,msg){
+  const state=v.status==='utilisé'?'ko':(v.expired?'warn':'ok');
+  const big=state==='ok'?'✅ Bon valable':state==='ko'?'❌ Déjà utilisé le '+d(v.usedAt):'⚠️ Expiré depuis le '+d(v.expires);
+  $('#result').innerHTML='<div class="res '+state+'"><div class="big">'+big+'</div>'+(msg?'<div>'+esc(msg)+'</div>':'')+
+   '<div class="what">'+(v.type==='soin'?esc(v.soin):v.price+' €')+'</div>'+
+   '<dl><dt>Code</dt><dd><b>'+v.code+'</b></dd><dt>Pour</dt><dd>'+(esc(v.to)||'—')+'</dd><dt>Offert par</dt><dd>'+esc(v.buyer)+(v.buyerTel?' · '+esc(v.buyerTel):'')+'</dd><dt>Acheté le</dt><dd>'+d(v.created)+'</dd><dt>Valable jusqu\\'au</dt><dd>'+d(v.expires)+'</dd>'+(v.type==='soin'?'<dt>Valeur</dt><dd>'+v.price+' €</dd>':'')+(v.msg?'<dt>Message</dt><dd><i>'+esc(v.msg)+'</i></dd>':'')+'</dl>'+
+   (state==='ok'?'<button class="btn bok" id="use">Marquer comme utilisé</button>':'')+
+   (state==='warn'&&v.status!=='utilisé'?'<button class="btn bmag" id="use">Accepter quand même et marquer utilisé</button>':'')+
+   (v.status==='utilisé'?'<button class="btn b2" id="unuse">Annuler l\\'utilisation (erreur)</button>':'')+'</div>';
+  const u=$('#use');if(u)u.onclick=async()=>{if(!confirm('Marquer le bon '+v.code+' comme utilisé ?'))return;const r=await api('/api/vouchers/'+v.code+'/use',{method:'POST'});render(r.data.voucher||r.data,r.ok?'Bon validé le '+dt(Date.now())+'.':r.data.error);};
+  const n=$('#unuse');if(n)n.onclick=async()=>{if(!confirm('Remettre ce bon comme valable ?'))return;const r=await api('/api/vouchers/'+v.code+'/unuse',{method:'POST'});render(r.data,'Utilisation annulée.');};
+  $('#result').scrollIntoView({behavior:'smooth',block:'start'});
+}
+async function check(c){const code=norm(c);if(!code){$('#result').innerHTML='<div class="res ko"><div class="big">Code incomplet</div>Format attendu : AQB-XXXX-XXXX</div>';return;}
+  $('#code').value=code;const r=await api('/api/vouchers/'+code);
+  if(!r.ok){$('#result').innerHTML='<div class="res ko"><div class="big">❌ Bon introuvable</div>'+esc(r.data.error||'')+'<br><span class="muted">Vérifiez le code. Un bon inconnu ne doit pas être accepté.</span></div>';return;}
+  render(r.data);}
+$('#check').onclick=()=>check($('#code').value);
+$('#code').addEventListener('keydown',e=>{if(e.key==='Enter')check($('#code').value);});
+
+/* scan intégré (Android/Chrome) */
+if('BarcodeDetector' in window){$('#scan').classList.remove('hidden');}
+let stream=null;
+$('#scan').onclick=async()=>{
+  if(stream){stopCam();return;}
+  try{stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:'environment'}});}catch(e){alert('Caméra indisponible : utilisez l\\'appareil photo du téléphone.');return;}
+  const v=$('#cam');v.srcObject=stream;v.classList.remove('hidden');await v.play();$('#scan').textContent='✕ Arrêter';
+  const det=new BarcodeDetector({formats:['qr_code']});
+  const loop=async()=>{if(!stream)return;try{const r=await det.detect(v);if(r[0]){const t=r[0].rawValue;const m=t.match(/code=([A-Z0-9-]+)/i);stopCam();check(m?m[1]:t);return;}}catch(e){}requestAnimationFrame(loop);};loop();
+};
+function stopCam(){if(stream)stream.getTracks().forEach(t=>t.stop());stream=null;$('#cam').classList.add('hidden');$('#scan').textContent='📷 Scanner';}
+
+/* liste */
+let ALL=[],F='valide';
+async function loadAll(){$('#list').innerHTML='<p class="muted">Chargement…</p>';const r=await api('/api/vouchers');ALL=r.data.vouchers||[];paintAll();}
+function st(v){return v.status==='utilisé'?'utilisé':(v.expired?'expiré':'valide');}
+function paintAll(){
+  const val=ALL.filter(v=>st(v)==='valide'),sum=a=>a.reduce((s,v)=>s+(+v.price||0),0);
+  $('#stats').innerHTML='<div><b>'+ALL.length+'</b><span>bons vendus</span></div><div><b>'+val.length+'</b><span>à utiliser</span></div><div><b>'+sum(val)+' €</b><span>restant dû</span></div>';
+  document.querySelectorAll('#filters button').forEach(b=>b.classList.toggle('on',b.dataset.f===F));
+  const L=ALL.filter(v=>st(v)===F);
+  $('#list').innerHTML=L.length?L.map(v=>'<div class="it" data-c="'+v.code+'"><div><span class="c">'+v.code+'</span><br><small>'+(v.type==='soin'?esc(v.soin):v.price+' €')+(v.to?' · pour '+esc(v.to):'')+' · '+d(v.created)+'</small></div><span class="pill '+(F==='valide'?'p-v':F==='utilisé'?'p-u':'p-e')+'">'+F+'</span></div>').join(''):'<p class="muted">Aucun bon.</p>';
+}
+$('#filters').onclick=e=>{const b=e.target.closest('[data-f]');if(b){F=b.dataset.f;paintAll();}};
+$('#list').onclick=e=>{const it=e.target.closest('[data-c]');if(!it)return;document.querySelector('[data-t=check]').click();check(it.dataset.c);};
+
+function start(){const c=new URLSearchParams(location.search).get('code');if(c)check(c);}
+show();if(PIN)start();
+</script></body></html>`;
