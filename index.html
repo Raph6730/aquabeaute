@@ -232,6 +232,29 @@ section{padding:60px 0}
 .giftcard .gc-title{font-family:Parisienne,cursive;font-size:1.6rem;color:#5C1360;line-height:1}
 .giftcard .gc-amt{font-size:2.2rem;font-weight:700;color:#2B8DBB;line-height:1.15}
 .giftcard .gc-for{font-size:.9rem;color:#5B6470}
+.giftcard .gc-msg{font-style:italic;font-size:.82rem;color:#5B6470;margin-top:4px;max-width:85%;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.giftcard .gc-bottom{display:flex;justify-content:space-between;align-items:flex-end;gap:10px}
+.giftcard .gc-code{font-family:ui-monospace,Menlo,monospace;font-size:.85rem;font-weight:700;letter-spacing:.08em;color:#2A2A33;background:rgba(255,255,255,.85);padding:3px 8px;border-radius:6px;display:inline-block;margin-top:4px}
+.giftcard .qr{background:#fff;padding:5px;border-radius:8px;line-height:0;flex:none}
+.giftcard .qr img,.giftcard .qr canvas{width:64px!important;height:64px!important}
+.giftcard>*{position:relative;z-index:1}
+.giftcard .deco{position:absolute;right:14px;top:10px;width:92px;height:auto;z-index:0;pointer-events:none}
+.giftcard.festif{background:
+  radial-gradient(circle at 8% 18%,#F7D774 0 3px,transparent 4px),radial-gradient(circle at 22% 78%,#8FD3EE 0 3px,transparent 4px),
+  radial-gradient(circle at 46% 12%,#fff 0 2px,transparent 3px),radial-gradient(circle at 62% 88%,#F7D774 0 2.5px,transparent 3.5px),
+  radial-gradient(circle at 92% 70%,#8FD3EE 0 3px,transparent 4px),radial-gradient(circle at 35% 40%,rgba(255,255,255,.6) 0 1.5px,transparent 2.5px),
+  radial-gradient(circle at 75% 45%,#F7D774 0 2px,transparent 3px),
+  linear-gradient(135deg,#5C1360 0%,#B8006E 58%,#E0559C 100%);border:0;color:#fff}
+.giftcard.festif::before{background:radial-gradient(circle,rgba(247,215,116,.25),transparent 70%)}
+.giftcard.festif .gc-brand{color:#fff}
+.giftcard.festif .gc-title{color:#F7D774;font-size:1.9rem}
+.giftcard.festif .gc-amt{color:#fff}
+.giftcard.festif small,.giftcard.festif .gc-for,.giftcard.festif .gc-msg{color:rgba(255,255,255,.9)}
+.design-chip .sw{display:block;height:34px;border-radius:8px;margin-bottom:8px;border:1px solid var(--line)}
+.sw-c{background:linear-gradient(135deg,#fff,#FBE8F2 55%,#E7F5FB)}
+.sw-f{background:radial-gradient(circle at 20% 30%,#F7D774 0 2.5px,transparent 3.5px),radial-gradient(circle at 70% 60%,#8FD3EE 0 2.5px,transparent 3.5px),radial-gradient(circle at 45% 75%,#fff 0 2px,transparent 3px),linear-gradient(135deg,#5C1360,#B8006E 60%,#E0559C)}
+.voucher-wrap{margin:14px 0}
+.voucher-wrap .giftcard{aspect-ratio:auto;min-height:220px;gap:12px}
 .real-card{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:16px}
 .field{display:grid;gap:6px;margin-bottom:16px}
 .field label,.field .lbl{font-size:.86rem;font-weight:600}
@@ -560,15 +583,7 @@ footer.site a{text-decoration:none;display:block;padding:3px 0}
   <section style="padding-top:30px">
     <div class="wrap gc-builder">
       <div class="gc-preview">
-        <div class="giftcard">
-          <div class="gc-top"><div class="gc-brand">Aqua Beauté</div><small>Mutzig</small></div>
-          <div>
-            <div class="gc-title">Bon cadeau</div>
-            <div class="gc-for" id="gcFor">Pour vous</div>
-            <div class="gc-amt" id="gcAmt">50 €</div>
-            <small id="gcSvc">Valable 1 an sur toutes les prestations</small>
-          </div>
-        </div>
+        <div id="gcCard"></div>
         <img class="real-card" id="realCard" alt="Le bon cadeau imprimé, remis dans son enveloppe" loading="lazy">
       </div>
       <div class="card">
@@ -588,10 +603,21 @@ footer.site a{text-decoration:none;display:block;padding:3px 0}
           <label for="gcSoin">2. Soin offert</label>
           <select id="gcSoin"></select>
         </div>
-        <div class="field"><label for="gcName">3. Prénom de la personne gâtée</label><input id="gcName" placeholder="Ex. : Julie" maxlength="30"></div>
-        <div class="field"><label for="gcMsg">Petit mot (facultatif)</label><textarea id="gcMsg" maxlength="160" placeholder="Joyeux anniversaire ! Profite bien de ce moment."></textarea></div>
         <div class="field">
-          <span class="lbl">4. Comment le recevoir ?</span>
+          <span class="lbl">3. Choisissez le design</span>
+          <div class="seg">
+            <button class="chip design-chip on" data-gcdesign="classique"><span class="sw sw-c"></span><b>Classique</b>Pour toutes les occasions</button>
+            <button class="chip design-chip" data-gcdesign="fete"><span class="sw sw-f"></span><b>Anniversaire / Fête</b>Ballons et confettis</button>
+          </div>
+          <div class="chips" id="gcOccasion" hidden style="margin-top:8px">
+            <button class="chip on" data-gcocc="Joyeux anniversaire">Joyeux anniversaire</button>
+            <button class="chip" data-gcocc="Bonne fête">Bonne fête</button>
+          </div>
+        </div>
+        <div class="field"><label for="gcName">4. Prénom de la personne gâtée</label><input id="gcName" placeholder="Ex. : Julie" maxlength="30"></div>
+        <div class="field"><label for="gcMsg">5. Petit mot (facultatif)</label><textarea id="gcMsg" maxlength="160" placeholder="Joyeux anniversaire ! Profite bien de ce moment."></textarea></div>
+        <div class="field">
+          <span class="lbl">6. Comment le recevoir ?</span>
           <div class="seg">
             <button class="chip on" data-gcformat="e"><b>Par e-mail</b>Bon cadeau en PDF à imprimer</button>
             <button class="chip" data-gcformat="papier"><b>À l'institut</b>Imprimé, dans son enveloppe</button>
@@ -831,9 +857,25 @@ $('#svcTabs').addEventListener('click',e=>{const b=e.target.closest('[data-cat]'
 $('#svcPanel').addEventListener('click',e=>{const b=e.target.closest('[data-gift]');if(!b)return;gc.type='soin';gc.soin=b.dataset.gift;location.hash='bons-cadeaux';});
 
 /* bon cadeau */
-const gc={type:'montant',amount:50,soin:GIFTABLE[0].n,name:'',msg:'',format:'e'};
+const gc={type:'montant',amount:50,soin:GIFTABLE[0].n,name:'',msg:'',format:'e',design:'classique',occasion:'Joyeux anniversaire'};
 const AMOUNTS=[30,50,80,100,150];
 $('#gcSoin').innerHTML=CATS.map(c=>{const its=GIFTABLE.filter(x=>x.cat===c.name);return its.length?`<optgroup label="${c.name}">${its.map(i=>`<option value="${esc(i.n)}">${esc(i.n)} · ${eur(i.p)}</option>`).join('')}</optgroup>`:''}).join('');
+const BALLOONS='<svg class="deco" viewBox="0 0 100 110" aria-hidden="true"><path d="M30 58c2 12-4 24 2 40M62 52c-3 14 3 26-3 46M80 62c1 10-2 22 2 34" stroke="rgba(255,255,255,.7)" stroke-width="1.2" fill="none"/><ellipse cx="30" cy="34" rx="16" ry="20" fill="#F7D774"/><ellipse cx="62" cy="28" rx="17" ry="21" fill="#8FD3EE"/><ellipse cx="82" cy="42" rx="13" ry="16" fill="#fff" opacity=".9"/><path d="M28 54l2 4 2-4zM60 49l2 4 2-4zM80 58l2 4 2-4z" fill="rgba(255,255,255,.8)"/><ellipse cx="25" cy="27" rx="4" ry="6" fill="#fff" opacity=".45"/><ellipse cx="56" cy="21" rx="4" ry="6" fill="#fff" opacity=".45"/></svg>';
+function cardHTML(o){
+  const fete=o.design==='fete';
+  const amt=o.type==='montant'?`<div class="gc-amt">${eur(o.price)}</div>`:`<div class="gc-amt" style="font-size:1.15rem">${esc(o.soin)}</div>`;
+  const valid=o.until?'Valable jusqu\'au '+o.until:(o.type==='montant'?'Valable 1 an sur toutes les prestations':'Soin offert · valable 1 an');
+  return `<div class="giftcard ${fete?'festif':''}">${fete?BALLOONS:''}
+    <div class="gc-top"><div class="gc-brand">Aqua Beauté</div>${fete?'':'<small>Mutzig</small>'}</div>
+    <div>
+      <div class="gc-title">${fete?esc(o.occasion):'Bon cadeau'}</div>
+      <div class="gc-for">${o.to?'Pour '+esc(o.to):'Pour vous'}</div>
+      ${amt}
+      ${o.msg?`<div class="gc-msg">« ${esc(o.msg)} »</div>`:''}
+    </div>
+    <div class="gc-bottom"><div><small>${valid}</small>${o.code?`<br><span class="gc-code">${o.code}</span>`:''}</div>${o.code?`<div class="qr" data-qr="${o.code}"></div>`:''}</div>
+  </div>`;
+}
 const gcPrice=()=>gc.type==='montant'?gc.amount:GIFTABLE.find(x=>x.n===gc.soin).p;
 function renderGC(){
   $$('[data-gctype]').forEach(b=>b.classList.toggle('on',b.dataset.gctype===gc.type));
@@ -842,22 +884,23 @@ function renderGC(){
   $('#gcAmounts').innerHTML=AMOUNTS.map(a=>`<button class="chip ${gc.amount===a&&!$('#gcCustom').value?'on':''}" data-amt="${a}">${a} €</button>`).join('');
   $('#gcSoin').value=gc.soin;
   const p=gcPrice();
-  $('#gcAmt').textContent=gc.type==='montant'?eur(p):gc.soin;
-  $('#gcAmt').style.fontSize=gc.type==='montant'?'':'1.15rem';
-  $('#gcSvc').textContent=gc.type==='montant'?'Valable 1 an sur toutes les prestations':'Soin offert · valable 1 an';
-  $('#gcFor').textContent=gc.name?'Pour '+gc.name:'Pour vous';
+  $$('[data-gcdesign]').forEach(b=>b.classList.toggle('on',b.dataset.gcdesign===gc.design));
+  $$('[data-gcocc]').forEach(b=>b.classList.toggle('on',b.dataset.gcocc===gc.occasion));
+  $('#gcOccasion').hidden=gc.design!=='fete';
+  $('#gcCard').innerHTML=cardHTML({design:gc.design,occasion:gc.occasion,to:gc.name,msg:gc.msg,type:gc.type,price:p,soin:gc.soin});
   $('#gcBtnAmt').textContent=eur(p);
 }
-$('#p-bons-cadeaux').addEventListener('click',e=>{const t=e.target.closest('[data-gctype],[data-gcformat],[data-amt]');if(!t)return;if(t.dataset.gctype)gc.type=t.dataset.gctype;if(t.dataset.gcformat)gc.format=t.dataset.gcformat;if(t.dataset.amt){gc.amount=+t.dataset.amt;$('#gcCustom').value='';}renderGC();});
+$('#p-bons-cadeaux').addEventListener('click',e=>{const t=e.target.closest('[data-gctype],[data-gcformat],[data-amt],[data-gcdesign],[data-gcocc]');if(!t)return;if(t.dataset.gcdesign)gc.design=t.dataset.gcdesign;if(t.dataset.gcocc)gc.occasion=t.dataset.gcocc;if(t.dataset.gctype)gc.type=t.dataset.gctype;if(t.dataset.gcformat)gc.format=t.dataset.gcformat;if(t.dataset.amt){gc.amount=+t.dataset.amt;$('#gcCustom').value='';}renderGC();});
 $('#gcCustom').oninput=e=>{const v=Math.round(+e.target.value);if(v>=20&&v<=500){gc.amount=v;renderGC();}};
 $('#gcSoin').onchange=e=>{gc.soin=e.target.value;renderGC();};
 $('#gcName').oninput=e=>{gc.name=e.target.value.trim();renderGC();};
-$('#gcMsg').oninput=e=>{gc.msg=e.target.value.trim();};
+$('#gcMsg').oninput=e=>{gc.msg=e.target.value.trim();renderGC();};
 $$('[data-qa]').forEach(b=>b.onclick=()=>{gc.type='montant';gc.amount=+b.dataset.qa;$('#gcCustom').value='';location.hash='bons-cadeaux';renderGC();});
 $('#gcAdd').onclick=()=>{
   const p=gcPrice();
   addToCart({id:'gc-'+Date.now(),kind:'gc',name:gc.type==='montant'?'Bon cadeau '+eur(p):'Bon cadeau · '+gc.soin,
-    sub:(gc.format==='e'?'Par e-mail':'À retirer à l\'institut')+(gc.name?' · pour '+gc.name:''),price:p,qty:1,format:gc.format,to:gc.name,msg:gc.msg});
+    sub:(gc.design==='fete'?gc.occasion:'Classique')+' · '+(gc.format==='e'?'par e-mail':'à retirer à l\'institut')+(gc.name?' · pour '+gc.name:''),price:p,qty:1,format:gc.format,to:gc.name,msg:gc.msg,
+    design:gc.design,occasion:gc.occasion,type:gc.type,soin:gc.soin});
   openDrawer();
 };
 
@@ -901,7 +944,7 @@ function keepBuyer(){const g=id=>{const el=$(id);return el?el.value.trim():''};b
 
 /* commande transmise à PayPal : Christelle la retrouve dans le détail du paiement */
 function paypalOrder(){
-  const items=cart.map(x=>({name:(x.name+(x.to?' pour '+x.to:'')).slice(0,127),description:(x.kind==='gc'?(x.format==='e'?'Envoi par e-mail':'Retrait à l\'institut')+(x.msg?' · Mot : '+x.msg:''):x.sub).slice(0,127),quantity:String(x.qty),unit_amount:{currency_code:'EUR',value:x.price.toFixed(2)},category:x.kind==='gc'?'DIGITAL_GOODS':'PHYSICAL_GOODS'}));
+  const items=cart.map(x=>({name:(x.name+(x.to?' pour '+x.to:'')).slice(0,127),description:(x.kind==='gc'?(x.design==='fete'?x.occasion+' · ':'Classique · ')+(x.format==='e'?'Envoi par e-mail':'Retrait à l\'institut')+(x.msg?' · Mot : '+x.msg:''):x.sub).slice(0,127),quantity:String(x.qty),unit_amount:{currency_code:'EUR',value:x.price.toFixed(2)},category:x.kind==='gc'?'DIGITAL_GOODS':'PHYSICAL_GOODS'}));
   const sh=shipCost(),s=subtotal();
   return {intent:'CAPTURE',purchase_units:[{reference_id:orderRef,custom_id:orderRef,
     description:('Aqua Beauté · '+buyer.name+' · '+buyer.tel+(hasProducts()?' · '+(ship==='poste'?'Envoi : '+buyer.addr:'Retrait institut'):'')).slice(0,127),
@@ -909,13 +952,26 @@ function paypalOrder(){
 }
 let sdkLoading=null;
 function loadPayPal(){if(window.paypal)return Promise.resolve();if(sdkLoading)return sdkLoading;sdkLoading=new Promise((ok,ko)=>{const s=document.createElement('script');s.src='https://www.paypal.com/sdk/js?client-id='+encodeURIComponent(PAYPAL_CLIENT_ID)+'&currency=EUR&locale=fr_FR&intent=capture';s.onload=ok;s.onerror=()=>{sdkLoading=null;ko();};document.head.appendChild(s);});return sdkLoading;}
-function done(){buyer._allE=cart.every(x=>x.kind==='gc'&&x.format==='e');cart=[];save();updateBadge();step=3;renderDrawer();}
+const ALPH='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+const newCode=()=>{const r=n=>Array.from(crypto.getRandomValues(new Uint8Array(n)),v=>ALPH[v%ALPH.length]).join('');return 'AQB-'+r(4)+'-'+r(4);};
+let qrLib=null;
+const loadQR=()=>qrLib||(qrLib=new Promise((ok,ko)=>{const s=document.createElement('script');s.src='https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js';s.onload=ok;s.onerror=()=>{qrLib=null;ko();};document.head.appendChild(s);}));
+function paintQR(root){const els=[...root.querySelectorAll('[data-qr]')];if(!els.length)return;loadQR().then(()=>els.forEach(el=>{el.innerHTML='';new QRCode(el,{text:el.dataset.qr,width:128,height:128,colorDark:'#2A2A33',colorLight:'#ffffff'});})).catch(()=>els.forEach(el=>el.remove()));}
+function done(){buyer._allE=cart.every(x=>x.kind==='gc'&&x.format==='e');
+  const until=new Date(Date.now()+365*864e5).toLocaleDateString('fr-FR',{day:'numeric',month:'long',year:'numeric'});
+  buyer._vouchers=cart.filter(x=>x.kind==='gc').flatMap(x=>Array.from({length:x.qty},()=>({...x,code:newCode(),until})));
+  cart=[];save();updateBadge();step=3;renderDrawer();}
 
 function renderDrawer(){
   const C=$('#drawerContent'),F=$('#drawerFooter');
   if(step===3){
     $('#drawerTitle').textContent='Merci !';
-    C.innerHTML=`<div class="success"><div class="ok">✓</div><h3 style="font-size:1.35rem">Paiement confirmé</h3><p style="color:var(--ink-soft)">Merci ${esc(buyer.name||'')} ! Commande n° <b>${orderRef}</b>.<br>${buyer._allE?'Christelle vous envoie le bon cadeau par e-mail sous 24 h (jours d\'ouverture).':'Votre bon cadeau vous attend à l\'institut dans sa jolie enveloppe.'}</p>${LIVE?'':'<div class="note pink" style="text-align:left">Démonstration : aucun paiement n\'a été effectué.</div>'}</div>`;
+    C.innerHTML=`<div class="success"><div class="ok">✓</div><h3 style="font-size:1.35rem">Paiement confirmé</h3><p style="color:var(--ink-soft)">Merci ${esc(buyer.name||'')} ! Commande n° <b>${orderRef}</b>.<br>${buyer._allE?'Christelle vous envoie le bon cadeau par e-mail sous 24 h (jours d\'ouverture).':'Votre bon cadeau vous attend à l\'institut dans sa jolie enveloppe.'}</p></div>
+      <p style="font-weight:600;margin:4px 0 0">${(buyer._vouchers||[]).length>1?'Vos bons cadeaux':'Votre bon cadeau'}</p>
+      ${(buyer._vouchers||[]).map(v=>`<div class="voucher-wrap">${cardHTML(v)}</div>`).join('')}
+      <p style="font-size:.8rem;color:var(--muted)">Présentez ce bon (imprimé ou sur votre téléphone) à l'institut : le code est vérifié et le bon est marqué comme utilisé.</p>
+      ${LIVE?'':'<div class="note pink" style="text-align:left">Démonstration : aucun paiement n\'a été effectué et ce code n\'est pas valable.</div>'}`;
+    paintQR(C);
     F.innerHTML=`<button class="btn btn-blue" id="dDone">Retour au site</button>`;$('#dDone').onclick=()=>{closeDrawer();location.hash='accueil';};return;
   }
   if(!cart.length){
