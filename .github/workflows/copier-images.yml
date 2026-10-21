@@ -1,0 +1,38 @@
+# Copie une fois les images de l'ancien site WordPress dans le dossier images/ du dépôt.
+name: Copier les images de l'ancien site
+on:
+  push:
+    paths: ['.github/workflows/copier-images.yml']
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  copier:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Télécharger les images
+        run: |
+          set -e
+          base=https://aquabeaute-esthetique.fr/wp-content/uploads
+          for f in \
+            2022/12/LOGO-2.png 2022/12/Frame-2-1.png 2022/12/Frame-3-1.png 2022/12/Frame-5-1.png 2022/12/Frame-6.png \
+            2022/12/image-2-1.png 2022/12/image-4-1.png 2023/03/Acorelle-1.png 2023/03/heromo-1.png 2023/03/senteurs.png \
+            2023/05/Group-93.png 2023/05/IMG_9330-2.png 2023/05/IMG_9330-3.png 2023/05/IMG_9330-5.png 2023/05/IMG_9330-6.png \
+            2023/05/african-american-lady-having-skin-scrubbing-proced-2022-12-16-07-52-57-utc-2.png 2023/05/image-17.png \
+            2023/05/j-ai-teste-les-soins-du-visage-1b.webp 2023/08/IMG_9330-1.png 2023/08/IMG_9330-7.png \
+            2025/01/relaxing-back-massage-2025-01-29-08-15-31-utc-scaled.webp 2025/01/soin-chocolat-saint-valentin.jpg \
+            elementor/thumbs/IMG_7978-q98wl5v0cyrhvgvjjvdk1074m7jitr1gru2ef9b4c8.png \
+            elementor/thumbs/IMG_79783-q98wqxlcbcnv5ahsuv63u1rzwd3n2uy58e8pher454.png
+          do
+            mkdir -p "images/$(dirname "$f")"
+            curl -fsSL --retry 3 -A "Mozilla/5.0" -o "images/$f" "$base/$f"
+            echo "ok $f $(stat -c%s "images/$f")"
+          done
+      - name: Enregistrer dans le dépôt
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add images
+          git diff --cached --quiet || git commit -m "Images de l'ancien site copiées dans le dépôt"
+          git push
