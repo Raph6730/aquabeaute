@@ -236,7 +236,7 @@ section{padding:60px 0}
 .giftcard .gc-bottom{display:flex;justify-content:space-between;align-items:flex-end;gap:10px}
 .giftcard .gc-code{font-family:ui-monospace,Menlo,monospace;font-size:.85rem;font-weight:700;letter-spacing:.08em;color:#2A2A33;background:rgba(255,255,255,.85);padding:3px 8px;border-radius:6px;display:inline-block;margin-top:4px}
 .giftcard .qr{background:#fff;padding:5px;border-radius:8px;line-height:0;flex:none}
-.giftcard .qr img,.giftcard .qr canvas{width:64px!important;height:64px!important}
+.giftcard .qr svg,.giftcard .qr img{width:64px!important;height:64px!important;display:block}
 .giftcard>*{position:relative;z-index:1}
 .giftcard .deco{position:absolute;right:14px;top:10px;width:92px;height:auto;z-index:0;pointer-events:none}
 .giftcard.festif{background:
@@ -876,7 +876,7 @@ function cardHTML(o){
       ${amt}
       ${o.msg?`<div class="gc-msg">« ${esc(o.msg)} »</div>`:''}
     </div>
-    <div class="gc-bottom"><div><small>${valid}</small>${o.code?`<br><span class="gc-code">${o.code}</span>`:''}</div>${o.code?`<div class="qr" data-qr="${LIVE?API_URL.replace(/\/$/,'')+'/verifier?code='+o.code:o.code}"></div>`:''}</div>
+    <div class="gc-bottom"><div><small>${valid}</small>${o.code?`<br><span class="gc-code">${o.code}</span>`:''}</div>${o.code?`<div class="qr" data-qr="${o.qr?o.qr:LIVE?API_URL.replace(/\/$/,'')+'/verifier?code='+o.code:o.code}"></div>`:''}</div>
   </div>`;
 }
 const gcPrice=()=>gc.type==='montant'?gc.amount:GIFTABLE.find(x=>x.n===gc.soin).p;
@@ -951,12 +951,23 @@ function loadPayPal(){if(window.paypal)return Promise.resolve();if(sdkLoading)re
 const ALPH='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
 const newCode=()=>{const r=n=>Array.from(crypto.getRandomValues(new Uint8Array(n)),v=>ALPH[v%ALPH.length]).join('');return 'AQB-'+r(4)+'-'+r(4);};
 let qrLib=null;
-const loadQR=()=>qrLib||(qrLib=new Promise((ok,ko)=>{const s=document.createElement('script');s.src='https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js';s.onload=ok;s.onerror=()=>{qrLib=null;ko();};document.head.appendChild(s);}));
-function paintQR(root){const els=[...root.querySelectorAll('[data-qr]')];if(!els.length)return;loadQR().then(()=>els.forEach(el=>{el.innerHTML='';new QRCode(el,{text:el.dataset.qr,width:128,height:128,colorDark:'#2A2A33',colorLight:'#ffffff'});})).catch(()=>els.forEach(el=>el.remove()));}
+const loadQR=()=>qrLib||(qrLib=new Promise((ok,ko)=>{if(window.qrcode)return ok();const s=document.createElement('script');s.src='js/qrcode.js';s.onload=ok;s.onerror=()=>{qrLib=null;ko();};document.head.appendChild(s);}));
+function paintQR(root){const els=[...root.querySelectorAll('[data-qr]')];if(!els.length)return;loadQR().then(()=>els.forEach(el=>{const q=window.qrcode(0,'M');q.addData(el.dataset.qr);q.make();el.innerHTML=q.createSvgTag({cellSize:2,margin:0});const sv=el.querySelector('svg');if(sv){sv.setAttribute('width','64');sv.setAttribute('height','64');}})).catch(()=>els.forEach(el=>el.remove()));}
 async function apiPost(path,body){const r=await fetch(API_URL.replace(/\/$/,'')+path,{method:'POST',headers:{'content-type':'application/json'},body:body?JSON.stringify(body):undefined});const j=await r.json().catch(()=>({}));if(!r.ok)throw new Error(j.error||'Le paiement n\'a pas abouti, réessayez.');return j;}
+/* démo : le QR code contient le bon lui-même, lu par la page verifier.html (sans moteur) */
+function demoQR(v){const j={c:v.code,t:v.type,s:v.type==='soin'?v.soin:'',p:v.price,to:v.to||'',m:(v.msg||'').slice(0,80),g:v.design,f:v.format,b:buyer.name||'',cr:v.created,ex:v.expires};
+  const b64=btoa(unescape(encodeURIComponent(JSON.stringify(j)))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
+  return new URL('verifier.html?d='+b64,location.href).href;}
+function verifyUrl(v){return v.qr||(LIVE?API_URL.replace(/\/$/,'')+'/verifier?code='+v.code:v.code);}
+async function downloadPDF(i){const v=buyer._vouchers[i];const b=document.querySelector('[data-pdf="'+i+'"]');if(b){b.disabled=true;b.textContent='Préparation du PDF…';}
+  try{const m=await import('./js/bon-pdf.js');const bytes=await m.voucherPDF({...v,untilFr:v.until},verifyUrl(v));
+    const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([bytes],{type:'application/pdf'}));a.download='Bon-cadeau-Aqua-Beaute-'+v.code+'.pdf';document.body.appendChild(a);a.click();a.remove();
+    if(b){b.disabled=false;b.textContent='⬇ Télécharger le bon en PDF';}
+  }catch(e){console.error(e);toast('PDF indisponible, réessayez');if(b){b.disabled=false;b.textContent='⬇ Télécharger le bon en PDF';}}}
 function done(serverVouchers){buyer._allE=cart.every(x=>x.kind==='gc'&&x.format==='e');
   const until=new Date(Date.now()+365*864e5).toLocaleDateString('fr-FR',{day:'numeric',month:'long',year:'numeric'});
-  buyer._vouchers=serverVouchers||cart.filter(x=>x.kind==='gc').flatMap(x=>Array.from({length:x.qty},()=>({...x,code:newCode(),until})));
+  const created=Date.now(),expires=created+365*864e5;
+  buyer._vouchers=serverVouchers||cart.filter(x=>x.kind==='gc').flatMap(x=>Array.from({length:x.qty},()=>{const v={...x,code:newCode(),until,created,expires};v.qr=demoQR(v);return v;}));
   cart=[];save();updateBadge();step=3;renderDrawer();}
 
 function renderDrawer(){
@@ -965,10 +976,11 @@ function renderDrawer(){
     $('#drawerTitle').textContent='Merci !';
     C.innerHTML=`<div class="success"><div class="ok">✓</div><h3 style="font-size:1.35rem">Paiement confirmé</h3><p style="color:var(--ink-soft)">Merci ${esc(buyer.name||'')} ! Commande n° <b>${orderRef}</b>.<br>${buyer._allE?'Christelle vous envoie le bon cadeau par e-mail sous 24 h (jours d\'ouverture).':'Votre bon cadeau vous attend à l\'institut dans sa jolie enveloppe.'}</p></div>
       <p style="font-weight:600;margin:4px 0 0">${(buyer._vouchers||[]).length>1?'Vos bons cadeaux':'Votre bon cadeau'}</p>
-      ${(buyer._vouchers||[]).map(v=>`<div class="voucher-wrap">${cardHTML(v)}</div>`).join('')}
+      ${(buyer._vouchers||[]).map((v,i)=>`<div class="voucher-wrap">${cardHTML(v)}<button class="btn btn-ghost btn-sm" style="width:100%;margin-top:8px" data-pdf="${i}">⬇ Télécharger le bon en PDF</button></div>`).join('')}
+      ${LIVE?'':`<a class="btn btn-blue btn-sm" style="width:100%" href="verifier.html" target="_blank" rel="noopener">Ouvrir la vérification en magasin (démo, PIN 1234)</a><p style="font-size:.78rem;color:var(--muted);margin:6px 0 0">Astuce : scannez le QR code du bon avec un autre téléphone, comme le ferait Christelle à l'institut.</p>`}
       <p style="font-size:.8rem;color:var(--muted)">Présentez ce bon (imprimé ou sur votre téléphone) à l'institut : le code est vérifié et le bon est marqué comme utilisé.</p>
       ${LIVE?'':'<div class="note pink" style="text-align:left">Démonstration : aucun paiement n\'a été effectué et ce code n\'est pas valable.</div>'}`;
-    paintQR(C);
+    paintQR(C);C.querySelectorAll('[data-pdf]').forEach(b=>b.onclick=()=>downloadPDF(+b.dataset.pdf));
     F.innerHTML=`<button class="btn btn-blue" id="dDone">Retour au site</button>`;$('#dDone').onclick=()=>{closeDrawer();location.hash='accueil';};return;
   }
   if(!cart.length){
