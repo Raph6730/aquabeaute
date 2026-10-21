@@ -1,0 +1,12 @@
+# Moteur des bons cadeaux : tout passe par index.php, les dossiers internes sont inaccessibles.
+Options -Indexes
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteRule ^(lib|vendor|data|tests)(/|$) - [F,L]
+  RewriteRule ^config(\.example)?\.php$ - [F,L]
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteRule ^ index.php [QSA,L]
+</IfModule>
+<FilesMatch "^(config\.php|config\.example\.php)$">
+  Require all denied
+</FilesMatch>

@@ -57,6 +57,7 @@ video{width:100%;border-radius:12px;background:#000;margin-top:10px}
       <div class="stats" id="stats"></div>
       <div class="tabs" id="filters"><button class="on" data-f="valide">Valables</button><button data-f="utilisé">Utilisés / annulés</button><button data-f="expiré">Expirés</button></div>
       <div class="list" id="list"></div>
+      <button class="btn b2" id="export" style="margin-top:14px">⬇ Exporter tous les bons (Excel)</button>
     </div>
     <button class="btn b2" id="logout" style="margin-top:20px">Se déconnecter de ce téléphone</button>
   </section>
@@ -123,6 +124,11 @@ function paintAll(){
   const L=ALL.filter(v=>st(v)===F);
   $('#list').innerHTML=L.length?L.map(v=>'<div class="it" data-c="'+v.code+'"><div><span class="c">'+v.code+'</span><br><small>'+(v.type==='soin'?esc(v.soin):v.type==='accessoire'?'Accessoires '+v.price+' €':v.price+' €')+(v.to?' · pour '+esc(v.to):'')+' · '+d(v.created)+'</small></div><span class="pill '+(F==='valide'?'p-v':F==='utilisé'?'p-u':'p-e')+'">'+F+'</span></div>').join(''):'<p class="muted">Aucun bon.</p>';
 }
+$('#export').onclick=async()=>{const b=$('#export');b.disabled=true;b.textContent='Préparation…';
+  try{const r=await fetch('/api/vouchers/export.csv',{headers:{'x-staff-pin':PIN}});if(!r.ok)throw new Error();const blob=await r.blob();
+    const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='bons-cadeaux-aqua-beaute-'+new Date().toISOString().slice(0,10)+'.csv';document.body.appendChild(a);a.click();a.remove();}
+  catch(e){alert('Export impossible pour le moment.');}
+  b.disabled=false;b.textContent='⬇ Exporter tous les bons (Excel)';};
 $('#filters').onclick=e=>{const b=e.target.closest('[data-f]');if(b){F=b.dataset.f;paintAll();}};
 $('#list').onclick=e=>{const it=e.target.closest('[data-c]');if(!it)return;document.querySelector('[data-t=check]').click();check(it.dataset.c);};
 

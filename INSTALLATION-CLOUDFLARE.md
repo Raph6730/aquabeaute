@@ -1,4 +1,6 @@
-# Mise en service des bons cadeaux automatiques
+# Mise en service sur Cloudflare (solution de secours)
+
+> La solution retenue est l'hébergement IONOS : voir **[INSTALLATION-IONOS.md](INSTALLATION-IONOS.md)**. Ce guide décrit l'alternative Cloudflare + Brevo (dossier `worker/`).
 
 Ce guide explique comment brancher le vrai paiement. À faire **une seule fois**, idéalement pendant un rendez-vous avec Christelle (compter 45 minutes).
 

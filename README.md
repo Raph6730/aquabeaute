@@ -15,7 +15,11 @@ Proposition de refonte du site de l'institut Aqua Beauté, 8 rue du Maréchal Fo
 - **L'institut** et **Contact** : horaires, plan d'accès, demande de rappel.
 
 ## Bons cadeaux automatiques
-Le dossier `worker/` contient le moteur qui encaisse les paiements PayPal, crée les bons (code unique + QR code), les envoie par e-mail et permet de les vérifier à l'institut. Mise en service : voir **[INSTALLATION.md](INSTALLATION.md)**.
+Le dossier `api/` contient le moteur (PHP + MySQL, pour l'hébergement IONOS) qui encaisse les paiements PayPal, crée les bons (code unique + QR code), les envoie par e-mail depuis la boîte de l'institut, permet de les vérifier à l'institut, et sauvegarde le registre (export Excel + récapitulatif hebdomadaire). Mise en service : **[INSTALLATION-IONOS.md](INSTALLATION-IONOS.md)**. Envoi automatique vers IONOS : `.github/workflows/envoi-ionos.yml`.
+
+Solution de secours (Cloudflare + Brevo) : dossier `worker/`, guide [INSTALLATION-CLOUDFLARE.md](INSTALLATION-CLOUDFLARE.md).
+
+Tests : `php api/tests/run.php` (moteur PHP) et `cd worker && npm test` (version Cloudflare).
 
 ## Ce qui reste à valider ensemble
 - [ ] Compte PayPal Business et identifiant « Client ID »

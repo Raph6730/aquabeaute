@@ -778,8 +778,8 @@ footer.site{background:var(--sapin-soft)}
 /* Identifiant client PayPal de l'institut : compte PayPal Business → developer.paypal.com → Apps & Credentials → mode "Live" → "Client ID".
    Tant qu'il est vide, le paiement reste en mode démonstration. */
 const PAYPAL_CLIENT_ID = '';
-/* Adresse du moteur des bons cadeaux (Cloudflare), ex. 'https://aquabeaute-bons-cadeaux.xxxx.workers.dev'.
-   Les deux réglages doivent être remplis pour que les vrais paiements s'activent. */
+/* Adresse du site qui héberge le moteur des bons cadeaux (dossier api/), ex. 'https://www.aquabeaute-esthetique.fr'.
+   Remplie automatiquement lors de l'envoi vers IONOS. Les deux réglages doivent être remplis pour activer les vrais paiements. */
 const API_URL = '';
 const IMG = 'images/';
 /* ==================================================== */
@@ -986,7 +986,7 @@ function cardHTML(o){
       ${amt}
       ${o.msg?`<div class="gc-msg">« ${esc(o.msg)} »</div>`:''}
     </div>
-    <div class="gc-bottom"><div><small>${valid}</small>${o.code?`<br><span class="gc-code">${o.code}</span>`:''}</div>${o.code?`<div class="qr" data-qr="${o.qr?o.qr:LIVE?API_URL.replace(/\/$/,'')+'/verifier?code='+o.code:o.code}"></div>`:''}</div>
+    <div class="gc-bottom"><div><small>${valid}</small>${o.code?`<br><span class="gc-code">${o.code}</span>`:''}</div>${o.code?`<div class="qr" data-qr="${o.qr?o.qr:LIVE?API_URL.replace(/\/$/,'')+'/api/verifier?code='+o.code:o.code}"></div>`:''}</div>
   </div>`;
 }
 const gcPrice=()=>gc.type!=='soin'?gc.amount:soinPrice(gc.soin);
@@ -1068,7 +1068,7 @@ async function apiPost(path,body){const r=await fetch(API_URL.replace(/\/$/,'')+
 function demoQR(v){const j={c:v.code,t:v.type,s:v.type==='soin'?v.soin:'',p:v.price,to:v.to||'',m:(v.msg||'').slice(0,80),g:v.design,f:v.format,b:buyer.name||'',cr:v.created,ex:v.expires};
   const b64=btoa(unescape(encodeURIComponent(JSON.stringify(j)))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
   return new URL('verifier.html?d='+b64,location.href).href;}
-function verifyUrl(v){return v.qr||(LIVE?API_URL.replace(/\/$/,'')+'/verifier?code='+v.code:v.code);}
+function verifyUrl(v){return v.qr||(LIVE?API_URL.replace(/\/$/,'')+'/api/verifier?code='+v.code:v.code);}
 async function downloadPDF(i){const v=buyer._vouchers[i];const b=document.querySelector('[data-pdf="'+i+'"]');if(b){b.disabled=true;b.textContent='Préparation du PDF…';}
   try{const m=await import('./js/bon-pdf.js');const bytes=await m.voucherPDF({...v,untilFr:v.until},verifyUrl(v));
     const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([bytes],{type:'application/pdf'}));a.download='Bon-cadeau-Aqua-Beaute-'+v.code+'.pdf';document.body.appendChild(a);a.click();a.remove();

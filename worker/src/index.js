@@ -27,7 +27,7 @@ export default {
     try {
       const p = url.pathname.replace(/\/+$/, '') || '/';
       if (p === '/' ) return new Response('Moteur des bons cadeaux Aqua Beauté : OK', { headers: { 'content-type': 'text/plain; charset=utf-8' } });
-      if (p === '/verifier' && req.method === 'GET') return new Response(VERIFIER_HTML, { headers: { 'content-type': 'text/html; charset=utf-8', 'x-robots-tag': 'noindex', 'cache-control': 'no-store' } });
+      if ((p === '/verifier' || p === '/api/verifier') && req.method === 'GET') return new Response(VERIFIER_HTML, { headers: { 'content-type': 'text/html; charset=utf-8', 'x-robots-tag': 'noindex', 'cache-control': 'no-store' } });
       if (p === '/api/orders' && req.method === 'POST') return withCors(await createOrder(req, env), cors);
       let m;
       if ((m = p.match(/^\/api\/orders\/([A-Z0-9]+)\/capture$/)) && req.method === 'POST') return withCors(await captureOrder(m[1], env, url), cors);
@@ -35,6 +35,7 @@ export default {
       if (p.startsWith('/api/vouchers')) {
         const auth = await checkPin(req, env); if (auth) return auth;
         if (p === '/api/vouchers' && req.method === 'GET') return listVouchers(env, url);
+        if (p === '/api/vouchers/export.csv' && req.method === 'GET') return exportCsv(env);
         if ((m = p.match(/^\/api\/vouchers\/([A-Z0-9-]+)$/)) && req.method === 'GET') return getVoucher(m[1], env);
         if ((m = p.match(/^\/api\/vouchers\/([A-Z0-9-]+)\/(use|unuse)$/)) && req.method === 'POST') return useVoucher(m[1], m[2] === 'use', env);
       }
@@ -326,4 +327,15 @@ async function listVouchers(env, url) {
   } while (cursor && out.length < 5000);
   out.sort((a, b) => (b.created || 0) - (a.created || 0));
   return json({ vouchers: out.map(v => ({ ...v, expired: Date.now() > v.expires })) });
+}
+
+async function exportCsv(env) {
+  const rows = []; let cursor;
+  do { const r = await env.BONS.list({ prefix: 'v:', cursor, limit: 1000 }); for (const k of r.keys) rows.push(JSON.parse(await env.BONS.get(k.name))); cursor = r.list_complete ? null : r.cursor; } while (cursor);
+  rows.sort((a, b) => b.created - a.created);
+  const f = t => t ? new Date(t).toLocaleString('fr-FR', { timeZone: 'Europe/Paris', day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' }) : '';
+  const lines = [['Code', 'Type', 'Soin', 'Valeur (€)', 'Pour', 'Acheteur', 'E-mail', 'Téléphone', 'Remise', 'Acheté le', 'Expire le', 'Statut', 'Utilisé le', 'Commande PayPal']]
+    .concat(rows.map(v => [v.code, TYPES[v.type], v.soin, String(v.price).replace('.', ','), v.to, v.buyer?.name, v.buyer?.email, v.buyer?.tel, v.format === 'e' ? 'e-mail' : 'institut', f(v.created), f(v.expires), v.status === 'valide' && Date.now() > v.expires ? 'expiré' : v.status, f(v.usedAt), v.paypalOrder]));
+  const csv = '\uFEFF' + lines.map(l => l.map(c => '"' + String(c ?? '').replace(/"/g, '""') + '"').join(';')).join('\r\n') + '\r\n';
+  return new Response(csv, { headers: { 'content-type': 'text/csv; charset=utf-8', 'content-disposition': 'attachment; filename="bons-cadeaux-aqua-beaute.csv"', 'cache-control': 'no-store' } });
 }

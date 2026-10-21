@@ -1,0 +1,96 @@
+# Envoi automatique du site et du moteur des bons cadeaux vers l'hébergement IONOS.
+# Tant que les « Secrets » IONOS ne sont pas renseignés dans GitHub, cette tâche ne fait rien.
+# Voir INSTALLATION-IONOS.md.
+name: Envoi vers IONOS
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+concurrency: envoi-ionos
+jobs:
+  envoi:
+    runs-on: ubuntu-latest
+    env:
+      SFTP_HOST: ${{ secrets.IONOS_SFTP_HOST }}
+    steps:
+      - name: Vérifier que l'hébergement est configuré
+        id: check
+        run: |
+          if [ -z "$SFTP_HOST" ]; then echo "Hébergement IONOS pas encore configuré : rien à envoyer."; echo "go=no" >> $GITHUB_OUTPUT; else echo "go=yes" >> $GITHUB_OUTPUT; fi
+
+      - uses: actions/checkout@v4
+        if: steps.check.outputs.go == 'yes'
+
+      - name: Préparer les fichiers à envoyer
+        if: steps.check.outputs.go == 'yes'
+        env:
+          PAYPAL_CLIENT_ID: ${{ secrets.PAYPAL_CLIENT_ID }}
+          SITE_URL: ${{ vars.SITE_URL }}
+          MISE_EN_LIGNE: ${{ vars.MISE_EN_LIGNE }}
+        run: |
+          set -e
+          mkdir dist
+          cp -r index.html promos.json images js .htaccess dist/
+          cp -r api dist/api
+          rm -rf dist/api/tests dist/api/.gitignore dist/api/config.php
+          find dist/api/data -mindepth 1 ! -name .htaccess -delete
+          origin=$(echo "$SITE_URL" | sed -E 's#^(https?://[^/]+).*#\1#')
+          python3 - "$PAYPAL_CLIENT_ID" "$origin" "$MISE_EN_LIGNE" <<'PY'
+          import sys, json, re
+          cid, origin, live = sys.argv[1], sys.argv[2], sys.argv[3]
+          p = 'dist/index.html'; s = open(p, encoding='utf-8').read()
+          s = s.replace("const PAYPAL_CLIENT_ID = '';", "const PAYPAL_CLIENT_ID = " + json.dumps(cid) + ";", 1)
+          s = s.replace("const API_URL = '';", "const API_URL = " + json.dumps(origin) + ";", 1)
+          if live == 'oui':   # mise en ligne définitive : visible par Google, sans bandeau de démonstration
+              s = s.replace('<meta name="robots" content="noindex, nofollow">\n', '', 1)
+              s = re.sub(r'<div class="demo">.*?</div>\n', '', s, count=1)
+          open(p, 'w', encoding='utf-8').write(s)
+          PY
+
+      - name: Fabriquer la configuration du moteur (depuis les Secrets)
+        if: steps.check.outputs.go == 'yes'
+        env:
+          PAYPAL_ENV: ${{ vars.PAYPAL_ENV }}
+          PAYPAL_CLIENT_ID: ${{ secrets.PAYPAL_CLIENT_ID }}
+          PAYPAL_SECRET: ${{ secrets.PAYPAL_SECRET }}
+          PAYPAL_WEBHOOK_ID: ${{ secrets.PAYPAL_WEBHOOK_ID }}
+          DB_HOST: ${{ secrets.DB_HOST }}
+          DB_NAME: ${{ secrets.DB_NAME }}
+          DB_USER: ${{ secrets.DB_USER }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          SMTP_HOST: ${{ vars.SMTP_HOST }}
+          SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
+          STAFF_PIN: ${{ secrets.STAFF_PIN }}
+          CRON_KEY: ${{ secrets.CRON_KEY }}
+          SITE_URL: ${{ vars.SITE_URL }}
+        run: |
+          php -r '
+            $e = fn($k, $d = "") => getenv($k) !== false && getenv($k) !== "" ? getenv($k) : $d;
+            $c = [
+              "paypal_env" => $e("PAYPAL_ENV", "sandbox"), "paypal_client_id" => $e("PAYPAL_CLIENT_ID"), "paypal_secret" => $e("PAYPAL_SECRET"), "paypal_webhook_id" => $e("PAYPAL_WEBHOOK_ID"),
+              "db_dsn" => "mysql:host=" . $e("DB_HOST") . ";dbname=" . $e("DB_NAME") . ";charset=utf8mb4", "db_user" => $e("DB_USER"), "db_pass" => $e("DB_PASSWORD"),
+              "smtp_host" => $e("SMTP_HOST", "smtp.ionos.fr"), "smtp_port" => 465, "smtp_user" => "contact@aquabeaute-esthetique.fr", "smtp_pass" => $e("SMTP_PASSWORD"),
+              "sender_email" => "contact@aquabeaute-esthetique.fr", "sender_name" => "Aqua Beauté", "shop_email" => "contact@aquabeaute-esthetique.fr",
+              "staff_pin" => $e("STAFF_PIN"), "cron_key" => $e("CRON_KEY"), "site_url" => $e("SITE_URL"), "allowed_origin" => "",
+            ];
+            file_put_contents("dist/api/config.php", "<?php\n// Fabriqué automatiquement par GitHub, ne pas modifier à la main.\nreturn " . var_export($c, true) . ";\n");
+          '
+          php -l dist/api/config.php
+
+      - name: Envoyer sur IONOS (SFTP)
+        if: steps.check.outputs.go == 'yes'
+        env:
+          SFTP_USER: ${{ secrets.IONOS_SFTP_USER }}
+          SFTP_PASSWORD: ${{ secrets.IONOS_SFTP_PASSWORD }}
+          DOSSIER: ${{ secrets.IONOS_DOSSIER }}
+        run: |
+          sudo apt-get install -y lftp >/dev/null
+          lftp -u "$SFTP_USER","$SFTP_PASSWORD" "sftp://$SFTP_HOST" -e "set sftp:auto-confirm yes; set net:max-retries 2; mirror -R --verbose dist/ ${DOSSIER:-/}; bye"
+
+      - name: Contrôle après envoi
+        if: steps.check.outputs.go == 'yes'
+        env:
+          SITE_URL: ${{ vars.SITE_URL }}
+        run: |
+          sleep 5
+          curl -fsS "${SITE_URL%/}/api/sante" && echo " → moteur OK"
