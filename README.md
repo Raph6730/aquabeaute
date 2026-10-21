@@ -8,6 +8,9 @@ Proposition de refonte du site de l'institut Aqua Beauté, 8 rue du Maréchal Fo
 - **Accueil** : présentation, statut ouvert/fermé en direct, avis Google, marques.
 - **Soins & tarifs** : toute la carte (visage, corps, épilation, lumière pulsée, mains & pieds, regard & maquillage, minceur), avec un bouton « Offrir » sur chaque soin.
 - **Bons cadeaux en ligne** : montant libre ou soin précis, envoi par e-mail ou retrait à l'institut, paiement PayPal (compte PayPal ou carte bancaire).
+- **Trois types de bons** : montant (toutes prestations), soin précis, accessoires (traitements de TVA différents), jusqu'à 600 €.
+- **Promotions de fêtes** : fichier `promos.json` (Noël, Saint-Valentin, fête des mères, fête des pères…) : bandeau, section sur l'accueil, prix barrés et bons cadeaux au prix promo, automatiquement entre les dates. Aperçu : ajouter `?promo=noel` à l'adresse.
+- **Maquette de Noël** (non mise en ligne) : https://raph6730.github.io/aquabeaute/maquette-noel.html
 - **Photos** : menu déroulant, carrousel sur l'accueil et page avec toutes les photos de l'institut.
 - **L'institut** et **Contact** : horaires, plan d'accès, demande de rappel.
 

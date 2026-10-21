@@ -98,3 +98,76 @@ const page = await worker.fetch(new Request('https://x/verifier?code=' + v1.code
 assert.equal(page.status, 200); assert.match(await page.text(), /Vérifier un bon/);
 console.log('✓ page /verifier servie');
 console.log('\nTous les tests passent.');
+
+/* ===== Nouveaux scénarios : types de bons, plafond 600 €, sécurité du paiement ===== */
+r = await call('POST', '/api/orders', { buyer, items: [{ type: 'accessoire', amount: 600, design: 'classique', format: 'e' }] });
+assert.equal(r.status, 200); assert.equal(orders[r.data.id].purchase_units[0].amount.value, '600.00');
+assert.match(orders[r.data.id].purchase_units[0].items[0].description, /\[Accessoires\]/);
+assert.equal((await call('POST', '/api/orders', { buyer, items: [{ type: 'montant', amount: 601 }] })).status, 400);
+const accId = r.data.id;
+console.log('✓ bon accessoires 600 € accepté, 601 € refusé, type indiqué à PayPal');
+
+// deux encaissements simultanés → mêmes codes, pas de doublon
+const [c1, c2] = await Promise.all([call('POST', `/api/orders/${accId}/capture`), call('POST', `/api/orders/${accId}/capture`)]);
+assert.deepEqual(c1.data.vouchers.map(v => v.code), c2.data.vouchers.map(v => v.code));
+const accCode = c1.data.vouchers[0].code;
+const vAcc = await call('GET', `/api/vouchers/${accCode}`, null, { 'x-staff-pin': '2468' });
+assert.equal(vAcc.data.typeLabel, 'Accessoires');
+console.log('✓ deux encaissements simultanés : un seul bon', accCode);
+
+// carte refusée → le site doit relancer PayPal
+r = await call('POST', '/api/orders', { buyer, items: [{ type: 'montant', amount: 40 }] });
+const realFetch = globalThis.fetch;
+globalThis.fetch = async (u, o) => String(u).endsWith('/capture') ? new Response(JSON.stringify({ name: 'UNPROCESSABLE_ENTITY', details: [{ issue: 'INSTRUMENT_DECLINED' }] }), { status: 422 }) : realFetch(u, o);
+let dec = await call('POST', `/api/orders/${r.data.id}/capture`);
+assert.equal(dec.status, 422); assert.equal(dec.data.restart, true);
+console.log('✓ carte refusée : le client peut choisir un autre moyen de paiement');
+
+// paiement en attente puis confirmé par la notification PayPal
+globalThis.fetch = async (u, o) => {
+  if (String(u).endsWith('/capture')) return new Response(JSON.stringify({ status: 'COMPLETED', purchase_units: [{ payments: { captures: [{ id: 'CAP-PEND', status: 'PENDING', amount: { currency_code: 'EUR', value: '40.00' } }] } }] }), { status: 201 });
+  if (String(u).endsWith('/verify-webhook-signature')) return new Response(JSON.stringify({ verification_status: 'SUCCESS' }), { status: 200 });
+  return realFetch(u, o);
+};
+const pendId = r.data.id; const mailsBefore = mails.length;
+let pend = await call('POST', `/api/orders/${pendId}/capture`);
+assert.equal(pend.data.pending, true); assert.equal(pend.data.vouchers.length, 0);
+assert.equal((await call('POST', '/api/paypal/webhook', { event_type: 'PAYMENT.CAPTURE.COMPLETED', resource: { id: 'CAP-PEND', status: 'COMPLETED', amount: { currency_code: 'EUR', value: '40.00' }, supplementary_data: { related_ids: { order_id: pendId } } } })).status, 503); // pas encore configuré
+env.PAYPAL_WEBHOOK_ID = 'WH-1';
+let wh = await call('POST', '/api/paypal/webhook', { event_type: 'PAYMENT.CAPTURE.COMPLETED', resource: { id: 'CAP-PEND', status: 'COMPLETED', amount: { currency_code: 'EUR', value: '40.00' }, supplementary_data: { related_ids: { order_id: pendId } } } });
+assert.equal(wh.status, 200);
+const pendOrder = JSON.parse(await KV.get('o:' + pendId)); assert.equal(pendOrder.status, 'payée'); assert.equal(pendOrder.codes.length, 1);
+assert.ok(mails.length > mailsBefore + 1);
+console.log('✓ paiement en attente : bons créés et envoyés automatiquement à la confirmation PayPal');
+
+// remboursement depuis PayPal → bon annulé
+wh = await call('POST', '/api/paypal/webhook', { event_type: 'PAYMENT.CAPTURE.REFUNDED', resource: { id: 'REF-1', links: [{ rel: 'up', href: 'https://api-m.paypal.com/v2/payments/captures/CAP-PEND' }] } });
+assert.equal(wh.status, 200);
+const refunded = await call('GET', `/api/vouchers/${pendOrder.codes[0]}`, null, { 'x-staff-pin': '2468' });
+assert.equal(refunded.data.status, 'remboursé');
+assert.equal((await call('POST', `/api/vouchers/${pendOrder.codes[0]}/use`, null, { 'x-staff-pin': '2468' })).status, 409);
+console.log('✓ bon remboursé sur PayPal : refusé à l\'institut');
+
+// signature de notification invalide → ignorée
+globalThis.fetch = async (u, o) => String(u).endsWith('/verify-webhook-signature') ? new Response(JSON.stringify({ verification_status: 'FAILURE' }), { status: 200 }) : realFetch(u, o);
+assert.equal((await call('POST', '/api/paypal/webhook', { event_type: 'PAYMENT.CAPTURE.REFUNDED', resource: {} })).status, 401);
+globalThis.fetch = realFetch;
+console.log('✓ fausse notification PayPal rejetée');
+
+// PDF bon accessoires
+const accV = JSON.parse(await KV.get('v:' + accCode));
+fs.writeFileSync(new URL('./out/bon-accessoires.pdf', import.meta.url), await (await import('../src/pdf.js')).voucherPDF(accV, 'https://x/verifier?code=' + accCode));
+console.log('\nTous les nouveaux tests passent.');
+
+/* ===== Promotions de fêtes ===== */
+const today = new Intl.DateTimeFormat('fr-CA', { timeZone: 'Europe/Paris' }).format(new Date());
+env.SITE_URL = 'https://site.test/';
+const promosFile = { promos: [{ id: 'test', nom: 'Test', du: today, au: today, soins: { 'Escapade au pays des sens': 50, 'Soin du dos': 999 } }] };
+globalThis.fetch = async (u, o) => String(u) === 'https://site.test/promos.json' ? new Response(JSON.stringify(promosFile)) : realFetch(u, o);
+r = await call('POST', '/api/orders', { buyer, items: [{ type: 'soin', soin: 'Escapade au pays des sens' }, { type: 'soin', soin: 'Soin du dos' }] });
+assert.equal(orders[r.data.id].purchase_units[0].amount.value, '100.00'); // 50 (promo) + 50 (prix normal : une "promo" plus chère est ignorée)
+promosFile.promos[0].du = '2000-01-01'; promosFile.promos[0].au = '2000-01-02';
+r = await call('POST', '/api/orders', { buyer, items: [{ type: 'soin', soin: 'Escapade au pays des sens' }] });
+assert.equal(orders[r.data.id].purchase_units[0].amount.value, '65.00');
+globalThis.fetch = realFetch;
+console.log('✓ prix promotionnel appliqué uniquement pendant la période, jamais plus cher que le prix normal');

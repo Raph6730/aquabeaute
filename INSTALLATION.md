@@ -60,6 +60,16 @@ Dans Cloudflare : le Worker `aquabeaute-bons-cadeaux` → **Paramètres** → **
 | `PAYPAL_SECRET` | le Secret PayPal |
 | `BREVO_API_KEY` | la clé API Brevo |
 | `STAFF_PIN` | un code PIN choisi par Christelle (6 chiffres conseillés) pour la page de vérification |
+| `PAYPAL_WEBHOOK_ID` | voir étape 4 bis |
+
+## Étape 4 bis : les notifications PayPal (5 min, fortement conseillé)
+
+Elles servent de filet de sécurité : si le client ferme la page juste après avoir payé, si PayPal confirme un paiement plus tard, ou si Christelle rembourse un bon depuis PayPal (le bon est alors automatiquement annulé).
+
+1. Sur **developer.paypal.com** → **Apps & Credentials** → l'app `Site Aqua Beauté` → section **Webhooks** → **Add Webhook**.
+2. URL : `https://…workers.dev/api/paypal/webhook` (l'adresse du moteur suivie de `/api/paypal/webhook`).
+3. Cocher les événements : `Checkout order approved`, `Payment capture completed`, `Payment capture refunded`, `Payment capture reversed`.
+4. Enregistrer, puis copier le **Webhook ID** affiché et l'ajouter dans Cloudflare comme secret `PAYPAL_WEBHOOK_ID`.
 
 ## Étape 5 : essai complet
 
@@ -70,7 +80,7 @@ Dans Cloudflare : le Worker `aquabeaute-bons-cadeaux` → **Paramètres** → **
 
 ## Étape 6 : passage aux vrais paiements
 
-1. Créer l'app PayPal en mode **Live** (étape 1) et remplacer `PAYPAL_CLIENT_ID` et `PAYPAL_SECRET` dans Cloudflare.
+1. Créer l'app PayPal en mode **Live** (étape 1), refaire le webhook (étape 4 bis) et remplacer `PAYPAL_CLIENT_ID`, `PAYPAL_SECRET` et `PAYPAL_WEBHOOK_ID` dans Cloudflare.
 2. Envoyer le nouveau Client ID à Claude, qui passe `PAYPAL_ENV` en `live` et met le site à jour.
 
 ---
@@ -80,4 +90,6 @@ Dans Cloudflare : le Worker `aquabeaute-bons-cadeaux` → **Paramètres** → **
 - **Une vente** : elle reçoit un e-mail « Bon cadeau vendu » avec les PDF. Si le client a choisi « À l'institut », elle imprime le bon et le prépare en enveloppe.
 - **Un client présente un bon** : scanner le QR code avec l'appareil photo du téléphone (ou taper le code sur la page `/verifier`), vérifier ✅, puis **Marquer comme utilisé**.
 - **Erreur de clic** : le bouton « Annuler l'utilisation » remet le bon comme valable.
+- **Trois types de bons** (affichés à la vérification) : *Montant* (toutes prestations), *Soin précis*, *Accessoires*. Chaque vente indique le type dans PayPal, pour le comptable.
+- **Remboursement** : rembourser depuis PayPal suffit, le bon passe automatiquement en « remboursé » et sera refusé à la vérification.
 - **Suivi** : l'onglet « Tous les bons » montre les bons vendus, ceux encore à utiliser et le montant restant dû.

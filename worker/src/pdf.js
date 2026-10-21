@@ -92,7 +92,7 @@ export async function voucherPDF(v, verifyUrl) {
   const cw = mono.widthOfTextAtSize(v.code, 16);
   page.drawRectangle({ x: 38, y: 62, width: cw + 16, height: 24, color: fete ? C.white : C.pink });
   page.drawText(v.code, { x: 46, y: 69, size: 16, font: mono, color: C.ink });
-  const valid = v.type === 'soin' ? 'Soin offert · valable jusqu\'au ' + v.untilFr : 'Valable jusqu\'au ' + v.untilFr + ' sur toutes les prestations';
+  const valid = v.type === 'soin' ? 'Soin offert · valable jusqu\'au ' + v.untilFr : v.type === 'accessoire' ? 'Valable jusqu\'au ' + v.untilFr + ' sur les accessoires de la boutique (sacs, bijoux, foulards)' : 'Valable jusqu\'au ' + v.untilFr + ' sur toutes les prestations';
   page.drawText(safe(sans, valid), { x: 42, y: 44, size: 9, font: sans, color: sub });
   page.drawText('8 rue du Maréchal Foch, 67190 Mutzig · 03 88 23 00 98 · Sur rendez-vous', { x: 42, y: 28, size: 8, font: sans, color: sub, opacity: 0.85 });
   drawQR(page, verifyUrl, W - 140, 40, 96, C.ink);

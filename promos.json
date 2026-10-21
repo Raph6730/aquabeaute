@@ -1,0 +1,58 @@
+{
+  "_mode_d_emploi": "Promotions de fêtes. Chaque promo s'affiche automatiquement entre les dates 'du' et 'au' (incluses, heure de Paris) : bandeau en haut du site, section sur l'accueil, prix barrés dans la carte des soins, et prix réduit pour les bons cadeaux de ces soins. Les noms des soins doivent être écrits exactement comme sur le site. Aperçu avant la date : ajouter ?promo=noel (ou l'id voulu) à l'adresse du site. PRIX D'EXEMPLE, À VALIDER AVEC CHRISTELLE.",
+  "promos": [
+    {
+      "id": "noel",
+      "nom": "Noël",
+      "titre": "Les offres de Noël",
+      "du": "2026-12-01",
+      "au": "2026-12-24",
+      "bandeau": "🎄 Offres de Noël jusqu'au 24 décembre · Offrez un bon cadeau au prix doux",
+      "soins": {
+        "Pause gourmande au chocolat": 55,
+        "Frisson de Laponie": 75,
+        "Soin Excellage · soin signature": 115,
+        "Soin des îles paradisiaques": 57
+      }
+    },
+    {
+      "id": "saint-valentin",
+      "nom": "Saint-Valentin",
+      "titre": "Les offres de la Saint-Valentin",
+      "du": "2027-02-01",
+      "au": "2027-02-14",
+      "bandeau": "💝 Saint-Valentin : des soins à offrir à prix doux jusqu'au 14 février",
+      "soins": {
+        "Escapade au pays des sens": 58,
+        "Pause gourmande au chocolat": 55,
+        "Soin Regard pétillant": 38
+      }
+    },
+    {
+      "id": "fete-des-meres",
+      "nom": "Fête des mères",
+      "titre": "Les offres de la fête des mères",
+      "du": "2027-05-15",
+      "au": "2027-05-30",
+      "bandeau": "🌷 Fête des mères (dimanche 30 mai) : gâtez votre maman avec un bon cadeau",
+      "soins": {
+        "Soin Spiruline 35-50 ans": 65,
+        "Trésors de Moorea": 72,
+        "Soin Fondamental · hydra, vitalité ou pureté": 72
+      }
+    },
+    {
+      "id": "fete-des-peres",
+      "nom": "Fête des pères",
+      "titre": "Les offres de la fête des pères",
+      "du": "2027-06-06",
+      "au": "2027-06-20",
+      "bandeau": "👔 Fête des pères (dimanche 20 juin) : un moment de détente à offrir",
+      "soins": {
+        "Soin du dos": 45,
+        "Détente profonde": 57,
+        "Modelage du cuir chevelu": 36
+      }
+    }
+  ]
+}

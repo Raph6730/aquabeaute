@@ -2,12 +2,13 @@
 //
 //  POST /api/orders                 le site envoie le panier → le moteur calcule le prix lui-même et crée la commande PayPal
 //  POST /api/orders/:id/capture     après validation PayPal → encaissement vérifié, création des bons, PDF, e-mails
+//  POST /api/paypal/webhook         notifications PayPal (paiement confirmé plus tard, page fermée, remboursement)
 //  GET  /verifier                   page privée de l'institut (code PIN) pour scanner et valider les bons
 //  GET  /api/vouchers               liste des bons (PIN)
 //  GET  /api/vouchers/:code         détail d'un bon (PIN)
 //  POST /api/vouchers/:code/use     marquer un bon comme utilisé (PIN)
 //  POST /api/vouchers/:code/unuse   annuler une utilisation par erreur (PIN)
-import { SOINS, MONTANT_MIN, MONTANT_MAX } from './catalog.js';
+import { SOINS, MONTANT_MIN, MONTANT_MAX, TYPES } from './catalog.js';
 import { voucherPDF, toBase64 } from './pdf.js';
 import { VERIFIER_HTML } from './verifier.js';
 
@@ -30,6 +31,7 @@ export default {
       if (p === '/api/orders' && req.method === 'POST') return withCors(await createOrder(req, env), cors);
       let m;
       if ((m = p.match(/^\/api\/orders\/([A-Z0-9]+)\/capture$/)) && req.method === 'POST') return withCors(await captureOrder(m[1], env, url), cors);
+      if (p === '/api/paypal/webhook' && req.method === 'POST') return await webhook(req, env, url);
       if (p.startsWith('/api/vouchers')) {
         const auth = await checkPin(req, env); if (auth) return auth;
         if (p === '/api/vouchers' && req.method === 'GET') return listVouchers(env, url);
@@ -68,16 +70,30 @@ async function pp(env, path, body, extraHeaders = {}) {
 }
 
 /* ---------------- Commande ---------------- */
-function normalizeCart(body) {
+/* Promotions de fêtes : lues dans promos.json sur le site (même fichier que l'affichage), dates en heure de Paris */
+async function activePromo(env) {
+  if (!env.SITE_URL) return null;
+  try {
+    const r = await fetch(env.SITE_URL.replace(/\/?$/, '/') + 'promos.json', { cf: { cacheTtl: 300 } });
+    if (!r.ok) return null;
+    const j = await r.json();
+    const today = new Intl.DateTimeFormat('fr-CA', { timeZone: 'Europe/Paris' }).format(new Date());
+    return (j.promos || []).find(p => p.du <= today && today <= p.au) || null;
+  } catch { return null; }
+}
+
+function normalizeCart(body, promo) {
   const items = Array.isArray(body?.items) ? body.items : [];
   if (!items.length || items.length > 20) throw fail('Panier vide ou trop grand.');
   const out = items.map(it => {
-    const type = it.type === 'soin' ? 'soin' : 'montant';
+    const type = TYPES[it.type] ? it.type : 'montant';
     let price, soin = '';
     if (type === 'soin') {
       soin = clean(it.soin, 120);
       price = SOINS[soin];
       if (!price) throw fail('Ce soin n\'est pas disponible en bon cadeau : ' + soin);
+      const pp_ = Number(promo?.soins?.[soin]);
+      if (pp_ > 0 && pp_ < price) price = pp_;   // prix promotionnel en cours
     } else {
       price = Math.round(Number(it.amount));
       if (!(price >= MONTANT_MIN && price <= MONTANT_MAX)) throw fail(`Le montant doit être entre ${MONTANT_MIN} et ${MONTANT_MAX} €.`);
@@ -96,10 +112,10 @@ function normalizeCart(body) {
   if (!buyer.name || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(buyer.email)) throw fail('Nom et e-mail valides obligatoires.');
   return { items: out, buyer };
 }
-const label = it => it.type === 'soin' ? 'Bon cadeau · ' + it.soin : 'Bon cadeau ' + it.price + ' €';
+const label = it => it.type === 'soin' ? 'Bon cadeau · ' + it.soin : it.type === 'accessoire' ? 'Bon cadeau accessoires ' + it.price + ' €' : 'Bon cadeau ' + it.price + ' €';
 
 async function createOrder(req, env) {
-  const cart = normalizeCart(await req.json().catch(() => null));
+  const cart = normalizeCart(await req.json().catch(() => null), await activePromo(env));
   const total = cart.items.reduce((s, it) => s + it.price * it.qty, 0);
   const ref = 'AB-' + randomCode(6);
   const { ok, data } = await pp(env, '/v2/checkout/orders', {
@@ -110,7 +126,7 @@ async function createOrder(req, env) {
       amount: { currency_code: 'EUR', value: euros(total), breakdown: { item_total: { currency_code: 'EUR', value: euros(total) } } },
       items: cart.items.map(it => ({
         name: clean(label(it) + (it.to ? ' pour ' + it.to : ''), 127),
-        description: clean((it.design === 'fete' ? it.occasion : 'Classique') + ' · ' + (it.format === 'e' ? 'par e-mail' : 'retrait institut') + (it.msg ? ' · ' + it.msg : ''), 127),
+        description: clean('[' + TYPES[it.type] + '] ' + (it.design === 'fete' ? it.occasion : 'Classique') + ' · ' + (it.format === 'e' ? 'par e-mail' : 'retrait institut') + (it.msg ? ' · ' + it.msg : ''), 127),
         quantity: String(it.qty), unit_amount: { currency_code: 'EUR', value: euros(it.price) }, category: 'DIGITAL_GOODS'
       }))
     }],
@@ -128,36 +144,102 @@ async function captureOrder(orderId, env, url) {
   if (order.status === 'payée') return json(publicResult(order)); // déjà traitée (double clic, rechargement…)
 
   const { ok, data } = await pp(env, `/v2/checkout/orders/${orderId}/capture`, null, { 'PayPal-Request-Id': 'cap-' + orderId });
-  const already = !ok && data?.details?.some?.(d => d.issue === 'ORDER_ALREADY_CAPTURED');
+  const issues = (data?.details || []).map(d => d.issue);
+  if (!ok && issues.includes('INSTRUMENT_DECLINED'))   // carte refusée : PayPal propose un autre moyen de paiement
+    return json({ error: 'Votre moyen de paiement a été refusé. Choisissez-en un autre.', restart: true }, 422);
   let cap = data?.purchase_units?.[0]?.payments?.captures?.[0];
-  if (already) {
-    const r = await fetch(ppBase(env) + '/v2/checkout/orders/' + orderId, { headers: { authorization: 'Bearer ' + await ppToken(env) } });
-    const d = await r.json(); cap = d?.purchase_units?.[0]?.payments?.captures?.[0];
-  } else if (!ok) throw fail('Le paiement n\'a pas abouti. Aucun montant n\'a été prélevé.', 402);
-  if (!cap || cap.status !== 'COMPLETED' || cap.amount?.currency_code !== 'EUR' || cap.amount?.value !== order.total)
-    throw fail('Paiement non confirmé par PayPal. Contactez l\'institut au 03 88 23 00 98.', 402);
+  if (!ok && issues.includes('ORDER_ALREADY_CAPTURED')) cap = await getCapture(env, orderId);
+  else if (!ok) throw fail('Le paiement n\'a pas abouti. Aucun montant n\'a été prélevé.', 402);
+  return json(await finalize(orderId, cap, env, url));
+}
 
-  // Création des bons
+async function getCapture(env, orderId) {
+  const r = await fetch(ppBase(env) + '/v2/checkout/orders/' + orderId, { headers: { authorization: 'Bearer ' + await ppToken(env) } });
+  const d = await r.json().catch(() => ({}));
+  return d?.purchase_units?.[0]?.payments?.captures?.[0];
+}
+
+// Création des bons une fois l'argent confirmé (appelé par le site ou par la notification PayPal).
+async function finalize(orderId, cap, env, url) {
+  const key = 'o:' + orderId;
+  const order = JSON.parse(await env.BONS.get(key) || 'null');
+  if (!order) throw fail('Commande inconnue ou expirée.', 404);
+  if (order.status === 'payée') return publicResult(order);
+  if (!cap || cap.amount?.currency_code !== 'EUR' || cap.amount?.value !== order.total)
+    throw fail('Paiement non confirmé par PayPal. Contactez l\'institut au 03 88 23 00 98.', 402);
+  if (cap.status === 'PENDING') {           // PayPal vérifie encore le paiement : les bons partiront à la confirmation
+    if (order.status !== 'en attente') {
+      order.status = 'en attente'; order.capture = cap.id;
+      await env.BONS.put(key, JSON.stringify(order));
+      await env.BONS.put('c:' + cap.id, orderId);
+      try { await brevo(env, { to: [{ email: env.SHOP_EMAIL || env.SENDER_EMAIL }], subject: 'Paiement PayPal en attente : ' + order.ref, htmlContent: mailLayout(`<p>PayPal vérifie le paiement de ${esc(order.buyer.name)} (${order.total.replace('.', ',')} €, commande ${order.ref}). Les bons seront créés et envoyés automatiquement dès la confirmation.</p>`) }); } catch (e) { console.error(e); }
+    }
+    return { ok: true, pending: true, ref: order.ref, vouchers: [] };
+  }
+  if (cap.status !== 'COMPLETED') throw fail('Paiement non confirmé par PayPal. Contactez l\'institut au 03 88 23 00 98.', 402);
+
+  // Codes déterministes : deux demandes simultanées produisent les mêmes codes, donc jamais de bons en double.
   const created = Date.now();
   const expires = new Date(created); expires.setFullYear(expires.getFullYear() + 1);
-  const vouchers = [];
+  const vouchers = []; let n = 0;
   for (const it of order.items) for (let i = 0; i < it.qty; i++) {
-    let code; do { code = 'AQB-' + randomCode(4) + '-' + randomCode(4); } while (await env.BONS.get('v:' + code));
-    const v = { code, ...it, qty: 1, buyer: order.buyer, order: order.ref, paypalOrder: orderId, paypalCapture: cap.id, created, expires: expires.getTime(), untilFr: frDate(expires), status: 'valide' };
-    await env.BONS.put('v:' + code, JSON.stringify(v), { metadata: meta(v) });
+    const code = await codeFor(env, orderId, n++);
+    const prev = JSON.parse(await env.BONS.get('v:' + code) || 'null');
+    const v = prev || { code, ...it, qty: 1, buyer: order.buyer, order: order.ref, paypalOrder: orderId, paypalCapture: cap.id, created, expires: expires.getTime(), untilFr: frDate(expires), status: 'valide' };
+    if (!prev) await env.BONS.put('v:' + code, JSON.stringify(v), { metadata: meta(v) });
     vouchers.push(v);
   }
-  order.status = 'payée'; order.paid = created; order.codes = vouchers.map(v => v.code);
-  order.vouchers = vouchers.map(v => ({ code: v.code, design: v.design, occasion: v.occasion, to: v.to, msg: v.msg, type: v.type, soin: v.soin, price: v.price, until: v.untilFr, format: v.format }));
+  order.status = 'payée'; order.paid = created; order.capture = cap.id; order.codes = vouchers.map(v => v.code);
+  order.vouchers = vouchers.map(v => ({ code: v.code, design: v.design, occasion: v.occasion, to: v.to, msg: v.msg, type: v.type, soin: v.soin, price: v.price, until: v.untilFr, format: v.format, created: v.created, expires: v.expires }));
   await env.BONS.put(key, JSON.stringify(order)); // conservée sans expiration
+  await env.BONS.put('c:' + cap.id, orderId);
 
-  // PDF + e-mails (un échec d'envoi ne bloque pas : les bons existent et Christelle peut les renvoyer)
-  try { await sendEmails(order, vouchers, env, url); order.emailed = true; }
-  catch (e) { console.error('e-mail', e); order.emailError = String(e.message || e); }
-  await env.BONS.put(key, JSON.stringify(order));
-  return json(publicResult(order));
+  // PDF + e-mails (un échec d'envoi ne bloque pas : les bons existent et l'institut a la liste)
+  if (!order.emailed) {
+    try { await sendEmails(order, vouchers, env, url); order.emailed = true; }
+    catch (e) { console.error('e-mail', e); order.emailError = String(e.message || e); }
+    await env.BONS.put(key, JSON.stringify(order));
+  }
+  return publicResult(order);
 }
-const publicResult = o => ({ ok: true, ref: o.ref, vouchers: o.vouchers, emailed: !!o.emailed });
+async function codeFor(env, orderId, n) {
+  const h = new Uint8Array(await crypto.subtle.digest('SHA-256', new TextEncoder().encode((env.PAYPAL_SECRET || '') + '|' + orderId + '|' + n)));
+  const c = Array.from(h.slice(0, 8), x => ALPH[x % ALPH.length]).join('');
+  return 'AQB-' + c.slice(0, 4) + '-' + c.slice(4);
+}
+
+/* ---------------- Notifications PayPal (webhook) ----------------
+   Filet de sécurité : si le client ferme la page juste après avoir payé, si PayPal confirme plus tard un paiement
+   « en attente », ou si Christelle rembourse un bon depuis PayPal. */
+async function webhook(req, env, url) {
+  if (!env.PAYPAL_WEBHOOK_ID) return json({ error: 'Webhook non configuré' }, 503);
+  const raw = await req.text(); let ev; try { ev = JSON.parse(raw); } catch { return json({ error: 'JSON invalide' }, 400); }
+  const h = n => req.headers.get(n);
+  const { ok, data } = await pp(env, '/v1/notifications/verify-webhook-signature', {
+    auth_algo: h('paypal-auth-algo'), cert_url: h('paypal-cert-url'), transmission_id: h('paypal-transmission-id'),
+    transmission_sig: h('paypal-transmission-sig'), transmission_time: h('paypal-transmission-time'), webhook_id: env.PAYPAL_WEBHOOK_ID, webhook_event: ev
+  });
+  if (!ok || data.verification_status !== 'SUCCESS') return json({ error: 'Signature invalide' }, 401);
+  const r = ev.resource || {};
+  try {
+    if (ev.event_type === 'CHECKOUT.ORDER.APPROVED') {
+      if (await env.BONS.get('o:' + r.id)) await captureOrder(r.id, env, url);
+    } else if (ev.event_type === 'PAYMENT.CAPTURE.COMPLETED') {
+      const orderId = r.supplementary_data?.related_ids?.order_id || await env.BONS.get('c:' + r.id);
+      if (orderId && await env.BONS.get('o:' + orderId)) await finalize(orderId, r, env, url);
+    } else if (ev.event_type === 'PAYMENT.CAPTURE.REFUNDED' || ev.event_type === 'PAYMENT.CAPTURE.REVERSED') {
+      const capId = (r.links || []).find(l => l.rel === 'up')?.href?.split('/').pop() || r.id;
+      const orderId = await env.BONS.get('c:' + capId);
+      const order = orderId && JSON.parse(await env.BONS.get('o:' + orderId) || 'null');
+      for (const code of order?.codes || []) {
+        const v = JSON.parse(await env.BONS.get('v:' + code) || 'null');
+        if (v && v.status !== 'utilisé') { v.status = 'remboursé'; v.refundedAt = Date.now(); await env.BONS.put('v:' + code, JSON.stringify(v), { metadata: meta(v) }); }
+      }
+    }
+  } catch (e) { console.error('webhook', e); return json({ error: 'Traitement impossible' }, 500); } // PayPal réessaiera
+  return json({ ok: true });
+}
+const publicResult = o => ({ ok: true, ref: o.ref, vouchers: o.vouchers || [], emailed: !!o.emailed, pending: o.status === 'en attente' });
 const meta = v => ({ to: v.to, price: v.price, type: v.type, soin: v.soin.slice(0, 60), status: v.status, created: v.created, expires: v.expires, buyer: v.buyer.name.slice(0, 40), usedAt: v.usedAt || 0 });
 function randomCode(n) { return Array.from(crypto.getRandomValues(new Uint8Array(n)), x => ALPH[x % ALPH.length]).join(''); }
 
@@ -169,7 +251,7 @@ async function sendEmails(order, vouchers, env, url) {
   const eItems = vouchers.map((v, i) => ({ v, pdf: pdfs[i] }));
   const toBuyer = eItems.filter(x => x.v.format === 'e');
   const papier = eItems.filter(x => x.v.format === 'papier');
-  const list = vouchers.map(v => `<li><b>${esc(label(v))}</b>${v.to ? ' pour ' + esc(v.to) : ''} · code <b style="font-family:monospace">${v.code}</b>${v.format === 'papier' ? ' · à retirer à l\'institut' : ''}</li>`).join('');
+  const list = vouchers.map(v => `<li><b>${esc(label(v))}</b> <span style="color:#8A929C">(${TYPES[v.type]})</span>${v.to ? ' pour ' + esc(v.to) : ''} · code <b style="font-family:monospace">${v.code}</b>${v.format === 'papier' ? ' · à retirer à l\'institut' : ''}</li>`).join('');
 
   const buyerHtml = mailLayout(`
     <h1 style="color:#2B8DBB;font-size:22px;margin:0 0 8px">Merci ${esc(order.buyer.name)} !</h1>
@@ -218,7 +300,7 @@ async function checkPin(req, env) {
   return null;
 }
 function timingSafeEqual(a, b) { if (a.length !== b.length) return false; let r = 0; for (let i = 0; i < a.length; i++) r |= a.charCodeAt(i) ^ b.charCodeAt(i); return r === 0; }
-const view = v => ({ code: v.code, label: label(v), type: v.type, soin: v.soin, price: v.price, to: v.to, msg: v.msg, design: v.design, buyer: v.buyer?.name, buyerTel: v.buyer?.tel, format: v.format, created: v.created, expires: v.expires, status: v.status, usedAt: v.usedAt || null, expired: Date.now() > v.expires });
+const view = v => ({ code: v.code, label: label(v), type: v.type, typeLabel: TYPES[v.type], soin: v.soin, price: v.price, to: v.to, msg: v.msg, design: v.design, buyer: v.buyer?.name, buyerTel: v.buyer?.tel, format: v.format, created: v.created, expires: v.expires, status: v.status, usedAt: v.usedAt || null, expired: Date.now() > v.expires });
 async function getVoucher(code, env) {
   const v = JSON.parse(await env.BONS.get('v:' + code) || 'null');
   if (!v) return json({ error: 'Aucun bon ne correspond à ce code.' }, 404);
@@ -228,6 +310,7 @@ async function useVoucher(code, use, env) {
   const v = JSON.parse(await env.BONS.get('v:' + code) || 'null');
   if (!v) return json({ error: 'Aucun bon ne correspond à ce code.' }, 404);
   if (use) {
+    if (v.status === 'remboursé') return json({ error: 'Ce bon a été remboursé : il n\'est plus valable.', voucher: view(v) }, 409);
     if (v.status === 'utilisé') return json({ error: 'Ce bon a déjà été utilisé le ' + new Date(v.usedAt).toLocaleDateString('fr-FR', { timeZone: 'Europe/Paris' }) + '.', voucher: view(v) }, 409);
     v.status = 'utilisé'; v.usedAt = Date.now();
   } else { v.status = 'valide'; delete v.usedAt; }

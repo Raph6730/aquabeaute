@@ -35,6 +35,7 @@
   --line:#2C313B; --shadow:0 12px 34px rgba(0,0,0,.4);
 }
 *{box-sizing:border-box}
+[hidden]{display:none!important}
 html{scroll-behavior:smooth}
 body{margin:0;background:var(--bg);color:var(--ink);font-family:Poppins,system-ui,sans-serif;font-weight:400;line-height:1.65;-webkit-font-smoothing:antialiased;padding-bottom:76px;font-size:15.5px}
 @media(min-width:900px){body{padding-bottom:0}}
@@ -109,13 +110,14 @@ section{padding:60px 0}
 .bg-soft{background:var(--soft)}
 .bg-pink{background:var(--soft-2)}
 
-.hero{position:relative;overflow:hidden;min-height:540px;display:flex;align-items:center;padding:50px 0}
-.hero .photo{position:absolute;inset:0;background:var(--blue-soft) center/cover no-repeat}
-.hero .veil{position:absolute;inset:0;background:linear-gradient(180deg,rgba(255,255,255,.55) 0%,rgba(255,255,255,.92) 55%,#fff 100%)}
-@media(min-width:860px){.hero .veil{background:linear-gradient(90deg,#fff 0%,rgba(255,255,255,.93) 42%,rgba(255,255,255,.35) 70%,rgba(255,255,255,0) 100%)}}
-:root[data-theme="dark"] .hero .veil{background:linear-gradient(90deg,#14161C 0%,rgba(20,22,28,.92) 45%,rgba(20,22,28,.5) 100%)}
-@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .hero .veil{background:linear-gradient(90deg,#14161C 0%,rgba(20,22,28,.92) 45%,rgba(20,22,28,.5) 100%)}}
-.hero .wrap{position:relative;width:100%}
+.hero{position:relative;overflow:hidden;padding:44px 0 56px;background:linear-gradient(180deg,var(--soft) 0%,var(--bg) 100%)}
+.hero .wrap{display:grid;gap:34px;align-items:center}
+@media(min-width:860px){.hero .wrap{grid-template-columns:1.05fr .95fr}.hero{padding:64px 0 72px}}
+.hero-pics{position:relative;max-width:470px;width:100%;justify-self:center;padding:0 0 40px 40px}
+.hero-pics .main{width:100%;aspect-ratio:502/531;object-fit:cover;border-radius:200px 200px 22px 22px;box-shadow:var(--shadow);background:var(--blue-soft)}
+.hero-pics .inset{position:absolute;left:0;bottom:0;width:46%;aspect-ratio:1;object-fit:cover;border-radius:18px;border:5px solid var(--bg);box-shadow:var(--shadow);background:var(--pink-soft)}
+.hero-pics .tag{position:absolute;right:-6px;top:24px;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:10px 14px;box-shadow:var(--shadow);font-size:.8rem;line-height:1.3}
+.hero-pics .tag b{display:block;color:var(--blue-deep);font-size:1.15rem}
 .hero-text{max-width:560px}
 .hero h1{font-size:clamp(2.1rem,6.5vw,3.3rem);margin:14px 0 8px}
 .hero .sub{font-size:1.1rem;color:var(--ink-soft);margin:0 0 26px}
@@ -217,10 +219,27 @@ section{padding:60px 0}
 .svc .p{font-weight:600;color:var(--blue-deep);white-space:nowrap}
 .svc .gift{border:1px solid var(--magenta);background:transparent;border-radius:999px;padding:3px 10px;font-size:.75rem;color:var(--magenta);white-space:nowrap;font-weight:500}
 .svc .gift:hover{background:var(--magenta);color:#fff}
+.promo-sec{background:linear-gradient(135deg,var(--pink-soft),var(--blue-soft))}
+.promo-head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:end;gap:10px;margin-bottom:20px}
+.promo-head h2{font-size:clamp(1.6rem,4.4vw,2.2rem)}
+.promo-dates{font-size:.85rem;font-weight:600;color:var(--magenta);background:var(--surface);padding:6px 12px;border-radius:999px}
+.promo-cards{display:grid;gap:12px;grid-template-columns:repeat(auto-fill,minmax(220px,1fr))}
+.promo-card{background:var(--surface);border-radius:16px;padding:18px;display:flex;flex-direction:column;gap:6px;box-shadow:var(--shadow)}
+.promo-card h3{font-size:1rem;color:var(--ink)}
+.promo-card .prices{display:flex;align-items:baseline;gap:10px}
+.promo-card .prices b{font-size:1.5rem;color:var(--magenta)}
+.promo-card s,.svc s{color:var(--muted);font-weight:400}
+.promo-card .btn{margin-top:auto}
+.badge-promo{display:inline-block;background:var(--magenta);color:#fff;font-size:.68rem;font-weight:600;padding:2px 8px;border-radius:999px;letter-spacing:.02em;vertical-align:middle}
+.preview-flag{position:fixed;left:12px;bottom:86px;z-index:55;background:#2A2A33;color:#fff;font-size:.78rem;padding:6px 12px;border-radius:999px}
+@media(min-width:900px){.preview-flag{bottom:16px}}
 .note{background:var(--blue-soft);border-radius:14px;padding:14px 16px;font-size:.9rem;margin:6px 0 18px}
 .note.pink{background:var(--pink-soft)}
 .cat-logo{height:56px;width:auto;margin-bottom:14px;background:#fff;border-radius:10px;padding:6px;border:1px solid var(--line)}
 
+.gc-head{display:grid;gap:20px;align-items:center}
+@media(min-width:860px){.gc-head{grid-template-columns:1.2fr .8fr}}
+.gc-head-pic{width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:20px;box-shadow:var(--shadow)}
 .gc-builder{display:grid;gap:24px}
 @media(min-width:900px){.gc-builder{grid-template-columns:.9fr 1.1fr;align-items:start}.gc-preview{position:sticky;top:90px}}
 .gc-preview{display:grid;gap:14px}
@@ -267,6 +286,9 @@ section{padding:60px 0}
 .seg{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .seg .chip{text-align:left;font-weight:400;font-size:.85rem;line-height:1.35}
 .seg .chip b{display:block;font-weight:600;font-size:.92rem}
+.seg3{grid-template-columns:repeat(3,1fr)}
+.seg3 .chip{padding:10px 10px;font-size:.78rem}
+.gc-type-note{font-size:.8rem;color:var(--muted);margin-top:6px}
 
 .filters{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;margin-bottom:18px}
 .products{display:grid;gap:14px;grid-template-columns:repeat(2,1fr)}
@@ -422,13 +444,11 @@ footer.site a{text-decoration:none;display:block;padding:3px 0}
     <a href="#contact">Contact & horaires</a>
   </div>
 </header>
-<a class="giftbar" href="#bons-cadeaux">🎁 Bons cadeaux en ligne, payés par PayPal ou par carte · <u>Offrir</u></a>
+<a class="giftbar" id="giftbar" href="#bons-cadeaux">🎁 Bons cadeaux en ligne, payés par PayPal ou par carte · <u>Offrir</u></a>
 
 <main>
 <div class="page" id="p-accueil">
   <section class="hero">
-    <div class="photo" id="heroPhoto"></div>
-    <div class="veil"></div>
     <div class="wrap">
       <div class="hero-text">
         <span class="status"><span class="dot" id="dotHero"></span><span id="statusHero">…</span></span>
@@ -440,8 +460,15 @@ footer.site a{text-decoration:none;display:block;padding:3px 0}
           <a class="btn btn-ghost" href="tel:0388230098">Réserver : 03 88 23 00 98</a>
         </div>
       </div>
+      <div class="hero-pics">
+        <img class="main" src="images/2023/08/IMG_9330-1.jpg" alt="La façade de l'institut Aqua Beauté, rue du Maréchal Foch à Mutzig" fetchpriority="high">
+        <img class="inset" src="images/2023/08/IMG_9330-7.jpg" alt="Une cabine de soin de l'institut" loading="lazy">
+        <div class="tag"><b>Depuis 2013</b>au cœur de Mutzig</div>
+      </div>
     </div>
   </section>
+
+  <section id="promoSection" class="promo-sec" hidden></section>
 
   <section class="bg-pink">
     <div class="wrap gift-feature">
@@ -577,7 +604,8 @@ footer.site a{text-decoration:none;display:block;padding:3px 0}
 <div class="page" id="p-bons-cadeaux">
   <section class="bg-pink" style="padding-bottom:30px">
     <div class="wrap">
-      <div class="sec-head" style="margin-bottom:0"><span class="kicker">Offrez un moment de bien-être</span><h2>Créez votre <em>bon cadeau</em></h2><p>Payé en ligne avec PayPal ou par carte, envoyé par e-mail ou à retirer à l'institut. Valable 1 an.</p></div>
+      <div class="gc-head"><div class="sec-head" style="margin-bottom:0"><span class="kicker">Offrez un moment de bien-être</span><h2>Créez votre <em>bon cadeau</em></h2><p>Payé en ligne avec PayPal ou par carte, envoyé par e-mail ou à retirer à l'institut. Valable 1 an.</p></div>
+      <img class="gc-head-pic" src="images/2025/01/relaxing-back-massage-2025-01-29-08-15-31-utc-scaled.webp" alt="Moment de détente à l'institut" loading="lazy"></div>
     </div>
   </section>
   <section style="padding-top:30px">
@@ -589,15 +617,16 @@ footer.site a{text-decoration:none;display:block;padding:3px 0}
       <div class="card">
         <div class="field">
           <span class="lbl">1. Que voulez-vous offrir ?</span>
-          <div class="seg">
-            <button class="chip on" data-gctype="montant"><b>Un montant</b>La personne choisit son soin</button>
+          <div class="seg seg3">
+            <button class="chip on" data-gctype="montant"><b>Un montant</b>Valable sur tous les soins</button>
             <button class="chip" data-gctype="soin"><b>Un soin précis</b>Modelage, soin visage…</button>
+            <button class="chip" data-gctype="accessoire"><b>Accessoires</b>Sacs, bijoux, foulards</button>
           </div>
         </div>
         <div class="field" id="gcAmountField">
           <span class="lbl">2. Montant</span>
           <div class="chips" id="gcAmounts"></div>
-          <input type="number" id="gcCustom" min="20" max="500" inputmode="numeric" placeholder="Autre montant (20 à 500 €)" style="margin-top:8px">
+          <input type="number" id="gcCustom" min="20" max="600" inputmode="numeric" placeholder="Autre montant (20 à 600 €)" style="margin-top:8px">
         </div>
         <div class="field" id="gcSoinField" hidden>
           <label for="gcSoin">2. Soin offert</label>
@@ -713,7 +742,6 @@ const LIVE=!!(PAYPAL_CLIENT_ID&&API_URL);
 /* images de l'institut (chargées depuis le site actuel, avec repli si indisponibles) */
 function bg(el,url){const i=new Image();i.onload=()=>{el.style.backgroundImage=`url("${url}")`};i.src=url;}
 function img(el,url,onFail){el.onerror=onFail||(()=>el.remove());el.src=url;}
-bg($('#heroPhoto'),IMG+'2025/01/relaxing-back-massage-2025-01-29-08-15-31-utc-scaled.webp');
 img($('#giftPhoto'),IMG+'elementor/thumbs/IMG_7978-q98wl5v0cyrhvgvjjvdk1074m7jitr1gru2ef9b4c8.png',function(){this.style.visibility='hidden'});
 img($('#realCard'),IMG+'elementor/thumbs/IMG_79783-q98wqxlcbcnv5ahsuv63u1rzwd3n2uy58e8pher454.png');
 img($('#aboutPhoto'),IMG+'2023/05/j-ai-teste-les-soins-du-visage-1b.webp',function(){this.style.display='none'});
@@ -843,6 +871,36 @@ const CATS=[
 const giftable=(c,it)=>it.p>=25&&it.p<=200&&c.id!=='lumiere';
 const GIFTABLE=[];CATS.forEach(c=>c.groups.forEach(g=>g.items.forEach(it=>{if(giftable(c,it))GIFTABLE.push({...it,cat:c.name});})));
 
+/* promotions de fêtes (fichier promos.json) : actives automatiquement entre leurs dates, aperçu avec ?promo=id */
+let PROMO=null;
+const promoPrice=n=>{const v=PROMO&&PROMO.soins?+PROMO.soins[n]:0;return v>0&&v<ALLSOINS[n]?v:0;};
+const soinPrice=n=>promoPrice(n)||(GIFTABLE.find(x=>x.n===n)||{}).p;
+const ALLSOINS=Object.fromEntries(CATS.flatMap(c=>c.groups.flatMap(g=>g.items.map(i=>[i.n,i.p]))));
+const frDay=d=>new Date(d+'T12:00:00').toLocaleDateString('fr-FR',{day:'numeric',month:'long'});
+async function loadPromos(){
+  try{
+    const j=await (await fetch('promos.json',{cache:'no-cache'})).json();
+    const today=new Intl.DateTimeFormat('fr-CA',{timeZone:'Europe/Paris'}).format(new Date());
+    const q=new URLSearchParams(location.search).get('promo');
+    PROMO=(q&&j.promos.find(p=>p.id===q))||j.promos.find(p=>p.du<=today&&today<=p.au)||null;
+    if(!PROMO)return;
+    PROMO.apercu=!(PROMO.du<=today&&today<=PROMO.au);
+    applyPromo();
+  }catch(e){console.warn('promos',e);}
+}
+function applyPromo(){
+  $('#giftbar').innerHTML=esc(PROMO.bandeau)+' · <u>Offrir</u>';
+  const items=Object.entries(PROMO.soins||{}).filter(([n])=>ALLSOINS[n]);
+  const sec=$('#promoSection');
+  sec.innerHTML=`<div class="wrap"><div class="promo-head"><div><span class="kicker">${esc(PROMO.nom)}</span><h2>${esc(PROMO.titre||'Nos offres')}</h2></div><span class="promo-dates">Du ${frDay(PROMO.du)} au ${frDay(PROMO.au)}</span></div>
+    <div class="promo-cards">${items.map(([n,p])=>`<div class="promo-card"><h3>${esc(n)}</h3><div class="prices"><b>${eur(+p)}</b><s>${eur(ALLSOINS[n])}</s></div>
+      ${GIFTABLE.some(x=>x.n===n)?`<button class="btn btn-gift btn-sm" data-gift="${esc(n)}">🎁 Offrir ce soin</button>`:''}<a class="btn btn-ghost btn-sm" href="tel:0388230098">Réserver</a></div>`).join('')}</div></div>`;
+  sec.hidden=false;
+  if(PROMO.apercu)document.body.insertAdjacentHTML('beforeend',`<div class="preview-flag">Aperçu de la promo « ${esc(PROMO.nom)} » (pas encore en ligne)</div>`);
+  buildSoinOptions();renderGC();if($('#p-soins').classList.contains('on'))renderSvc();
+}
+$('#promoSection').addEventListener('click',e=>{const b=e.target.closest('[data-gift]');if(!b)return;gc.type='soin';gc.soin=b.dataset.gift;location.hash='bons-cadeaux';});
+
 const ico=k=>`<span class="ico"><svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">${IC[k]}</svg></span>`;
 $('#catCards').innerHTML=CATS.map(c=>`<a class="card cat-card" href="#soins/${c.id}">${ico(c.id)}<h3>${c.name}</h3><p>${c.short}</p><small>Voir les tarifs</small></a>`).join('')+
   `<a class="card cat-card gift-card-cta" href="#bons-cadeaux">${ico('cadeau')}<h3>Bons cadeaux</h3><p>Toutes nos prestations à offrir.</p><small>Offrir</small></a>`;
@@ -852,7 +910,7 @@ function renderSvc(){
   $('#svcTabs').innerHTML=CATS.map(c=>`<button class="tab ${c.id===curCat?'on':''}" data-cat="${c.id}" role="tab">${c.name}</button>`).join('');
   const c=CATS.find(x=>x.id===curCat);
   $('#svcPanel').innerHTML=(c.logo?`<img class="cat-logo" src="${IMG+c.logo}" alt="" onerror="this.remove()">`:'')+(c.intro?`<div class="note">${c.intro}</div>`:'')+
-   c.groups.map(g=>`<div class="svc-group"><h3>${g.g}</h3>${g.items.map(it=>`<div class="svc"><div class="n">${esc(it.n)}${it.t?` <span class="t">· ${it.t}</span>`:''}</div><div class="meta">${giftable(c,it)?`<button class="gift" data-gift="${esc(it.n)}">🎁 Offrir</button>`:''}<span class="p">${eur(it.p)}</span></div>${it.d?`<div class="d">${esc(it.d)}</div>`:''}</div>`).join('')}</div>`).join('')+
+   c.groups.map(g=>`<div class="svc-group"><h3>${g.g}</h3>${g.items.map(it=>`<div class="svc"><div class="n">${esc(it.n)}${it.t?` <span class="t">· ${it.t}</span>`:''}</div><div class="meta">${giftable(c,it)?`<button class="gift" data-gift="${esc(it.n)}">🎁 Offrir</button>`:''}${promoPrice(it.n)?`<span class="badge-promo">${esc(PROMO.nom)}</span> <s>${eur(it.p)}</s> <span class="p" style="color:var(--magenta)">${eur(promoPrice(it.n))}</span>`:`<span class="p">${eur(it.p)}</span>`}</div>${it.d?`<div class="d">${esc(it.d)}</div>`:''}</div>`).join('')}</div>`).join('')+
    `<div class="ctas"><a class="btn btn-blue" href="tel:0388230098">Réserver au 03 88 23 00 98</a><a class="btn btn-gift" href="#bons-cadeaux">Offrir un bon cadeau</a></div>`;
   const on=$('#svcTabs .tab.on');if(on)on.scrollIntoView({block:'nearest',inline:'center'});
 }
@@ -862,12 +920,14 @@ $('#svcPanel').addEventListener('click',e=>{const b=e.target.closest('[data-gift
 /* bon cadeau */
 const gc={type:'montant',amount:50,soin:GIFTABLE[0].n,name:'',msg:'',format:'e',design:'classique',occasion:'Joyeux anniversaire'};
 const AMOUNTS=[30,50,80,100,150];
-$('#gcSoin').innerHTML=CATS.map(c=>{const its=GIFTABLE.filter(x=>x.cat===c.name);return its.length?`<optgroup label="${c.name}">${its.map(i=>`<option value="${esc(i.n)}">${esc(i.n)} · ${eur(i.p)}</option>`).join('')}</optgroup>`:''}).join('');
+function buildSoinOptions(){$('#gcSoin').innerHTML=CATS.map(c=>{const its=GIFTABLE.filter(x=>x.cat===c.name);return its.length?`<optgroup label="${c.name}">${its.map(i=>`<option value="${esc(i.n)}">${esc(i.n)} · ${promoPrice(i.n)?eur(promoPrice(i.n))+' ('+PROMO.nom+')':eur(i.p)}</option>`).join('')}</optgroup>`:''}).join('');}
+buildSoinOptions();
 const BALLOONS='<svg class="deco" viewBox="0 0 100 110" aria-hidden="true"><path d="M30 58c2 12-4 24 2 40M62 52c-3 14 3 26-3 46M80 62c1 10-2 22 2 34" stroke="rgba(255,255,255,.7)" stroke-width="1.2" fill="none"/><ellipse cx="30" cy="34" rx="16" ry="20" fill="#F7D774"/><ellipse cx="62" cy="28" rx="17" ry="21" fill="#8FD3EE"/><ellipse cx="82" cy="42" rx="13" ry="16" fill="#fff" opacity=".9"/><path d="M28 54l2 4 2-4zM60 49l2 4 2-4zM80 58l2 4 2-4z" fill="rgba(255,255,255,.8)"/><ellipse cx="25" cy="27" rx="4" ry="6" fill="#fff" opacity=".45"/><ellipse cx="56" cy="21" rx="4" ry="6" fill="#fff" opacity=".45"/></svg>';
 function cardHTML(o){
   const fete=o.design==='fete';
-  const amt=o.type==='montant'?`<div class="gc-amt">${eur(o.price)}</div>`:`<div class="gc-amt" style="font-size:1.15rem">${esc(o.soin)}</div>`;
-  const valid=o.until?'Valable jusqu\'au '+o.until:(o.type==='montant'?'Valable 1 an sur toutes les prestations':'Soin offert · valable 1 an');
+  const amt=o.type!=='soin'?`<div class="gc-amt">${eur(o.price)}</div>`:`<div class="gc-amt" style="font-size:1.15rem">${esc(o.soin)}</div>`;
+  const scope=o.type==='soin'?'Soin offert':o.type==='accessoire'?'Sur les accessoires':'Sur toutes les prestations';
+  const valid=(o.until?'Valable jusqu\'au '+o.until:'Valable 1 an')+' · '+scope;
   return `<div class="giftcard ${fete?'festif':''}">${fete?BALLOONS:''}
     <div class="gc-top"><div class="gc-brand">Aqua Beauté</div>${fete?'':'<small>Mutzig</small>'}</div>
     <div>
@@ -879,11 +939,11 @@ function cardHTML(o){
     <div class="gc-bottom"><div><small>${valid}</small>${o.code?`<br><span class="gc-code">${o.code}</span>`:''}</div>${o.code?`<div class="qr" data-qr="${o.qr?o.qr:LIVE?API_URL.replace(/\/$/,'')+'/verifier?code='+o.code:o.code}"></div>`:''}</div>
   </div>`;
 }
-const gcPrice=()=>gc.type==='montant'?gc.amount:GIFTABLE.find(x=>x.n===gc.soin).p;
+const gcPrice=()=>gc.type!=='soin'?gc.amount:soinPrice(gc.soin);
 function renderGC(){
   $$('[data-gctype]').forEach(b=>b.classList.toggle('on',b.dataset.gctype===gc.type));
   $$('[data-gcformat]').forEach(b=>b.classList.toggle('on',b.dataset.gcformat===gc.format));
-  $('#gcAmountField').hidden=gc.type!=='montant';$('#gcSoinField').hidden=gc.type!=='soin';
+  $('#gcAmountField').hidden=gc.type==='soin';$('#gcSoinField').hidden=gc.type!=='soin';
   $('#gcAmounts').innerHTML=AMOUNTS.map(a=>`<button class="chip ${gc.amount===a&&!$('#gcCustom').value?'on':''}" data-amt="${a}">${a} €</button>`).join('');
   $('#gcSoin').value=gc.soin;
   const p=gcPrice();
@@ -894,14 +954,14 @@ function renderGC(){
   $('#gcBtnAmt').textContent=eur(p);
 }
 $('#p-bons-cadeaux').addEventListener('click',e=>{const t=e.target.closest('[data-gctype],[data-gcformat],[data-amt],[data-gcdesign],[data-gcocc]');if(!t)return;if(t.dataset.gcdesign)gc.design=t.dataset.gcdesign;if(t.dataset.gcocc)gc.occasion=t.dataset.gcocc;if(t.dataset.gctype)gc.type=t.dataset.gctype;if(t.dataset.gcformat)gc.format=t.dataset.gcformat;if(t.dataset.amt){gc.amount=+t.dataset.amt;$('#gcCustom').value='';}renderGC();});
-$('#gcCustom').oninput=e=>{const v=Math.round(+e.target.value);if(v>=20&&v<=500){gc.amount=v;renderGC();}};
+$('#gcCustom').oninput=e=>{const v=Math.round(+e.target.value);if(v>=20&&v<=600){gc.amount=v;renderGC();}};
 $('#gcSoin').onchange=e=>{gc.soin=e.target.value;renderGC();};
 $('#gcName').oninput=e=>{gc.name=e.target.value.trim();renderGC();};
 $('#gcMsg').oninput=e=>{gc.msg=e.target.value.trim();renderGC();};
 $$('[data-qa]').forEach(b=>b.onclick=()=>{gc.type='montant';gc.amount=+b.dataset.qa;$('#gcCustom').value='';location.hash='bons-cadeaux';renderGC();});
 $('#gcAdd').onclick=()=>{
   const p=gcPrice();
-  addToCart({id:'gc-'+Date.now(),kind:'gc',name:gc.type==='montant'?'Bon cadeau '+eur(p):'Bon cadeau · '+gc.soin,
+  addToCart({id:'gc-'+Date.now(),kind:'gc',name:gc.type==='soin'?'Bon cadeau · '+gc.soin:gc.type==='accessoire'?'Bon cadeau accessoires '+eur(p):'Bon cadeau '+eur(p),
     sub:(gc.design==='fete'?gc.occasion:'Classique')+' · '+(gc.format==='e'?'par e-mail':'à retirer à l\'institut')+(gc.name?' · pour '+gc.name:''),price:p,qty:1,format:gc.format,to:gc.name,msg:gc.msg,
     design:gc.design,occasion:gc.occasion,type:gc.type,soin:gc.soin});
   openDrawer();
@@ -953,7 +1013,7 @@ const newCode=()=>{const r=n=>Array.from(crypto.getRandomValues(new Uint8Array(n
 let qrLib=null;
 const loadQR=()=>qrLib||(qrLib=new Promise((ok,ko)=>{if(window.qrcode)return ok();const s=document.createElement('script');s.src='js/qrcode.js';s.onload=ok;s.onerror=()=>{qrLib=null;ko();};document.head.appendChild(s);}));
 function paintQR(root){const els=[...root.querySelectorAll('[data-qr]')];if(!els.length)return;loadQR().then(()=>els.forEach(el=>{const q=window.qrcode(0,'M');q.addData(el.dataset.qr);q.make();el.innerHTML=q.createSvgTag({cellSize:2,margin:0});const sv=el.querySelector('svg');if(sv){sv.setAttribute('width','64');sv.setAttribute('height','64');}})).catch(()=>els.forEach(el=>el.remove()));}
-async function apiPost(path,body){const r=await fetch(API_URL.replace(/\/$/,'')+path,{method:'POST',headers:{'content-type':'application/json'},body:body?JSON.stringify(body):undefined});const j=await r.json().catch(()=>({}));if(!r.ok)throw new Error(j.error||'Le paiement n\'a pas abouti, réessayez.');return j;}
+async function apiPost(path,body){const r=await fetch(API_URL.replace(/\/$/,'')+path,{method:'POST',headers:{'content-type':'application/json'},body:body?JSON.stringify(body):undefined});const j=await r.json().catch(()=>({}));if(!r.ok&&!j.restart){const e=new Error(j.error||'Le paiement n\'a pas abouti, réessayez.');throw e;}return j;}
 /* démo : le QR code contient le bon lui-même, lu par la page verifier.html (sans moteur) */
 function demoQR(v){const j={c:v.code,t:v.type,s:v.type==='soin'?v.soin:'',p:v.price,to:v.to||'',m:(v.msg||'').slice(0,80),g:v.design,f:v.format,b:buyer.name||'',cr:v.created,ex:v.expires};
   const b64=btoa(unescape(encodeURIComponent(JSON.stringify(j)))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
@@ -974,8 +1034,8 @@ function renderDrawer(){
   const C=$('#drawerContent'),F=$('#drawerFooter');
   if(step===3){
     $('#drawerTitle').textContent='Merci !';
-    C.innerHTML=`<div class="success"><div class="ok">✓</div><h3 style="font-size:1.35rem">Paiement confirmé</h3><p style="color:var(--ink-soft)">Merci ${esc(buyer.name||'')} ! Commande n° <b>${orderRef}</b>.<br>${buyer._allE?'Christelle vous envoie le bon cadeau par e-mail sous 24 h (jours d\'ouverture).':'Votre bon cadeau vous attend à l\'institut dans sa jolie enveloppe.'}</p></div>
-      <p style="font-weight:600;margin:4px 0 0">${(buyer._vouchers||[]).length>1?'Vos bons cadeaux':'Votre bon cadeau'}</p>
+    C.innerHTML=`<div class="success"><div class="ok">✓</div><h3 style="font-size:1.35rem">Paiement confirmé</h3><p style="color:var(--ink-soft)">Merci ${esc(buyer.name||'')} ! Commande n° <b>${orderRef}</b>.<br>${buyer._pending?'PayPal vérifie encore votre paiement : votre bon cadeau vous sera envoyé par e-mail dès sa confirmation.':buyer._allE?(LIVE?'Votre bon cadeau vient de vous être envoyé par e-mail (pensez à regarder dans les courriers indésirables).':'Sur le vrai site, le bon est envoyé automatiquement par e-mail.'):'Votre bon cadeau vous attend à l\'institut dans sa jolie enveloppe. Un e-mail de confirmation vous a été envoyé.'}</p></div>
+      ${(buyer._vouchers||[]).length?`<p style="font-weight:600;margin:4px 0 0">${buyer._vouchers.length>1?'Vos bons cadeaux':'Votre bon cadeau'}</p>`:''}
       ${(buyer._vouchers||[]).map((v,i)=>`<div class="voucher-wrap">${cardHTML(v)}<button class="btn btn-ghost btn-sm" style="width:100%;margin-top:8px" data-pdf="${i}">⬇ Télécharger le bon en PDF</button></div>`).join('')}
       ${LIVE?'':`<a class="btn btn-blue btn-sm" style="width:100%" href="verifier.html" target="_blank" rel="noopener">Ouvrir la vérification en magasin (démo, PIN 1234)</a><p style="font-size:.78rem;color:var(--muted);margin:6px 0 0">Astuce : scannez le QR code du bon avec un autre téléphone, comme le ferait Christelle à l'institut.</p>`}
       <p style="font-size:.8rem;color:var(--muted)">Présentez ce bon (imprimé ou sur votre téléphone) à l'institut : le code est vérifié et le bon est marqué comme utilisé.</p>
@@ -1019,7 +1079,11 @@ function renderDrawer(){
       loadPayPal().then(()=>{box.innerHTML='';window.paypal.Buttons({style:{layout:'vertical',color:'gold',shape:'rect',label:'paypal'},
         createOrder:()=>apiPost('/api/orders',{buyer:{name:buyer.name,email:buyer.mail,tel:buyer.tel},
           items:cart.map(x=>({type:x.type,amount:x.price,soin:x.soin,design:x.design,occasion:x.occasion,to:x.to,msg:x.msg,format:x.format,qty:x.qty}))}).then(r=>r.id),
-        onApprove:d=>apiPost('/api/orders/'+d.orderID+'/capture').then(r=>{orderRef=r.ref;done(r.vouchers);}).catch(e=>{toast(e.message);}),
+        onApprove:(d,actions)=>apiPost('/api/orders/'+d.orderID+'/capture').then(r=>{
+          if(r.restart){toast(r.error);return actions.restart();}   // carte refusée : PayPal propose un autre moyen
+          orderRef=r.ref;buyer._pending=!!r.pending;done(r.vouchers);
+        }).catch(e=>{box.insertAdjacentHTML('beforebegin','<p style="color:#D2563F;font-size:.85rem">'+esc(e.message)+'</p>');}),
+        onCancel:()=>toast('Paiement annulé : votre panier est conservé'),
         onError:()=>toast('Le paiement n\'a pas abouti, réessayez')}).render(box);})
       .catch(()=>{box.innerHTML='<p style="color:#D2563F;font-size:.85rem">PayPal est indisponible pour le moment. Appelez l\'institut au 03 88 23 00 98.</p>';});
     }else{
@@ -1051,7 +1115,7 @@ function route(){
   window.scrollTo(0,0);
 }
 window.addEventListener('hashchange',route);
-renderGC();updateBadge();route();
+renderGC();updateBadge();route();loadPromos();
 })();
 </script>
 </body>

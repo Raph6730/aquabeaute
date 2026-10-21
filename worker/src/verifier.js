@@ -55,7 +55,7 @@ video{width:100%;border-radius:12px;background:#000;margin-top:10px}
     </div>
     <div id="t-all" class="hidden">
       <div class="stats" id="stats"></div>
-      <div class="tabs" id="filters"><button class="on" data-f="valide">Valables</button><button data-f="utilisé">Utilisés</button><button data-f="expiré">Expirés</button></div>
+      <div class="tabs" id="filters"><button class="on" data-f="valide">Valables</button><button data-f="utilisé">Utilisés / annulés</button><button data-f="expiré">Expirés</button></div>
       <div class="list" id="list"></div>
     </div>
     <button class="btn b2" id="logout" style="margin-top:20px">Se déconnecter de ce téléphone</button>
@@ -81,10 +81,10 @@ document.querySelectorAll('.tabs:not(#filters) button').forEach(b=>b.onclick=()=
 
 function norm(c){c=String(c||'').toUpperCase().replace(/[^A-Z0-9]/g,'');if(c.startsWith('AQB'))c=c.slice(3);return c.length===8?'AQB-'+c.slice(0,4)+'-'+c.slice(4):null;}
 function render(v,msg){
-  const state=v.status==='utilisé'?'ko':(v.expired?'warn':'ok');
-  const big=state==='ok'?'✅ Bon valable':state==='ko'?'❌ Déjà utilisé le '+d(v.usedAt):'⚠️ Expiré depuis le '+d(v.expires);
+  const state=(v.status==='utilisé'||v.status==='remboursé')?'ko':(v.expired?'warn':'ok');
+  const big=state==='ok'?'✅ Bon valable':v.status==='remboursé'?'❌ Bon remboursé : ne pas accepter':state==='ko'?'❌ Déjà utilisé le '+d(v.usedAt):'⚠️ Expiré depuis le '+d(v.expires);
   $('#result').innerHTML='<div class="res '+state+'"><div class="big">'+big+'</div>'+(msg?'<div>'+esc(msg)+'</div>':'')+
-   '<div class="what">'+(v.type==='soin'?esc(v.soin):v.price+' €')+'</div>'+
+   '<div class="what">'+(v.type==='soin'?esc(v.soin):v.price+' €')+'</div><div style="font-weight:600">'+esc(v.typeLabel||(v.type==='soin'?'Soin précis':v.type==='accessoire'?'Accessoires':'Montant (toutes prestations)'))+'</div>'+
    '<dl><dt>Code</dt><dd><b>'+v.code+'</b></dd><dt>Pour</dt><dd>'+(esc(v.to)||'—')+'</dd><dt>Offert par</dt><dd>'+esc(v.buyer)+(v.buyerTel?' · '+esc(v.buyerTel):'')+'</dd><dt>Acheté le</dt><dd>'+d(v.created)+'</dd><dt>Valable jusqu\\'au</dt><dd>'+d(v.expires)+'</dd>'+(v.type==='soin'?'<dt>Valeur</dt><dd>'+v.price+' €</dd>':'')+(v.msg?'<dt>Message</dt><dd><i>'+esc(v.msg)+'</i></dd>':'')+'</dl>'+
    (state==='ok'?'<button class="btn bok" id="use">Marquer comme utilisé</button>':'')+
    (state==='warn'&&v.status!=='utilisé'?'<button class="btn bmag" id="use">Accepter quand même et marquer utilisé</button>':'')+
@@ -115,13 +115,13 @@ function stopCam(){if(stream)stream.getTracks().forEach(t=>t.stop());stream=null
 /* liste */
 let ALL=[],F='valide';
 async function loadAll(){$('#list').innerHTML='<p class="muted">Chargement…</p>';const r=await api('/api/vouchers');ALL=r.data.vouchers||[];paintAll();}
-function st(v){return v.status==='utilisé'?'utilisé':(v.expired?'expiré':'valide');}
+function st(v){return (v.status==='utilisé'||v.status==='remboursé')?'utilisé':(v.expired?'expiré':'valide');}
 function paintAll(){
   const val=ALL.filter(v=>st(v)==='valide'),sum=a=>a.reduce((s,v)=>s+(+v.price||0),0);
   $('#stats').innerHTML='<div><b>'+ALL.length+'</b><span>bons vendus</span></div><div><b>'+val.length+'</b><span>à utiliser</span></div><div><b>'+sum(val)+' €</b><span>restant dû</span></div>';
   document.querySelectorAll('#filters button').forEach(b=>b.classList.toggle('on',b.dataset.f===F));
   const L=ALL.filter(v=>st(v)===F);
-  $('#list').innerHTML=L.length?L.map(v=>'<div class="it" data-c="'+v.code+'"><div><span class="c">'+v.code+'</span><br><small>'+(v.type==='soin'?esc(v.soin):v.price+' €')+(v.to?' · pour '+esc(v.to):'')+' · '+d(v.created)+'</small></div><span class="pill '+(F==='valide'?'p-v':F==='utilisé'?'p-u':'p-e')+'">'+F+'</span></div>').join(''):'<p class="muted">Aucun bon.</p>';
+  $('#list').innerHTML=L.length?L.map(v=>'<div class="it" data-c="'+v.code+'"><div><span class="c">'+v.code+'</span><br><small>'+(v.type==='soin'?esc(v.soin):v.type==='accessoire'?'Accessoires '+v.price+' €':v.price+' €')+(v.to?' · pour '+esc(v.to):'')+' · '+d(v.created)+'</small></div><span class="pill '+(F==='valide'?'p-v':F==='utilisé'?'p-u':'p-e')+'">'+F+'</span></div>').join(''):'<p class="muted">Aucun bon.</p>';
 }
 $('#filters').onclick=e=>{const b=e.target.closest('[data-f]');if(b){F=b.dataset.f;paintAll();}};
 $('#list').onclick=e=>{const it=e.target.closest('[data-c]');if(!it)return;document.querySelector('[data-t=check]').click();check(it.dataset.c);};

@@ -72,4 +72,9 @@ export const SOINS = {
  "Enveloppement d'algues": 39,
  "Presso esthétique": 46
 };
-export const MONTANT_MIN = 20, MONTANT_MAX = 500;
+export const MONTANT_MIN = 20, MONTANT_MAX = 600;
+// Types de bons (traitement de TVA différent selon le type, à voir avec le comptable) :
+//   montant    = valable sur toutes les prestations (bon « multi-usage »)
+//   soin       = un soin précis, au prix du jour (bon « à usage unique »)
+//   accessoire = valable sur les accessoires vendus à l'institut (sacs, bijoux, foulards)
+export const TYPES = { montant: 'Montant (toutes prestations)', soin: 'Soin précis', accessoire: 'Accessoires' };
