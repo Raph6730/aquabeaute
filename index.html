@@ -1,0 +1,941 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Aqua Beauté Mutzig</title>
+<meta name="description" content="Institut de beauté à Mutzig : soins visage et corps, épilation, lumière pulsée, minceur, mains et pieds. Boutique en ligne : cartes cadeaux, produits et accessoires.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F6F2EC; --surface:#FFFDFA; --surface-2:#EFE9E0;
+  --ink:#1E3638; --ink-soft:#4E6466; --muted:#7D8B8A;
+  --aqua:#3F8F8C; --aqua-deep:#2A6A68; --aqua-soft:#DDEDEA;
+  --coral:#C9775D; --coral-soft:#F5E1D8;
+  --line:#E1D9CD; --shadow:0 10px 30px rgba(30,54,56,.08);
+  --r:18px;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#121B1C; --surface:#1A2526; --surface-2:#223031;
+    --ink:#EAF1EF; --ink-soft:#B9C8C6; --muted:#8FA09E;
+    --aqua:#6FC0BC; --aqua-deep:#8FD3CF; --aqua-soft:#1F3A3A;
+    --coral:#E39A80; --coral-soft:#3A2822;
+    --line:#2C3B3C; --shadow:0 10px 30px rgba(0,0,0,.35);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#121B1C; --surface:#1A2526; --surface-2:#223031;
+  --ink:#EAF1EF; --ink-soft:#B9C8C6; --muted:#8FA09E;
+  --aqua:#6FC0BC; --aqua-deep:#8FD3CF; --aqua-soft:#1F3A3A;
+  --coral:#E39A80; --coral-soft:#3A2822;
+  --line:#2C3B3C; --shadow:0 10px 30px rgba(0,0,0,.35);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Outfit,system-ui,sans-serif;font-weight:400;line-height:1.6;-webkit-font-smoothing:antialiased;padding-bottom:76px}
+@media(min-width:900px){body{padding-bottom:0}}
+h1,h2,h3{font-family:"Cormorant Garamond",Georgia,serif;font-weight:600;line-height:1.1;margin:0}
+a{color:inherit}
+button{font:inherit;color:inherit;cursor:pointer}
+img,svg{display:block}
+.wrap{max-width:1120px;margin:0 auto;padding:0 16px}
+.eyebrow{font-size:.78rem;letter-spacing:.18em;text-transform:uppercase;color:var(--aqua);font-weight:500}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;border-radius:999px;padding:13px 22px;font-weight:500;text-decoration:none;transition:transform .15s,background .2s}
+.btn:active{transform:scale(.97)}
+.btn-primary{background:var(--aqua-deep);color:#fff}
+:root[data-theme="dark"] .btn-primary{color:#10201f}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .btn-primary{color:#10201f}}
+.btn-primary:hover{background:var(--aqua)}
+.btn-ghost{background:transparent;border:1px solid var(--line);color:var(--ink)}
+.btn-ghost:hover{border-color:var(--aqua)}
+.btn-coral{background:var(--coral);color:#fff}
+.btn-sm{padding:8px 14px;font-size:.88rem}
+
+/* demo banner */
+.demo{background:var(--ink);color:var(--bg);font-size:.8rem;text-align:center;padding:7px 16px}
+
+/* header */
+header.top{position:sticky;top:0;z-index:40;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.top .wrap{display:flex;align-items:center;justify-content:space-between;height:64px;gap:12px}
+.brand{display:flex;flex-direction:column;text-decoration:none;line-height:1}
+.brand b{font-family:"Cormorant Garamond",serif;font-size:1.6rem;font-weight:600;letter-spacing:.02em}
+.brand span{font-size:.62rem;letter-spacing:.3em;text-transform:uppercase;color:var(--muted);margin-top:3px}
+nav.main{display:none;gap:4px}
+nav.main a{text-decoration:none;padding:8px 14px;border-radius:999px;font-size:.93rem;color:var(--ink-soft)}
+nav.main a.on{background:var(--aqua-soft);color:var(--aqua-deep)}
+.top-actions{display:flex;align-items:center;gap:6px}
+.icon-btn{width:42px;height:42px;border-radius:50%;border:1px solid var(--line);background:var(--surface);display:grid;place-items:center;position:relative}
+.icon-btn svg{width:19px;height:19px}
+.badge{position:absolute;top:-4px;right:-4px;background:var(--coral);color:#fff;font-size:.7rem;font-weight:600;min-width:19px;height:19px;border-radius:10px;display:grid;place-items:center;padding:0 5px}
+.badge[hidden]{display:none}
+.menu-btn{display:grid}
+@media(min-width:900px){nav.main{display:flex}.menu-btn{display:none}}
+.mobile-nav{display:none;border-top:1px solid var(--line);padding:8px 16px 16px;background:var(--bg)}
+.mobile-nav.open{display:grid;gap:2px}
+.mobile-nav a{padding:12px 4px;text-decoration:none;font-size:1.05rem;border-bottom:1px solid var(--line)}
+
+/* status */
+.status{display:inline-flex;align-items:center;gap:8px;font-size:.85rem;padding:6px 12px;border-radius:999px;background:var(--surface);border:1px solid var(--line)}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--muted)}
+.dot.open{background:#3BA272;box-shadow:0 0 0 4px rgba(59,162,114,.18)}
+.dot.closed{background:var(--coral)}
+
+/* pages */
+.page{display:none;animation:fade .35s ease}
+.page.on{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+section{padding:56px 0}
+.sec-head{margin-bottom:28px;max-width:640px}
+.sec-head h2{font-size:clamp(2rem,5vw,2.8rem);margin-top:6px}
+.sec-head p{color:var(--ink-soft);margin:10px 0 0}
+
+/* hero */
+.hero{padding:36px 0 48px}
+.hero .wrap{display:grid;gap:32px;align-items:center}
+@media(min-width:900px){.hero .wrap{grid-template-columns:1.05fr .95fr}.hero{padding:64px 0}}
+.hero h1{font-size:clamp(2.6rem,8vw,4.4rem);margin:14px 0 16px}
+.hero h1 em{font-style:italic;color:var(--aqua-deep)}
+.hero p.lead{font-size:1.08rem;color:var(--ink-soft);max-width:520px;margin:0 0 24px}
+.hero-ctas{display:flex;flex-wrap:wrap;gap:10px}
+.hero-art{position:relative;aspect-ratio:4/5;max-width:440px;width:100%;margin:0 auto;border-radius:220px 220px var(--r) var(--r);overflow:hidden;background:linear-gradient(180deg,var(--aqua-soft),var(--surface-2))}
+.hero-art svg{width:100%;height:100%}
+.hero-chip{position:absolute;left:-6px;bottom:28px;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px 14px;box-shadow:var(--shadow);font-size:.85rem;max-width:210px}
+.hero-chip b{display:block;font-family:"Cormorant Garamond",serif;font-size:1.5rem;line-height:1}
+@media(min-width:900px){.hero-chip{left:-30px}}
+
+/* promise strip */
+.promise{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+@media(min-width:760px){.promise{grid-template-columns:repeat(4,1fr)}}
+.promise div{background:var(--surface);padding:18px 16px}
+.promise b{font-family:"Cormorant Garamond",serif;font-size:1.7rem;display:block;line-height:1;color:var(--aqua-deep)}
+.promise span{font-size:.86rem;color:var(--ink-soft)}
+
+/* cards */
+.grid{display:grid;gap:14px}
+.g3{grid-template-columns:1fr}
+@media(min-width:640px){.g3{grid-template-columns:repeat(2,1fr)}}
+@media(min-width:960px){.g3{grid-template-columns:repeat(3,1fr)}}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:22px}
+.cat-card{text-decoration:none;display:flex;flex-direction:column;gap:10px;transition:border-color .2s,transform .2s}
+.cat-card:hover{border-color:var(--aqua);transform:translateY(-2px)}
+.cat-card .ico{width:46px;height:46px;border-radius:50%;background:var(--aqua-soft);display:grid;place-items:center;color:var(--aqua-deep)}
+.cat-card .ico svg{width:22px;height:22px}
+.cat-card h3{font-size:1.5rem}
+.cat-card p{margin:0;color:var(--ink-soft);font-size:.93rem}
+.cat-card small{color:var(--aqua-deep);font-weight:500;margin-top:auto}
+
+/* gift band */
+.gift-band{background:var(--ink);color:var(--bg);border-radius:28px;padding:32px 22px;display:grid;gap:24px;align-items:center;overflow:hidden;position:relative}
+@media(min-width:860px){.gift-band{grid-template-columns:1.1fr .9fr;padding:48px}}
+.gift-band h2{font-size:clamp(2rem,5vw,2.8rem)}
+.gift-band p{opacity:.8;margin:12px 0 22px}
+.gift-band .eyebrow{color:var(--aqua-soft)}
+:root[data-theme="dark"] .gift-band{background:var(--surface-2);color:var(--ink)}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .gift-band{background:var(--surface-2);color:var(--ink)}}
+.giftcard-visual{aspect-ratio:1.6/1;border-radius:18px;background:linear-gradient(135deg,#5FA8A4,#2A6A68 60%,#1E3638);color:#fff;padding:20px;display:flex;flex-direction:column;justify-content:space-between;box-shadow:0 20px 40px rgba(0,0,0,.25);max-width:380px;width:100%;justify-self:center;position:relative;overflow:hidden}
+.giftcard-visual::after{content:"";position:absolute;right:-60px;top:-60px;width:220px;height:220px;border-radius:50%;border:1px solid rgba(255,255,255,.25);box-shadow:0 0 0 24px rgba(255,255,255,.06),0 0 0 48px rgba(255,255,255,.04)}
+.giftcard-visual b{font-family:"Cormorant Garamond",serif;font-size:1.7rem;font-weight:600}
+.giftcard-visual .amt{font-family:"Cormorant Garamond",serif;font-size:2.6rem;line-height:1}
+.giftcard-visual small{opacity:.8;letter-spacing:.15em;text-transform:uppercase;font-size:.66rem}
+
+/* about */
+.about-grid{display:grid;gap:28px;align-items:center}
+@media(min-width:860px){.about-grid{grid-template-columns:.9fr 1.1fr}}
+.portrait{aspect-ratio:1;border-radius:50%;max-width:340px;width:100%;margin:0 auto;background:var(--coral-soft);overflow:hidden}
+.quote{font-family:"Cormorant Garamond",serif;font-size:1.6rem;font-style:italic;line-height:1.3;border-left:2px solid var(--aqua);padding-left:16px;margin:18px 0}
+
+/* reviews */
+.reviews{display:grid;gap:14px}
+@media(min-width:760px){.reviews{grid-template-columns:repeat(3,1fr)}}
+.review .stars{color:var(--coral);letter-spacing:2px}
+.review p{margin:8px 0 12px;font-size:.98rem}
+.review small{color:var(--muted)}
+.rating-big{display:flex;align-items:center;gap:14px;margin-bottom:18px}
+.rating-big b{font-family:"Cormorant Garamond",serif;font-size:3rem;line-height:1}
+
+/* brands */
+.brands{display:flex;flex-wrap:wrap;gap:10px}
+.brands span{border:1px solid var(--line);border-radius:999px;padding:8px 16px;font-family:"Cormorant Garamond",serif;font-size:1.15rem;background:var(--surface)}
+
+/* soins */
+.tabs{display:flex;gap:8px;overflow-x:auto;padding-bottom:6px;margin-bottom:20px;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{flex:none;border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:9px 16px;font-size:.92rem;white-space:nowrap}
+.tab.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.cat-intro{color:var(--ink-soft);margin:0 0 18px;max-width:700px}
+.svc-group{margin-bottom:26px}
+.svc-group h3{font-size:1.45rem;margin-bottom:6px}
+.svc{display:grid;grid-template-columns:1fr auto;gap:4px 14px;padding:16px 0;border-bottom:1px solid var(--line)}
+.svc .n{font-weight:500}
+.svc .d{grid-column:1/-1;color:var(--ink-soft);font-size:.9rem}
+.svc .meta{display:flex;align-items:center;gap:10px;justify-self:end}
+.svc .p{font-family:"Cormorant Garamond",serif;font-size:1.35rem;font-weight:600;white-space:nowrap}
+.svc .t{font-size:.8rem;color:var(--muted);white-space:nowrap}
+.svc .gift{border:1px solid var(--line);background:transparent;border-radius:999px;padding:4px 10px;font-size:.78rem;color:var(--aqua-deep);white-space:nowrap}
+.svc .gift:hover{border-color:var(--aqua)}
+.note{background:var(--aqua-soft);border-radius:14px;padding:14px 16px;font-size:.9rem;margin:6px 0 18px}
+.note.warn{background:var(--coral-soft)}
+
+/* shop */
+.shop-hero{display:grid;gap:18px;margin-bottom:26px}
+@media(min-width:860px){.shop-hero{grid-template-columns:1fr auto;align-items:end}}
+.shop-tabs{display:flex;gap:8px;flex-wrap:wrap}
+.gc-builder{display:grid;gap:22px}
+@media(min-width:900px){.gc-builder{grid-template-columns:.9fr 1.1fr;align-items:start}}
+.gc-builder .giftcard-visual{max-width:none;position:sticky;top:90px}
+.field{display:grid;gap:6px;margin-bottom:16px}
+.field label,.field .lbl{font-size:.86rem;font-weight:500}
+.field input,.field select,.field textarea{width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:12px;background:var(--surface);color:var(--ink);font:inherit}
+.field textarea{min-height:80px;resize:vertical}
+.field input:focus,.field select:focus,.field textarea:focus{outline:2px solid var(--aqua);outline-offset:1px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:1px solid var(--line);background:var(--surface);border-radius:12px;padding:10px 16px;font-weight:500}
+.chip.on{border-color:var(--aqua-deep);background:var(--aqua-soft);color:var(--aqua-deep)}
+.seg{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.seg .chip{text-align:left;font-weight:400;font-size:.9rem}
+.seg .chip b{display:block;font-weight:600}
+.filters{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;margin-bottom:18px}
+.products{display:grid;gap:14px;grid-template-columns:repeat(2,1fr)}
+@media(min-width:760px){.products{grid-template-columns:repeat(3,1fr)}}
+@media(min-width:1000px){.products{grid-template-columns:repeat(4,1fr)}}
+.prod{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;display:flex;flex-direction:column}
+.prod .pic{aspect-ratio:1;background:var(--surface-2);display:grid;place-items:center;position:relative}
+.prod .pic svg{width:62%;height:62%}
+.prod .tag{position:absolute;top:10px;left:10px;font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;background:var(--surface);border-radius:999px;padding:3px 9px}
+.prod .body{padding:12px 14px 14px;display:flex;flex-direction:column;gap:4px;flex:1}
+.prod .brand-n{font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.prod h4{margin:0;font-weight:500;font-size:.95rem;line-height:1.3}
+.prod .row{display:flex;align-items:center;justify-content:space-between;margin-top:auto;padding-top:8px}
+.prod .price{font-family:"Cormorant Garamond",serif;font-size:1.4rem;font-weight:600}
+.add{width:38px;height:38px;border-radius:50%;border:0;background:var(--aqua-deep);color:#fff;display:grid;place-items:center;font-size:1.3rem;line-height:1}
+.add.done{background:#3BA272}
+.trust{display:grid;gap:10px;grid-template-columns:1fr;margin-top:30px}
+@media(min-width:760px){.trust{grid-template-columns:repeat(3,1fr)}}
+.trust div{display:flex;gap:12px;align-items:flex-start;padding:16px;border:1px dashed var(--line);border-radius:14px;font-size:.9rem}
+.trust svg{flex:none;width:22px;height:22px;color:var(--aqua-deep)}
+
+/* drawer */
+.scrim{position:fixed;inset:0;background:rgba(10,20,20,.4);z-index:60;opacity:0;pointer-events:none;transition:opacity .25s}
+.scrim.on{opacity:1;pointer-events:auto}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(440px,100%);background:var(--bg);z-index:61;transform:translateX(100%);transition:transform .3s ease;display:flex;flex-direction:column;box-shadow:var(--shadow)}
+.drawer.on{transform:none}
+.drawer header{display:flex;justify-content:space-between;align-items:center;padding:16px;border-bottom:1px solid var(--line)}
+.drawer header h3{font-size:1.6rem}
+.drawer .content{flex:1;overflow-y:auto;padding:16px}
+.drawer footer{border-top:1px solid var(--line);padding:16px;display:grid;gap:10px}
+.line{display:grid;grid-template-columns:52px 1fr auto;gap:12px;align-items:center;padding:12px 0;border-bottom:1px solid var(--line)}
+.line .mini{width:52px;height:52px;border-radius:12px;background:var(--surface-2);display:grid;place-items:center}
+.line .mini svg{width:70%;height:70%}
+.line .nm{font-weight:500;font-size:.93rem;line-height:1.3}
+.line .sub{font-size:.8rem;color:var(--muted)}
+.qty{display:inline-flex;align-items:center;border:1px solid var(--line);border-radius:999px;margin-top:6px}
+.qty button{border:0;background:none;width:28px;height:28px}
+.qty span{min-width:20px;text-align:center;font-size:.88rem}
+.line .lp{font-weight:600;text-align:right}
+.rm{border:0;background:none;color:var(--muted);font-size:.78rem;text-decoration:underline;padding:0;margin-top:4px}
+.sum{display:flex;justify-content:space-between;font-size:.93rem}
+.sum.total{font-size:1.1rem;font-weight:600}
+.empty{text-align:center;color:var(--muted);padding:40px 10px}
+.steps{display:flex;gap:6px;margin-bottom:16px}
+.steps span{flex:1;height:4px;border-radius:2px;background:var(--line)}
+.steps span.on{background:var(--aqua-deep)}
+.pay-box{border:1px solid var(--line);border-radius:14px;padding:14px;background:var(--surface);font-size:.9rem}
+.success{text-align:center;padding:30px 6px}
+.success .ok{width:64px;height:64px;border-radius:50%;background:var(--aqua-soft);color:var(--aqua-deep);display:grid;place-items:center;margin:0 auto 14px;font-size:1.8rem}
+
+/* contact */
+.contact-grid{display:grid;gap:16px}
+@media(min-width:860px){.contact-grid{grid-template-columns:1fr 1fr}}
+.hours{width:100%;border-collapse:collapse}
+.hours td{padding:9px 0;border-bottom:1px solid var(--line)}
+.hours td:last-child{text-align:right}
+.hours tr.today td{font-weight:600;color:var(--aqua-deep)}
+.map{border-radius:var(--r);overflow:hidden;border:1px solid var(--line);aspect-ratio:4/3;background:var(--surface-2)}
+.map iframe{width:100%;height:100%;border:0}
+.big-tel{font-family:"Cormorant Garamond",serif;font-size:2.2rem;text-decoration:none;display:block;line-height:1.1}
+
+/* footer */
+footer.site{border-top:1px solid var(--line);padding:40px 0 30px;margin-top:20px;font-size:.9rem;color:var(--ink-soft)}
+footer.site .wrap{display:grid;gap:24px}
+@media(min-width:760px){footer.site .wrap{grid-template-columns:1.2fr 1fr 1fr}}
+footer.site h4{font-family:"Cormorant Garamond",serif;font-size:1.3rem;color:var(--ink);margin:0 0 8px}
+footer.site a{text-decoration:none;display:block;padding:3px 0}
+.legal{grid-column:1/-1;font-size:.78rem;color:var(--muted);border-top:1px solid var(--line);padding-top:16px}
+
+/* bottom bar */
+.bbar{position:fixed;left:0;right:0;bottom:0;z-index:50;display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:10px 12px calc(10px + env(safe-area-inset-bottom));background:color-mix(in srgb,var(--bg) 92%,transparent);backdrop-filter:blur(10px);border-top:1px solid var(--line)}
+@media(min-width:900px){.bbar{display:none}}
+.toast{position:fixed;left:50%;bottom:90px;transform:translateX(-50%) translateY(20px);background:var(--ink);color:var(--bg);padding:10px 18px;border-radius:999px;font-size:.88rem;opacity:0;pointer-events:none;transition:all .25s;z-index:70;white-space:nowrap}
+.toast.on{opacity:1;transform:translateX(-50%)}
+@media(min-width:900px){.toast{bottom:30px}}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+</style>
+</head>
+<body>
+
+<div class="demo">Proposition de nouveau site · Démonstration : aucune commande ni aucun paiement n'est réellement envoyé</div>
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="#accueil"><b>Aqua Beauté</b><span>Institut · Mutzig</span></a>
+    <nav class="main" aria-label="Menu principal">
+      <a href="#accueil" data-nav="accueil">Accueil</a>
+      <a href="#soins" data-nav="soins">Soins & tarifs</a>
+      <a href="#boutique" data-nav="boutique">Boutique</a>
+      <a href="#institut" data-nav="institut">L'institut</a>
+      <a href="#contact" data-nav="contact">Contact</a>
+    </nav>
+    <div class="top-actions">
+      <button class="icon-btn" id="themeBtn" aria-label="Changer de thème">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+      </button>
+      <button class="icon-btn" id="cartBtn" aria-label="Ouvrir le panier">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M5 8h14l-1.2 11.2a2 2 0 0 1-2 1.8H8.2a2 2 0 0 1-2-1.8L5 8z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg>
+        <span class="badge" id="cartCount" hidden>0</span>
+      </button>
+      <button class="icon-btn menu-btn" id="menuBtn" aria-label="Menu">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 7h16M4 12h16M4 17h10"/></svg>
+      </button>
+    </div>
+  </div>
+  <div class="mobile-nav" id="mobileNav">
+    <a href="#accueil">Accueil</a>
+    <a href="#soins">Soins & tarifs</a>
+    <a href="#boutique">Boutique en ligne</a>
+    <a href="#institut">L'institut</a>
+    <a href="#contact">Contact & horaires</a>
+  </div>
+</header>
+
+<main>
+<!-- ============ ACCUEIL ============ -->
+<div class="page" id="p-accueil">
+  <section class="hero">
+    <div class="wrap">
+      <div>
+        <span class="status"><span class="dot" id="dotHero"></span><span id="statusHero">…</span></span>
+        <h1>Prenez le temps,<br><em>on s'occupe du reste.</em></h1>
+        <p class="lead">Institut de beauté à Mutzig depuis 2013. Soins visage et corps, épilation à la lumière pulsée, minceur, mains et pieds : Christelle vous reçoit dans trois cabines pensées pour la détente.</p>
+        <div class="hero-ctas">
+          <a class="btn btn-primary" href="tel:0388230098">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z"/></svg>
+            Réserver : 03 88 23 00 98</a>
+          <a class="btn btn-ghost" href="#boutique">Offrir une carte cadeau</a>
+        </div>
+      </div>
+      <div class="hero-art" aria-hidden="true">
+        <svg viewBox="0 0 400 500" preserveAspectRatio="xMidYMid slice">
+          <defs>
+            <linearGradient id="w1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#9FD1CC"/><stop offset="1" stop-color="#3F8F8C"/></linearGradient>
+            <radialGradient id="sun" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#F7D9C8"/><stop offset="1" stop-color="#F7D9C8" stop-opacity="0"/></radialGradient>
+          </defs>
+          <circle cx="270" cy="150" r="130" fill="url(#sun)"/>
+          <circle cx="270" cy="150" r="46" fill="#F2C7B2"/>
+          <path d="M0 300 Q100 270 200 300 T400 300 V500 H0Z" fill="url(#w1)" opacity=".55"/>
+          <path d="M0 340 Q100 310 200 340 T400 340 V500 H0Z" fill="url(#w1)" opacity=".75"/>
+          <path d="M0 385 Q100 355 200 385 T400 385 V500 H0Z" fill="#2A6A68"/>
+          <g fill="none" stroke="#fff" stroke-opacity=".5" stroke-width="1.4">
+            <ellipse cx="120" cy="420" rx="40" ry="8"/><ellipse cx="120" cy="420" rx="70" ry="14" stroke-opacity=".3"/>
+            <ellipse cx="300" cy="455" rx="30" ry="6"/>
+          </g>
+          <g fill="#1E3638" opacity=".85">
+            <path d="M70 300c0-40 14-70 14-70s14 30 14 70z"/>
+            <path d="M92 300c4-30 22-52 22-52s2 30-6 52z" opacity=".7"/>
+          </g>
+          <g transform="translate(250 255)">
+            <rect x="-22" y="0" width="44" height="72" rx="10" fill="#FFFDFA"/>
+            <rect x="-10" y="-16" width="20" height="18" rx="4" fill="#C9775D"/>
+            <rect x="-14" y="24" width="28" height="22" rx="3" fill="#DDEDEA"/>
+          </g>
+        </svg>
+        <div class="hero-chip"><b>4,6 / 5</b>Note moyenne des clientes sur Google</div>
+      </div>
+    </div>
+  </section>
+
+  <section style="padding-top:0">
+    <div class="wrap">
+      <div class="promise">
+        <div><b>2013</b><span>Institut ouvert à Mutzig</span></div>
+        <div><b>30 ans</b><span>d'expérience de Christelle</span></div>
+        <div><b>3</b><span>cabines + espace manucure</span></div>
+        <div><b>Offert</b><span>bilan et flash test lumière pulsée</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="sec-head"><span class="eyebrow">Nos soins</span><h2>Une carte complète, du visage aux pieds</h2></div>
+      <div class="grid g3" id="catCards"></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="gift-band">
+        <div>
+          <span class="eyebrow">Boutique en ligne</span>
+          <h2>Offrez un moment de bien-être, en deux minutes</h2>
+          <p>Cartes cadeaux d'un montant libre ou d'un soin précis, produits de soin et accessoires : commandez en ligne, retirez à l'institut ou recevez chez vous.</p>
+          <div class="hero-ctas">
+            <a class="btn btn-coral" href="#boutique">Choisir une carte cadeau</a>
+            <a class="btn btn-ghost" style="color:inherit;border-color:rgba(255,255,255,.3)" href="#boutique/produits">Voir les produits</a>
+          </div>
+        </div>
+        <div class="giftcard-visual">
+          <div style="display:flex;justify-content:space-between;align-items:start"><b>Aqua Beauté</b><small>Carte cadeau</small></div>
+          <div><div class="amt">80 €</div><small>Valable 1 an · Mutzig</small></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="sec-head"><span class="eyebrow">Avis Google</span><h2>Ce qu'en disent les clientes</h2></div>
+      <div class="rating-big"><b>4,6</b><div><div class="review"><span class="stars">★★★★★</span></div><small style="color:var(--muted)">Plus de 50 avis sur Google</small></div></div>
+      <div class="reviews">
+        <div class="card review"><span class="stars">★★★★★</span><p>Esthéticienne très pro et de bon conseil. Utilise d'excellents produits.</p><small>Angélique H. · Google</small></div>
+        <div class="card review"><span class="stars">★★★★★</span><p>Professionnelle, douce, accueillante. Locaux accueillants et très propres.</p><small>Sylvie B. · Google</small></div>
+        <div class="card review"><span class="stars">★★★★★</span><p>Un institut à l'offre très complète. Vous serez chouchoutés.</p><small>Emeline · Google</small></div>
+      </div>
+    </div>
+  </section>
+
+  <section style="padding-top:0">
+    <div class="wrap">
+      <div class="sec-head"><span class="eyebrow">Nos marques</span><h2>Des produits professionnels</h2></div>
+      <div class="brands"><span>Institut Esthederm</span><span>Bernard Cassière</span><span>Acorelle</span><span>Cellutec G5</span><span>Ariane Expert</span></div>
+    </div>
+  </section>
+</div>
+
+<!-- ============ SOINS ============ -->
+<div class="page" id="p-soins">
+  <section>
+    <div class="wrap">
+      <div class="sec-head"><span class="eyebrow">Soins & tarifs</span><h2>Toute la carte de l'institut</h2><p>Réservation par téléphone au 03 88 23 00 98. Chaque soin peut aussi être offert en carte cadeau, d'un simple clic.</p></div>
+      <div class="tabs" id="svcTabs" role="tablist"></div>
+      <div id="svcPanel"></div>
+    </div>
+  </section>
+</div>
+
+<!-- ============ BOUTIQUE ============ -->
+<div class="page" id="p-boutique">
+  <section>
+    <div class="wrap">
+      <div class="shop-hero">
+        <div class="sec-head" style="margin:0"><span class="eyebrow">Boutique en ligne</span><h2>Faites plaisir, ou faites-vous plaisir</h2><p>Paiement sécurisé, retrait gratuit à l'institut ou envoi à domicile.</p></div>
+        <div class="shop-tabs">
+          <button class="tab on" data-shop="cartes">Cartes cadeaux</button>
+          <button class="tab" data-shop="produits">Produits & accessoires</button>
+        </div>
+      </div>
+
+      <!-- cartes cadeaux -->
+      <div id="shop-cartes">
+        <div class="gc-builder">
+          <div class="giftcard-visual" id="gcVisual">
+            <div style="display:flex;justify-content:space-between;align-items:start"><b>Aqua Beauté</b><small>Carte cadeau</small></div>
+            <div>
+              <div style="font-size:.9rem;opacity:.9;margin-bottom:4px" id="gcFor">Pour vous</div>
+              <div class="amt" id="gcAmt">50 €</div>
+              <small id="gcSvc">Valable 1 an sur toute la carte</small>
+            </div>
+          </div>
+          <div class="card">
+            <div class="field">
+              <span class="lbl">1. Type de carte</span>
+              <div class="seg">
+                <button class="chip on" data-gctype="montant"><b>Un montant</b>Libre choix du soin</button>
+                <button class="chip" data-gctype="soin"><b>Un soin précis</b>Ex. : modelage, soin visage</button>
+              </div>
+            </div>
+            <div class="field" id="gcAmountField">
+              <span class="lbl">2. Montant</span>
+              <div class="chips" id="gcAmounts"></div>
+              <input type="number" id="gcCustom" min="20" max="500" placeholder="Autre montant (20 à 500 €)" style="margin-top:8px">
+            </div>
+            <div class="field" id="gcSoinField" hidden>
+              <label for="gcSoin">2. Soin offert</label>
+              <select id="gcSoin"></select>
+            </div>
+            <div class="field">
+              <label for="gcName">3. Prénom de la personne gâtée</label>
+              <input id="gcName" placeholder="Ex. : Julie" maxlength="30">
+            </div>
+            <div class="field">
+              <label for="gcMsg">Petit mot (facultatif)</label>
+              <textarea id="gcMsg" maxlength="160" placeholder="Joyeux anniversaire ! Profite bien de ce moment."></textarea>
+            </div>
+            <div class="field">
+              <span class="lbl">4. Format</span>
+              <div class="seg">
+                <button class="chip on" data-gcformat="e"><b>E-carte</b>PDF par e-mail, immédiat</button>
+                <button class="chip" data-gcformat="papier"><b>Carte imprimée</b>Dans une jolie pochette</button>
+              </div>
+            </div>
+            <button class="btn btn-primary" style="width:100%" id="gcAdd">Ajouter au panier · <span id="gcBtnAmt">50 €</span></button>
+          </div>
+        </div>
+      </div>
+
+      <!-- produits -->
+      <div id="shop-produits" hidden>
+        <div class="filters" id="prodFilters"></div>
+        <div class="note">Les produits et prix ci-dessous sont des exemples : le catalogue réel sera rempli avec les références vendues à l'institut.</div>
+        <div class="products" id="prodGrid"></div>
+      </div>
+
+      <div class="trust">
+        <div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg><span><b>Paiement sécurisé</b><br>Carte bancaire, Apple Pay, Google Pay</span></div>
+        <div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 10l9-6 9 6v10H3z"/><path d="M9 20v-6h6v6"/></svg><span><b>Retrait gratuit</b><br>À l'institut, 8 rue du Maréchal Foch</span></div>
+        <div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 21s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 11c0 5.6-7 10-7 10z"/></svg><span><b>Conseils personnalisés</b><br>Une question ? Appelez Christelle</span></div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ============ INSTITUT ============ -->
+<div class="page" id="p-institut">
+  <section>
+    <div class="wrap about-grid">
+      <div class="portrait" aria-hidden="true">
+        <svg viewBox="0 0 300 300">
+          <rect width="300" height="300" fill="var(--coral-soft)"/>
+          <circle cx="150" cy="120" r="48" fill="#C9775D" opacity=".85"/>
+          <path d="M60 300c6-62 44-100 90-100s84 38 90 100z" fill="#2A6A68"/>
+          <path d="M102 112c0-34 22-56 50-56 30 0 50 24 46 60-10-20-30-30-52-30-20 0-34 10-44 26z" fill="#1E3638"/>
+          <path d="M125 210l25 30 25-30" fill="none" stroke="#DDEDEA" stroke-width="3"/>
+        </svg>
+      </div>
+      <div>
+        <span class="eyebrow">L'institut</span>
+        <h2 style="font-size:clamp(2rem,5vw,2.8rem);margin-top:6px">Christelle, 30 ans de métier et la même passion</h2>
+        <p class="quote">« Chaque soin est adapté à la personne que je reçois, à sa peau et à son rythme. »</p>
+        <p style="color:var(--ink-soft)">Christelle a ouvert Aqua Beauté en 2013, au 8 rue du Maréchal Foch à Mutzig. L'institut compte trois cabines (visage, corps, épilation), un solarium et un espace manucure. Les soins mêlent techniques manuelles et appareils spécialisés : la lumière pulsée Ariane Expert pour l'épilation durable et le Cellutec G5 pour la minceur et l'anti-âge.</p>
+        <p style="color:var(--ink-soft)">À l'institut, vous trouverez aussi une sélection d'accessoires (sacs, bijoux, foulards, chapeaux) pour vous faire plaisir ou offrir.</p>
+        <div class="hero-ctas" style="margin-top:20px"><a class="btn btn-primary" href="tel:0388230098">Prendre rendez-vous</a><a class="btn btn-ghost" href="#soins">Voir les soins</a></div>
+      </div>
+    </div>
+  </section>
+  <section style="padding-top:0">
+    <div class="wrap">
+      <div class="grid g3">
+        <div class="card"><span class="eyebrow">Visage</span><h3 style="font-size:1.5rem;margin:6px 0">Diagnostic de peau</h3><p style="color:var(--ink-soft);margin:0">Chaque soin commence par un échange pour choisir les actifs adaptés : hydratation, éclat, imperfections ou anti-âge.</p></div>
+        <div class="card"><span class="eyebrow">Épilation</span><h3 style="font-size:1.5rem;margin:6px 0">Hygiène irréprochable</h3><p style="color:var(--ink-soft);margin:0">Cire basse température à usage unique, et cire sans colophane sur demande pour les peaux allergiques.</p></div>
+        <div class="card"><span class="eyebrow">Minceur</span><h3 style="font-size:1.5rem;margin:6px 0">Cure sur mesure</h3><p style="color:var(--ink-soft);margin:0">Diagnostic offert pour construire votre cure : Cellutec G5, enveloppements d'algues, presso esthétique.</p></div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ============ CONTACT ============ -->
+<div class="page" id="p-contact">
+  <section>
+    <div class="wrap">
+      <div class="sec-head"><span class="eyebrow">Contact</span><h2>Venez nous voir à Mutzig</h2><p>Les rendez-vous se prennent par téléphone.</p></div>
+      <div class="contact-grid">
+        <div class="card">
+          <span class="status" style="margin-bottom:14px"><span class="dot" id="dotContact"></span><span id="statusContact">…</span></span>
+          <a class="big-tel" href="tel:0388230098">03 88 23 00 98</a>
+          <a href="tel:0659532864" style="color:var(--ink-soft);text-decoration:none">ou 06 59 53 28 64</a>
+          <p style="margin:16px 0 4px"><b>Adresse</b><br>8 rue du Maréchal Foch, 67190 Mutzig</p>
+          <p style="margin:12px 0 18px"><b>E-mail</b><br><a href="mailto:contact@aquabeaute-esthetique.fr">contact@aquabeaute-esthetique.fr</a></p>
+          <table class="hours" id="hoursTable"></table>
+          <p style="font-size:.85rem;color:var(--muted);margin-top:12px">Accès de plain-pied, places de stationnement à proximité.</p>
+        </div>
+        <div style="display:grid;gap:16px">
+          <div class="map"><iframe title="Plan d'accès" loading="lazy" src="https://www.openstreetmap.org/export/embed.html?bbox=7.4524%2C48.5359%2C7.4624%2C48.5409&amp;layer=mapnik&amp;marker=48.5384%2C7.4574"></iframe></div>
+          <a class="btn btn-ghost" href="https://www.google.com/maps/search/?api=1&query=8+rue+du+Mar%C3%A9chal+Foch+67190+Mutzig" target="_blank" rel="noopener">Itinéraire avec Google Maps</a>
+          <form class="card" id="contactForm">
+            <h3 style="font-size:1.4rem;margin-bottom:12px">Être rappelée</h3>
+            <div class="field"><label for="cName">Nom et prénom</label><input id="cName" required></div>
+            <div class="field"><label for="cTel">Téléphone</label><input id="cTel" type="tel" required></div>
+            <div class="field"><label for="cMsg">Votre demande</label><textarea id="cMsg" placeholder="Ex. : je souhaite un bilan lumière pulsée"></textarea></div>
+            <button class="btn btn-primary" style="width:100%">Envoyer</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <div><h4>Aqua Beauté</h4>Institut de beauté et spa<br>8 rue du Maréchal Foch, 67190 Mutzig<br><a href="tel:0388230098">03 88 23 00 98</a><a href="https://www.facebook.com/people/Aqua-Beaut%C3%A9-Esthetique/100063663006272/" target="_blank" rel="noopener">Facebook</a></div>
+    <div><h4>Soins</h4><a href="#soins/visage">Soins visage</a><a href="#soins/corps">Soins corps</a><a href="#soins/epilation">Épilation</a><a href="#soins/lumiere">Lumière pulsée</a><a href="#soins/minceur">Minceur</a></div>
+    <div><h4>Boutique</h4><a href="#boutique">Cartes cadeaux</a><a href="#boutique/produits">Produits & accessoires</a><a href="#contact">Retrait à l'institut</a><a href="#contact">Conditions de vente</a></div>
+    <div class="legal">© Aqua Beauté · SIREN 798 632 329 · Mentions légales · CGV · Confidentialité — Proposition de refonte, démonstration non contractuelle.</div>
+  </div>
+</footer>
+
+<div class="bbar">
+  <a class="btn btn-primary" href="tel:0388230098">Appeler</a>
+  <a class="btn btn-ghost" href="#boutique" style="background:var(--surface)">Boutique</a>
+</div>
+
+<!-- cart drawer -->
+<div class="scrim" id="scrim"></div>
+<aside class="drawer" id="drawer" aria-label="Panier">
+  <header><h3 id="drawerTitle">Votre panier</h3><button class="icon-btn" id="closeDrawer" aria-label="Fermer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 6l12 12M18 6L6 18"/></svg></button></header>
+  <div class="content" id="drawerContent"></div>
+  <footer id="drawerFooter"></footer>
+</aside>
+<div class="toast" id="toast"></div>
+
+<script>
+(function(){
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const eur=n=>(Math.round(n*100)/100).toLocaleString('fr-FR',{minimumFractionDigits:n%1?2:0,maximumFractionDigits:2})+' €';
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+/* ---------- theme ---------- */
+const root=document.documentElement;
+try{const t=localStorage.getItem('ab-theme');if(t)root.dataset.theme=t;}catch(e){}
+$('#themeBtn').onclick=()=>{
+  const dark=root.dataset.theme? root.dataset.theme==='dark' : matchMedia('(prefers-color-scheme: dark)').matches;
+  root.dataset.theme=dark?'light':'dark';
+  try{localStorage.setItem('ab-theme',root.dataset.theme)}catch(e){}
+};
+
+/* ---------- hours / status ---------- */
+const HOURS={1:[[14,0],[18,30]],2:[[9,0],[18,30]],3:null,4:[[9,0],[18,30]],5:[[9,0],[18,30]],6:[[9,0],[17,0]],0:null};
+const DAYS=['Dimanche','Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi'];
+const fmt=([h,m])=>h+'h'+(m?String(m).padStart(2,'0'):'');
+function parisNow(){
+  const p=new Intl.DateTimeFormat('fr-FR',{timeZone:'Europe/Paris',weekday:'short',hour:'2-digit',minute:'2-digit',hourCycle:'h23'}).formatToParts(new Date());
+  const g=t=>p.find(x=>x.type===t).value;
+  const map={dim:0,lun:1,mar:2,mer:3,jeu:4,ven:5,sam:6};
+  return {d:map[g('weekday').slice(0,3).toLowerCase()],m:+g('hour')*60+ +g('minute')};
+}
+function status(){
+  const {d,m}=parisNow(); const h=HOURS[d];
+  if(h){const o=h[0][0]*60+h[0][1],c=h[1][0]*60+h[1][1];
+    if(m>=o&&m<c) return {open:true,txt:'Ouvert · ferme à '+fmt(h[1])};
+    if(m<o) return {open:false,txt:'Fermé · ouvre à '+fmt(h[0])};
+  }
+  for(let i=1;i<=7;i++){const nd=(d+i)%7;if(HOURS[nd])return{open:false,txt:'Fermé · ouvre '+(i===1?'demain':DAYS[nd].toLowerCase())+' à '+fmt(HOURS[nd][0])};}
+}
+function paintStatus(){
+  const s=status();
+  [['#dotHero','#statusHero'],['#dotContact','#statusContact']].forEach(([d,t])=>{$(d).className='dot '+(s.open?'open':'closed');$(t).textContent=s.txt;});
+  const {d}=parisNow();
+  $('#hoursTable').innerHTML=[1,2,3,4,5,6,0].map(i=>`<tr class="${i===d?'today':''}"><td>${DAYS[i]}</td><td>${HOURS[i]?fmt(HOURS[i][0])+' – '+fmt(HOURS[i][1]):'Fermé'}</td></tr>`).join('');
+}
+paintStatus(); setInterval(paintStatus,60000);
+
+/* ---------- services data (tarifs du site actuel) ---------- */
+const S=(n,p,t,d)=>({n,p,t,d});
+const CATS=[
+ {id:'visage',name:'Soins visage',short:'Hydratation, éclat, anti-âge, soins signature Esthederm.',
+  icon:'<path d="M12 3c-4 0-7 3.5-7 8 0 5 3.5 10 7 10s7-5 7-10c0-4.5-3-8-7-8z"/><path d="M9 11h.01M15 11h.01M9.5 15.5c1.5 1 3.5 1 5 0"/>',
+  groups:[
+   {g:'Soins visage',items:[
+    S('Soin Voyage · effet bonne mine',48,'45 min','Nettoyage, gommage, masque et crème de jour. Thé de Java, citron.'),
+    S('Soin Promenade asiatique',52,'50 min','Purifiant pour peaux mixtes à grasses. Menthe, citron.'),
+    S('Pause gourmande au chocolat',62,'1 h','Protecteur et antioxydant : cacao et vanille contre le stress urbain.'),
+    S('Soin Muesli',62,'1 h','Avoine bio et probiotiques pour peaux sensibles et sèches, apaise les rougeurs.'),
+    S('Soin Nectar du Nil à la gelée royale',62,'1 h','Oxygénant au miel d\'acacia pour peaux ternes.'),
+    S('Soin Aloe vera eau de source',65,'1 h','Nouveau. Hydrate, protège et régénère les peaux déshydratées.'),
+    S('Soin détox à l\'orange sanguine',62,'1 h','Cocktail d\'agrumes pour revitaliser et affiner le grain de peau.'),
+    S('Soin au yuzu',64,'1 h','Taches pigmentaires et teint unifié, peeling 25 % AHA.'),
+    S('Soin Spiruline 35-50 ans',73,'1 h 15','Massage visage inspiré du yoga, détente et efficacité.'),
+    S('Soin précieux Etern\'i-T aux diamants',90,'1 h 30','Modelage anti-rides et fermeté aux perles de massage. Idéal en cure de 3 soins par mois.'),
+    S('Soin Regard intense',33,'30 min','Soin tenseur anti-fatigue et anti-poches. Idéal en cure de 6 soins.'),
+    S('Soin Regard pétillant',42,'30 min','Soin express du contour de l\'œil, marques de fatigue effacées.')]},
+   {g:'Rituels Institut Esthederm',items:[
+    S('Osmoclean · nettoyage de peau profond',42,'30 min','Peau détoxifiée et plus réceptive aux soins.'),
+    S('Soin Fondamental · hydra, vitalité ou pureté',81,'1 h','S\'adapte à l\'état de votre peau du moment.'),
+    S('Soin Multipeel',111,'1 h 30','Peeling jeunesse ultra-personnalisé : rides, éclat, taches, imperfections.'),
+    S('Soin Esthélift · lifting manuel',121,'1 h','Rehausse et redessine les contours du visage, contour des yeux inclus.'),
+    S('Soin Excellage · soin signature',131,'1 h','Modelage aux pinceaux doux, peau lissée et redensifiée.')]}
+  ]},
+ {id:'corps',name:'Soins corps',short:'Gommages, modelages du monde et rituels d\'exception.',
+  icon:'<path d="M12 4a2 2 0 1 1 0 4 2 2 0 0 1 0-4z"/><path d="M5 21c1-6 3.5-10 7-10s6 4 7 10"/><path d="M4 13c3 1 5 1 8-1 3 2 5 2 8 1"/>',
+  groups:[
+   {g:'Ô plaisir du dos',items:[
+    S('Application d\'argile',36,'30 min','Couverture chauffante, soulage les douleurs articulaires et musculaires. Forfait 10 + 1 offerte : 360 €.'),
+    S('Soin du dos',50,'45 min','Gommage, vapeur, extraction, modelage et masque.'),
+    S('Détente profonde',64,'1 h','Gommage, enveloppement à l\'argile, modelage mangue-gingembre.'),
+    S('Soin des îles paradisiaques',64,'1 h','Gommage coco et sable de Bora Bora, modelage au monoï.'),
+    S('Modelage relaxant du dos',36,'30 min','')]},
+   {g:'Cocooning détox',items:[
+    S('Gommage gourmand avec douche',37,'30 min','Mangue, ananas.'),
+    S('Détente future maman',49,'45 min','Modelage sur le côté à l\'huile neutre, dès le 4e mois.'),
+    S('Modelage du cuir chevelu',40,'30 min',''),
+    S('Cocktail',65,'1 h','Gommage et modelage du corps : coco, menthe, ananas ou cranberry.'),
+    S('Escapade au pays des sens',65,'1 h','Modelage à la bougie 100 % naturelle.'),
+    S('Voyage californien',70,'1 h 15','Mouvements fluides aux huiles essentielles, cuir chevelu et visage.')]},
+   {g:'Voyages & rituels',items:[
+    S('Trésors de Moorea',80,'1 h 15','Gommage et modelage coco et fleur de tiaré.'),
+    S('Escale polynésienne tribale',84,'1 h 30','Gommage baobab et café, modelage inspiré d\'Hawaï.'),
+    S('Frisson de Laponie',84,'1 h 30','Gommage, modelage et enveloppement au miel.'),
+    S('Échappée amazonienne',84,'1 h 30','Mangue sauvage et beurre de cupuaçu, modelage macadamia.'),
+    S('Secret du Sahara',110,'1 h 30','Nouveau. Gommage au sable noir, modelage bédouin à l\'huile chaude, thé à la menthe.'),
+    S('Secret hindou',159,'2 h','Nouveau. Gommage amande-pistache, enveloppement curcuma, modelage Holi et soin sonore.')]}
+  ]},
+ {id:'epilation',name:'Épilation à la cire',short:'Pour elle et lui, cire basse température à usage unique.',
+  icon:'<path d="M7 3v8a5 5 0 0 0 10 0V3"/><path d="M5 21h14"/>',
+  intro:'Cire basse température à usage unique. Cire sans colophane (allergies) sur demande.',
+  groups:[
+   {g:'Visage',items:[S('Lèvres ou sourcils (entretien)',9.5),S('Création d\'une ligne de sourcils',14),S('Menton, joues ou cou',9.5),S('Sourcils + lèvres + menton',25),S('Visage complet',29),S('Nez + oreilles + sourcils',16)]},
+   {g:'Corps',items:[S('Maillot ou aisselles',14),S('Maillot string',24),S('Maillot intégral',28),S('Avant-bras',17),S('Bras complets',20),S('Bras complets + mains',24),S('Demi-jambes ou cuisses',20),S('Trois quarts jambes',23),S('Jambes entières',26)]},
+   {g:'Forfaits',items:[S('Demi-jambes + maillot + aisselles',38),S('Trois quarts jambes + maillot + aisselles',46),S('Demi-jambes + maillot intégral',42),S('Demi-jambes + maillot intégral + aisselles',51),S('Jambes entières + maillot',36),S('Jambes entières + maillot intégral',51),S('Jambes entières + maillot intégral + aisselles',57)]},
+   {g:'Pour lui',items:[S('Torse',22),S('Ventre',12),S('Dos complet avec épaules',26),S('Dos + ventre + torse',52)]}
+  ]},
+ {id:'lumiere',name:'Lumière pulsée',short:'Épilation durable Ariane Expert. Bilan et flash test offerts.',
+  icon:'<circle cx="12" cy="12" r="4"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1L7 17M17 7l2.1-2.1"/>',
+  intro:'Épilation définitive à 90 % pour femmes et hommes avec la technologie Ariane Expert. Fini les poils incarnés. Bilan initial et flash test offerts, paiement en 5 fois sans frais.',
+  groups:[
+   {g:'Formules',items:[S('Délicatesse',1404,'','Aisselles + maillot + demi-jambes'),S('L\'Irrésistible',1704,'','Aisselles + maillot + jambes complètes'),S('Au masculin',1304,'','Dos + épaules + nuque'),S('L\'Audacieux',854,'','Torse + ventre')]},
+   {g:'Forfaits par zone',items:[S('Aisselles',351),S('Maillot classique',251),S('Maillot échancré',391),S('Maillot semi-intégral ou intégral',551),S('SIF',251),S('Demi-jambes ou cuisses',851),S('Jambes complètes',1194)]},
+   {g:'À la séance',items:[S('Visage, 1 zone',51),S('Aisselles',91),S('Maillot classique',61),S('Maillot échancré',91),S('Maillot semi-échancré ou intégral',121),S('Demi-jambes',211),S('Jambes complètes',351),S('Bras',181),S('Dos',201),S('Torse',141),S('Barbe',191)]}
+  ]},
+ {id:'mains',name:'Mains & pieds',short:'Manucure, semi-permanent, beauté des pieds.',
+  icon:'<path d="M8 13V5a1.5 1.5 0 0 1 3 0v6M11 11V3.5a1.5 1.5 0 0 1 3 0V11M14 11V5a1.5 1.5 0 0 1 3 0v8c0 4-2.5 8-6 8s-6-3-7-6l-1-3a1.5 1.5 0 0 1 2.7-1.3L8 13"/>',
+  intro:'Nos vernis semi-permanents se retirent avec un dissolvant spécial, sans poncer l\'ongle.',
+  groups:[
+   {g:'Mains',items:[S('Manucure complète',27),S('Pose de vernis',10),S('Retrait de vernis',10),S('Limage + pose de vernis',17),S('Soin des mains',35),S('Soin mains de velours',36,'','Soin express cocooning, mains nourries et protégées des taches.'),S('Vernis semi-permanent (mains ou pieds)',30),S('Retrait semi-permanent',15),S('Dépose + semi-permanent',38)]},
+   {g:'Pieds',items:[S('Beauté des pieds',30),S('Calluspeeling',43,'','Élimine callosités et crevasses.'),S('Calluspeeling + beauté des pieds',67),S('Modelage des pieds',38)]}
+  ]},
+ {id:'regard',name:'Regard, maquillage & solarium',short:'Rehaussement de cils, teintures, maquillage, bonne mine.',
+  icon:'<path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>',
+  groups:[
+   {g:'Cils & teintures',items:[S('Rehaussement de cils',50),S('Rehaussement + teinture de cils',56),S('Lash botox booster',15),S('Forfait rehaussement + teinture + booster',67),S('Teinture des cils',16),S('Teinture des sourcils',14)]},
+   {g:'Maquillage professionnel',items:[S('Maquillage jour',25),S('Maquillage soirée',32),S('Forfait maquillage avec essai',40),S('Maquillage + conseils techniques',39),S('Cours de maquillage',42)]},
+   {g:'Bonne mine & solarium',items:[S('Soin bonne mine visage',12,'10 min','Teint hâlé avec un activateur de mélanine végétal.'),S('Soin bonne mine corps complet',33),S('Solarium, la minute',0.8,'','Interdit aux moins de 18 ans. Lunettes de protection obligatoires (6 €).')]}
+  ]},
+ {id:'minceur',name:'Minceur & Cellutec G5',short:'Vibration active, enveloppements, presso esthétique.',
+  icon:'<path d="M8 3c0 6 2 8 2 11s-2 4-2 7M16 3c0 6-2 8-2 11s2 4 2 7"/>',
+  intro:'Diagnostic offert pour construire votre cure minceur personnalisée.',
+  groups:[
+   {g:'Cellutec G5 visage',items:[S('Soin visage anti-rides, remodelant',66,'1 h'),S('Cure de 5 séances',300,'','Au lieu de 330 €.')]},
+   {g:'Cellutec G5 corps',items:[S('1 séance',48,'30 min'),S('10 séances + 1 d\'entretien offerte',480,'30 min'),S('1 séance',53,'40 min'),S('10 séances + 1 d\'entretien offerte',530,'40 min'),S('5 séances + 5 enveloppements d\'algues',430),S('5 séances + 5 presso esthétique',465)]},
+   {g:'Soins & cures',items:[S('Cure Silhouette à l\'ananas',620,'8 × 1 h 30','Gommage, enveloppement ananas-thé vert-café, modelage aux ventouses. Gel minceur offert.'),S('Enveloppement d\'algues',39,'30 min','Reminéralisant et amincissant. Forfait 10 + 1 offerte : 390 €.'),S('Presso esthétique',46,'30 min','Drainage, jambes lourdes, rétention d\'eau. Forfait 10 + 1 offerte : 460 €.')]}
+  ]}
+];
+const GIFTABLE=[];
+CATS.forEach(c=>c.groups.forEach(g=>g.items.forEach(it=>{if(it.p>=30&&it.p<=200&&c.id!=='lumiere')GIFTABLE.push({...it,cat:c.name});})));
+
+/* home cards */
+$('#catCards').innerHTML=CATS.map(c=>`<a class="card cat-card" href="#soins/${c.id}"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">${c.icon}</svg></span><h3>${c.name}</h3><p>${c.short}</p><small>Voir les tarifs →</small></a>`).join('');
+
+/* services page */
+let curCat='visage';
+function renderSvc(){
+  $('#svcTabs').innerHTML=CATS.map(c=>`<button class="tab ${c.id===curCat?'on':''}" data-cat="${c.id}" role="tab">${c.name}</button>`).join('');
+  const c=CATS.find(x=>x.id===curCat);
+  $('#svcPanel').innerHTML=(c.intro?`<div class="note">${c.intro}</div>`:'')+c.groups.map(g=>`<div class="svc-group"><h3>${g.g}</h3>${g.items.map(it=>{
+    const giftable=it.p>=30&&it.p<=200&&c.id!=='lumiere';
+    return `<div class="svc"><div class="n">${esc(it.n)}${it.t?` <span class="t">· ${it.t}</span>`:''}</div><div class="meta">${giftable?`<button class="gift" data-gift="${esc(it.n)}">Offrir</button>`:''}<span class="p">${eur(it.p)}</span></div>${it.d?`<div class="d">${esc(it.d)}</div>`:''}</div>`}).join('')}</div>`).join('')+
+    `<a class="btn btn-primary" href="tel:0388230098">Réserver au 03 88 23 00 98</a>`;
+  const on=$('#svcTabs .tab.on'); if(on) on.scrollIntoView({block:'nearest',inline:'center'});
+}
+$('#svcTabs').addEventListener('click',e=>{const b=e.target.closest('[data-cat]');if(b){location.hash='soins/'+b.dataset.cat;}});
+$('#svcPanel').addEventListener('click',e=>{const b=e.target.closest('[data-gift]');if(!b)return;
+  gc.type='soin';gc.soin=b.dataset.gift;location.hash='boutique';setTimeout(()=>{renderGC();scrollTo({top:0,behavior:'smooth'})},30);});
+
+/* ---------- gift card builder ---------- */
+const gc={type:'montant',amount:50,soin:GIFTABLE[0].n,name:'',msg:'',format:'e'};
+const AMOUNTS=[30,50,80,100,150];
+$('#gcSoin').innerHTML=CATS.filter(c=>c.id!=='lumiere').map(c=>{const its=GIFTABLE.filter(x=>x.cat===c.name);return its.length?`<optgroup label="${c.name}">${its.map(i=>`<option value="${esc(i.n)}">${esc(i.n)} · ${eur(i.p)}</option>`).join('')}</optgroup>`:''}).join('');
+function gcPrice(){return gc.type==='montant'?gc.amount:GIFTABLE.find(x=>x.n===gc.soin).p;}
+function renderGC(){
+  $$('[data-gctype]').forEach(b=>b.classList.toggle('on',b.dataset.gctype===gc.type));
+  $$('[data-gcformat]').forEach(b=>b.classList.toggle('on',b.dataset.gcformat===gc.format));
+  $('#gcAmountField').hidden=gc.type!=='montant'; $('#gcSoinField').hidden=gc.type!=='soin';
+  $('#gcAmounts').innerHTML=AMOUNTS.map(a=>`<button class="chip ${gc.amount===a?'on':''}" data-amt="${a}">${a} €</button>`).join('');
+  $('#gcSoin').value=gc.soin;
+  const p=gcPrice();
+  $('#gcAmt').textContent=gc.type==='montant'?eur(p):(gc.soin);
+  $('#gcAmt').style.fontSize=gc.type==='montant'?'':'1.6rem';
+  $('#gcSvc').textContent=gc.type==='montant'?'Valable 1 an sur toute la carte':'Soin offert · valable 1 an';
+  $('#gcFor').textContent=gc.name?'Pour '+gc.name:'Pour vous';
+  $('#gcBtnAmt').textContent=eur(p+(gc.format==='papier'?0:0));
+}
+$('#shop-cartes').addEventListener('click',e=>{
+  const t=e.target.closest('[data-gctype],[data-gcformat],[data-amt]');if(!t)return;
+  if(t.dataset.gctype)gc.type=t.dataset.gctype;
+  if(t.dataset.gcformat)gc.format=t.dataset.gcformat;
+  if(t.dataset.amt){gc.amount=+t.dataset.amt;$('#gcCustom').value='';}
+  renderGC();
+});
+$('#gcCustom').oninput=e=>{const v=Math.round(+e.target.value);if(v>=20&&v<=500){gc.amount=v;renderGC();}};
+$('#gcSoin').onchange=e=>{gc.soin=e.target.value;renderGC();};
+$('#gcName').oninput=e=>{gc.name=e.target.value.trim();renderGC();};
+$('#gcMsg').oninput=e=>{gc.msg=e.target.value;};
+$('#gcAdd').onclick=()=>{
+  const p=gcPrice();
+  addToCart({id:'gc-'+Date.now(),kind:'gc',name:gc.type==='montant'?'Carte cadeau '+eur(p):'Carte cadeau · '+gc.soin,
+    sub:(gc.format==='e'?'E-carte par e-mail':'Carte imprimée')+(gc.name?' · pour '+gc.name:''),price:p,qty:1,format:gc.format});
+};
+
+/* ---------- products (exemples) ---------- */
+const P=(id,cat,brand,name,price,color,shape,tag)=>({id,cat,brand,name,price,color,shape,tag});
+const PRODUCTS=[
+ P('p1','soin','Institut Esthederm','Crème hydratante éclat 50 ml',49,'#E9D7C9','jar','Best-seller'),
+ P('p2','soin','Institut Esthederm','Sérum jeunesse 30 ml',72,'#C9E3DF','dropper'),
+ P('p3','soin','Institut Esthederm','Brume d\'eau cellulaire 100 ml',29,'#DCEBF2','spray'),
+ P('p4','soin','Institut Esthederm','Protection solaire visage 50 ml',36,'#F3E3B8','tube'),
+ P('p5','soin','Bernard Cassière','Gommage visage doux 50 ml',26,'#F2D3C4','tube'),
+ P('p6','soin','Bernard Cassière','Masque hydratant 50 ml',28,'#D5E8D4','jar','Nouveau'),
+ P('p7','corps','Bernard Cassière','Lait corps nourrissant 200 ml',24,'#F6E6D8','bottle'),
+ P('p8','corps','Acorelle','Eau de parfum bio 50 ml',39,'#E8D3E6','perfume'),
+ P('p9','corps','Acorelle','Roll-on bien-être 10 ml',19,'#D7E5EE','roll'),
+ P('p10','maquillage','Sélection institut','Rouge à lèvres satiné',19,'#C9775D','lipstick'),
+ P('p11','maquillage','Sélection institut','Mascara volume',22,'#2B2B2B','mascara'),
+ P('p12','accessoire','Accessoires','Foulard léger imprimé',25,'#3F8F8C','scarf'),
+ P('p13','accessoire','Accessoires','Bracelet perles et doré',18,'#D9B46A','bracelet','Idée cadeau'),
+ P('p14','accessoire','Accessoires','Sac cabas en cuir végétal',45,'#B88768','bag'),
+ P('p15','accessoire','Accessoires','Chapeau de paille',29,'#E2C98F','hat'),
+ P('p16','soin','Coffrets','Coffret découverte visage',59,'#DDEDEA','box','Coffret')
+];
+function shapeSVG(s,c){
+  const o='stroke="rgba(30,54,56,.25)" stroke-width="1.5"';
+  const S={
+   jar:`<rect x="22" y="44" width="56" height="38" rx="8" fill="${c}" ${o}/><rect x="20" y="32" width="60" height="14" rx="5" fill="#fff" ${o}/><rect x="34" y="56" width="32" height="12" rx="2" fill="#fff" opacity=".7"/>`,
+   dropper:`<rect x="33" y="40" width="34" height="46" rx="8" fill="${c}" ${o}/><rect x="40" y="26" width="20" height="16" rx="3" fill="#2A6A68"/><rect x="45" y="12" width="10" height="16" rx="5" fill="#1E3638"/><rect x="39" y="56" width="22" height="14" rx="2" fill="#fff" opacity=".75"/>`,
+   spray:`<rect x="32" y="34" width="36" height="54" rx="10" fill="${c}" ${o}/><rect x="42" y="20" width="16" height="15" rx="3" fill="#fff" ${o}/><rect x="56" y="22" width="10" height="5" rx="2" fill="#fff" ${o}/><rect x="39" y="54" width="22" height="16" rx="2" fill="#fff" opacity=".7"/>`,
+   tube:`<path d="M34 20h32l-4 62H38z" fill="${c}" ${o}/><rect x="40" y="82" width="20" height="8" rx="2" fill="#fff" ${o}/><rect x="40" y="38" width="20" height="18" rx="2" fill="#fff" opacity=".7"/>`,
+   bottle:`<rect x="30" y="34" width="40" height="56" rx="10" fill="${c}" ${o}/><rect x="42" y="18" width="16" height="18" rx="3" fill="#2A6A68"/><rect x="37" y="54" width="26" height="18" rx="2" fill="#fff" opacity=".7"/>`,
+   perfume:`<rect x="26" y="40" width="48" height="46" rx="12" fill="${c}" ${o}/><rect x="42" y="30" width="16" height="12" fill="#D9B46A"/><rect x="38" y="16" width="24" height="15" rx="4" fill="#1E3638"/><circle cx="50" cy="63" r="9" fill="#fff" opacity=".6"/>`,
+   roll:`<rect x="40" y="30" width="20" height="58" rx="6" fill="${c}" ${o}/><rect x="40" y="16" width="20" height="16" rx="5" fill="#fff" ${o}/>`,
+   lipstick:`<rect x="38" y="52" width="24" height="36" rx="3" fill="#1E3638"/><rect x="40" y="40" width="20" height="14" fill="#D9B46A"/><path d="M42 40V24l16-8v24z" fill="${c}"/>`,
+   mascara:`<rect x="40" y="38" width="20" height="50" rx="6" fill="${c}"/><rect x="40" y="10" width="20" height="30" rx="5" fill="#D9B46A"/>`,
+   scarf:`<path d="M20 30c20-10 40 10 60 0v30c-20 10-40-10-60 0z" fill="${c}" ${o}/><path d="M30 60l-6 26M70 60l6 26" stroke="${c}" stroke-width="6" stroke-linecap="round"/><circle cx="40" cy="40" r="3" fill="#fff" opacity=".7"/><circle cx="58" cy="44" r="3" fill="#fff" opacity=".7"/>`,
+   bracelet:`<ellipse cx="50" cy="55" rx="30" ry="22" fill="none" stroke="${c}" stroke-width="4"/>${[0,1,2,3,4,5,6,7].map(i=>{const a=i/8*Math.PI*2;return `<circle cx="${50+30*Math.cos(a)}" cy="${55+22*Math.sin(a)}" r="5" fill="${i%2?'#DDEDEA':'#C9775D'}"/>`}).join('')}`,
+   bag:`<path d="M20 40h60l-6 46H26z" fill="${c}" ${o}/><path d="M36 40c0-16 28-16 28 0" fill="none" stroke="#1E3638" stroke-width="3"/>`,
+   hat:`<ellipse cx="50" cy="66" rx="40" ry="12" fill="${c}" ${o}/><path d="M28 64c0-26 44-26 44 0z" fill="${c}" ${o}/><path d="M29 58h42" stroke="#1E3638" stroke-width="4"/>`,
+   box:`<rect x="18" y="38" width="64" height="46" rx="4" fill="${c}" ${o}/><rect x="16" y="30" width="68" height="12" rx="3" fill="#fff" ${o}/><path d="M50 30v54" stroke="#C9775D" stroke-width="5"/><path d="M50 30c-10-14-22-6-12 0M50 30c10-14 22-6 12 0" fill="none" stroke="#C9775D" stroke-width="3"/>`
+  };
+  return `<svg viewBox="0 0 100 100" aria-hidden="true">${S[s]||S.jar}</svg>`;
+}
+const FILTERS=[['tous','Tout'],['soin','Soins visage'],['corps','Corps & parfums'],['maquillage','Maquillage'],['accessoire','Accessoires']];
+let curFilter='tous';
+function renderProducts(){
+  $('#prodFilters').innerHTML=FILTERS.map(([k,l])=>`<button class="tab ${k===curFilter?'on':''}" data-f="${k}">${l}</button>`).join('');
+  $('#prodGrid').innerHTML=PRODUCTS.filter(p=>curFilter==='tous'||p.cat===curFilter).map(p=>`
+    <article class="prod"><div class="pic">${p.tag?`<span class="tag">${p.tag}</span>`:''}${shapeSVG(p.shape,p.color)}</div>
+    <div class="body"><span class="brand-n">${p.brand}</span><h4>${esc(p.name)}</h4>
+    <div class="row"><span class="price">${eur(p.price)}</span><button class="add" data-add="${p.id}" aria-label="Ajouter ${esc(p.name)} au panier">+</button></div></div></article>`).join('');
+}
+$('#prodFilters').addEventListener('click',e=>{const b=e.target.closest('[data-f]');if(b){curFilter=b.dataset.f;renderProducts();}});
+$('#prodGrid').addEventListener('click',e=>{const b=e.target.closest('[data-add]');if(!b)return;const p=PRODUCTS.find(x=>x.id===b.dataset.add);
+  addToCart({id:p.id,kind:'prod',name:p.name,sub:p.brand,price:p.price,qty:1,shape:p.shape,color:p.color});
+  b.classList.add('done');b.textContent='✓';setTimeout(()=>{b.classList.remove('done');b.textContent='+'},1200);});
+
+let shopTab='cartes';
+function setShop(t){shopTab=t;$$('[data-shop]').forEach(b=>b.classList.toggle('on',b.dataset.shop===t));$('#shop-cartes').hidden=t!=='cartes';$('#shop-produits').hidden=t!=='produits';}
+$$('[data-shop]').forEach(b=>b.onclick=()=>{location.hash=b.dataset.shop==='cartes'?'boutique':'boutique/produits';});
+
+/* ---------- cart ---------- */
+let cart=[];
+try{cart=JSON.parse(localStorage.getItem('ab-cart')||'[]')}catch(e){cart=[]}
+const save=()=>{try{localStorage.setItem('ab-cart',JSON.stringify(cart))}catch(e){}};
+function addToCart(item){
+  const ex=item.kind==='prod'&&cart.find(x=>x.id===item.id);
+  if(ex)ex.qty++;else cart.push(item);
+  save();updateBadge();toast('Ajouté au panier');
+}
+function updateBadge(){const n=cart.reduce((a,b)=>a+b.qty,0);$('#cartCount').textContent=n;$('#cartCount').hidden=!n;}
+const subtotal=()=>cart.reduce((a,b)=>a+b.price*b.qty,0);
+const onlyE=()=>cart.length&&cart.every(x=>x.kind==='gc'&&x.format==='e');
+let step=0, ship='retrait', buyer={};
+const SHIP={retrait:{l:'Retrait à l\'institut',d:'Gratuit · prêt sous 24 h',p:0},poste:{l:'Envoi à domicile',d:'Colissimo 48-72 h',p:4.9},email:{l:'Par e-mail',d:'E-cartes envoyées immédiatement',p:0}};
+function shipCost(){const s=subtotal();if(ship==='poste')return s>=60?0:4.9;return 0;}
+function openDrawer(){step=0;renderDrawer();$('#drawer').classList.add('on');$('#scrim').classList.add('on');}
+function closeDrawer(){$('#drawer').classList.remove('on');$('#scrim').classList.remove('on');}
+$('#cartBtn').onclick=openDrawer;$('#closeDrawer').onclick=closeDrawer;$('#scrim').onclick=closeDrawer;
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeDrawer();});
+function lineHTML(x,i){
+  const mini=x.kind==='gc'?`<div class="mini" style="background:linear-gradient(135deg,#5FA8A4,#2A6A68);color:#fff;font-family:Cormorant Garamond,serif;font-size:1.1rem">AB</div>`:`<div class="mini">${shapeSVG(x.shape,x.color)}</div>`;
+  return `<div class="line">${mini}<div><div class="nm">${esc(x.name)}</div><div class="sub">${esc(x.sub)}</div>
+  ${x.kind==='prod'&&step===0?`<div class="qty"><button data-q="${i}" data-d="-1" aria-label="Moins">−</button><span>${x.qty}</span><button data-q="${i}" data-d="1" aria-label="Plus">+</button></div>`:''}
+  ${step===0?`<div><button class="rm" data-rm="${i}">Retirer</button></div>`:''}</div><div class="lp">${eur(x.price*x.qty)}</div></div>`;
+}
+function totalsHTML(){
+  const s=subtotal(),sh=shipCost();
+  return `<div class="sum"><span>Sous-total</span><span>${eur(s)}</span></div>${step>0?`<div class="sum"><span>${SHIP[ship].l}</span><span>${sh?eur(sh):'Offert'}</span></div>`:''}<div class="sum total"><span>Total TTC</span><span>${eur(s+(step>0?sh:0))}</span></div>`;
+}
+function renderDrawer(){
+  const C=$('#drawerContent'),F=$('#drawerFooter');
+  const bar=`<div class="steps">${[0,1,2].map(i=>`<span class="${i<=step?'on':''}"></span>`).join('')}</div>`;
+  if(step===3){
+    $('#drawerTitle').textContent='Merci !';
+    C.innerHTML=`<div class="success"><div class="ok">✓</div><h3 style="font-size:1.8rem">Commande confirmée</h3><p style="color:var(--ink-soft)">Merci ${esc(buyer.name||'')} ! Sur le vrai site, vous recevriez ici un e-mail de confirmation${ship==='retrait'?' et un SMS quand votre commande est prête à l\'institut':ship==='email'?' avec vos e-cartes cadeaux en PDF':' avec le numéro de suivi Colissimo'}.</p><div class="note warn" style="text-align:left">Démonstration : aucune commande n'a été envoyée et aucun paiement n'a été effectué.</div></div>`;
+    F.innerHTML=`<button class="btn btn-primary" id="dDone">Retour à la boutique</button>`;
+    $('#dDone').onclick=()=>{closeDrawer();location.hash='boutique';};
+    return;
+  }
+  if(!cart.length){
+    $('#drawerTitle').textContent='Votre panier';
+    C.innerHTML=`<div class="empty"><p>Votre panier est vide.</p><p>Une carte cadeau fait toujours plaisir.</p></div>`;
+    F.innerHTML=`<a class="btn btn-primary" href="#boutique" id="dShop">Découvrir la boutique</a>`;$('#dShop').onclick=closeDrawer;return;
+  }
+  if(step===0){
+    $('#drawerTitle').textContent='Votre panier';
+    C.innerHTML=bar+cart.map(lineHTML).join('');
+    F.innerHTML=totalsHTML()+`<button class="btn btn-primary" id="dNext">Commander</button><button class="btn btn-ghost" id="dCont">Continuer mes achats</button>`;
+    $('#dNext').onclick=()=>{step=1;if(onlyE())ship='email';else if(ship==='email')ship='retrait';renderDrawer();};
+    $('#dCont').onclick=closeDrawer;
+  }else if(step===1){
+    $('#drawerTitle').textContent='Vos coordonnées';
+    const opts=onlyE()?['email','retrait']:['retrait','poste'];
+    C.innerHTML=bar+`<form id="buyForm">
+      <div class="field"><label for="bName">Prénom et nom</label><input id="bName" required value="${esc(buyer.name||'')}" autocomplete="name"></div>
+      <div class="field"><label for="bMail">E-mail</label><input id="bMail" type="email" required value="${esc(buyer.mail||'')}" autocomplete="email"></div>
+      <div class="field"><label for="bTel">Téléphone</label><input id="bTel" type="tel" required value="${esc(buyer.tel||'')}" autocomplete="tel"></div>
+      <div class="field"><span class="lbl">Réception</span><div class="seg">${opts.map(k=>`<button type="button" class="chip ${ship===k?'on':''}" data-ship="${k}"><b>${SHIP[k].l}</b>${k==='poste'?(subtotal()>=60?'Offert dès 60 €':'4,90 € · offert dès 60 €'):SHIP[k].d}</button>`).join('')}</div></div>
+      <div class="field" id="addrField" ${ship==='poste'?'':'hidden'}><label for="bAddr">Adresse de livraison</label><textarea id="bAddr" placeholder="Rue, code postal, ville">${esc(buyer.addr||'')}</textarea></div>
+    </form>`;
+    F.innerHTML=totalsHTML()+`<button class="btn btn-primary" id="dNext">Continuer vers le paiement</button><button class="btn btn-ghost" id="dBack">Retour</button>`;
+    C.querySelectorAll('[data-ship]').forEach(b=>b.onclick=()=>{keepBuyer();ship=b.dataset.ship;renderDrawer();});
+    $('#dBack').onclick=()=>{keepBuyer();step=0;renderDrawer();};
+    $('#dNext').onclick=()=>{keepBuyer();const f=$('#buyForm');if(ship==='poste')$('#bAddr').required=true;if(!f.reportValidity())return;step=2;renderDrawer();};
+  }else if(step===2){
+    $('#drawerTitle').textContent='Paiement';
+    C.innerHTML=bar+cart.map(lineHTML).join('')+`<div class="pay-box" style="margin-top:16px"><b>Paiement sécurisé</b><p style="margin:6px 0 0;color:var(--ink-soft)">Sur le site en ligne, ce bouton ouvre la page de paiement sécurisée du prestataire bancaire (carte, Apple Pay, Google Pay). Aucune donnée bancaire ne transite par le site de l'institut.</p></div>
+    <p style="font-size:.8rem;color:var(--muted);margin-top:12px">En validant, j'accepte les conditions générales de vente. Cartes cadeaux valables 1 an, non remboursables.</p>`;
+    F.innerHTML=totalsHTML()+`<button class="btn btn-primary" id="dPay">Payer ${eur(subtotal()+shipCost())} (démo)</button><button class="btn btn-ghost" id="dBack">Retour</button>`;
+    $('#dBack').onclick=()=>{step=1;renderDrawer();};
+    $('#dPay').onclick=()=>{cart=[];save();updateBadge();step=3;renderDrawer();};
+  }
+}
+function keepBuyer(){const g=id=>{const el=$(id);return el?el.value:''};buyer={name:g('#bName'),mail:g('#bMail'),tel:g('#bTel'),addr:g('#bAddr')};}
+$('#drawerContent').addEventListener('click',e=>{
+  const q=e.target.closest('[data-q]'),r=e.target.closest('[data-rm]');
+  if(q){const it=cart[+q.dataset.q];it.qty=Math.max(1,it.qty+ +q.dataset.d);}
+  else if(r){cart.splice(+r.dataset.rm,1);}else return;
+  save();updateBadge();renderDrawer();
+});
+
+/* ---------- misc ---------- */
+let tt;function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('on');clearTimeout(tt);tt=setTimeout(()=>t.classList.remove('on'),1800);}
+$('#menuBtn').onclick=()=>$('#mobileNav').classList.toggle('open');
+$('#contactForm').onsubmit=e=>{e.preventDefault();toast('Démonstration : message non envoyé');e.target.reset();};
+
+/* ---------- router ---------- */
+function route(){
+  const h=(location.hash.slice(1)||'accueil').split('/');
+  const page=['accueil','soins','boutique','institut','contact'].includes(h[0])?h[0]:'accueil';
+  $$('.page').forEach(p=>p.classList.toggle('on',p.id==='p-'+page));
+  $$('[data-nav]').forEach(a=>a.classList.toggle('on',a.dataset.nav===page));
+  $('#mobileNav').classList.remove('open');
+  if(page==='soins'){if(h[1]&&CATS.some(c=>c.id===h[1]))curCat=h[1];renderSvc();}
+  if(page==='boutique'){setShop(h[1]==='produits'?'produits':'cartes');}
+  window.scrollTo(0,0);
+}
+window.addEventListener('hashchange',route);
+renderGC();renderProducts();updateBadge();route();
+})();
+</script>
+</body>
+</html>
