@@ -395,7 +395,7 @@ footer.site a{text-decoration:none;display:block;padding:3px 0}
 <header class="top">
   <div class="wrap">
     <a class="brand" id="brandLink" href="#accueil" aria-label="Aqua Beauté, accueil">
-      <img class="logo-img" src="https://aquabeaute-esthetique.fr/wp-content/uploads/2022/12/LOGO-2.png" alt="Aqua Beauté" onerror="document.getElementById('brandLink').classList.add('nologo');this.remove()">
+      <img class="logo-img" src="images/2022/12/LOGO-2.png" alt="Aqua Beauté" onerror="document.getElementById('brandLink').classList.add('nologo');this.remove()">
       <span class="fallback">Aqua Beauté</span>
     </a>
     <nav class="main" aria-label="Menu principal">
@@ -702,7 +702,7 @@ const PAYPAL_CLIENT_ID = '';
 /* Adresse du moteur des bons cadeaux (Cloudflare), ex. 'https://aquabeaute-bons-cadeaux.xxxx.workers.dev'.
    Les deux réglages doivent être remplis pour que les vrais paiements s'activent. */
 const API_URL = '';
-const IMG = 'https://aquabeaute-esthetique.fr/wp-content/uploads/';
+const IMG = 'images/';
 /* ==================================================== */
 (function(){
 const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
@@ -718,24 +718,24 @@ img($('#giftPhoto'),IMG+'elementor/thumbs/IMG_7978-q98wl5v0cyrhvgvjjvdk1074m7jit
 img($('#realCard'),IMG+'elementor/thumbs/IMG_79783-q98wqxlcbcnv5ahsuv63u1rzwd3n2uy58e8pher454.png');
 img($('#aboutPhoto'),IMG+'2023/05/j-ai-teste-les-soins-du-visage-1b.webp',function(){this.style.display='none'});
 bg($('#hlLumiere'),IMG+'2023/05/image-17.png');
-bg($('#hlMinceur'),IMG+'2023/05/african-american-lady-having-skin-scrubbing-proced-2022-12-16-07-52-57-utc-2.png');
+bg($('#hlMinceur'),IMG+'2023/05/african-american-lady-having-skin-scrubbing-proced-2022-12-16-07-52-57-utc-2.jpg');
 const BRANDS=[['2022/12/Frame-2-1.png','Institut Esthederm'],['2022/12/Frame-6.png','Bernard Cassière'],['2022/12/image-4-1.png','Parisax'],['2022/12/Frame-5-1.png','Autour du Bain'],['2023/03/heromo-1.png','Hérôme'],['2023/03/Acorelle-1.png','Acorelle'],['2023/03/senteurs.png','Les Senteurs Gourmandes'],['2022/12/Frame-3-1.png','Cellutec'],['2023/05/image-17.png','Ariane Expert'],['2023/05/Group-93.png','Roxils · Parisax']];
 $('#brandLogos').innerHTML=BRANDS.map(([u,n],i)=>`<div><img src="${IMG+u}" alt="${n}" loading="lazy" data-bi="${i}"></div>`).join('');
 $$('#brandLogos img').forEach(im=>im.onerror=()=>{im.parentNode.textContent=BRANDS[+im.dataset.bi][1];});
 
 /* photos de l'institut */
 const PHOTOS=[
- ['2023/08/IMG_9330-1.png','La façade, rue du Maréchal Foch','institut'],
- ['2023/05/IMG_9330-2.png','L\'accueil et l\'espace boutique','institut'],
- ['2023/05/IMG_9330-3.png','Produits et accessoires en vente','institut'],
- ['2023/08/IMG_9330-7.png','Une cabine de soin','cabines'],
- ['2023/05/IMG_9330-6.png','Cabine de soin et d\'épilation','cabines'],
- ['2023/05/IMG_9330-5.png','Le solarium','cabines'],
- ['2022/12/image-2-1.png','Soin du visage','soins'],
+ ['2023/08/IMG_9330-1.jpg','La façade, rue du Maréchal Foch','institut'],
+ ['2023/05/IMG_9330-2.jpg','L\'accueil et l\'espace boutique','institut'],
+ ['2023/05/IMG_9330-3.jpg','Produits et accessoires en vente','institut'],
+ ['2023/08/IMG_9330-7.jpg','Une cabine de soin','cabines'],
+ ['2023/05/IMG_9330-6.jpg','Cabine de soin et d\'épilation','cabines'],
+ ['2023/05/IMG_9330-5.jpg','Le solarium','cabines'],
+ ['2022/12/image-2-1.jpg','Soin du visage','soins'],
  ['2025/01/soin-chocolat-saint-valentin.jpg','Pause gourmande au chocolat','soins'],
  ['2025/01/relaxing-back-massage-2025-01-29-08-15-31-utc-scaled.webp','Modelage relaxant','soins'],
  ['2023/05/j-ai-teste-les-soins-du-visage-1b.webp','Soin visage relaxant','soins'],
- ['2023/05/african-american-lady-having-skin-scrubbing-proced-2022-12-16-07-52-57-utc-2.png','Minceur : Cellutec G5','soins'],
+ ['2023/05/african-american-lady-having-skin-scrubbing-proced-2022-12-16-07-52-57-utc-2.jpg','Minceur : Cellutec G5','soins'],
  ['elementor/thumbs/IMG_79783-q98wqxlcbcnv5ahsuv63u1rzwd3n2uy58e8pher454.png','Le bon cadeau dans son enveloppe','soins']
 ].map(([u,c,g])=>({src:IMG+u,cap:c,g}));
 const GAL_CATS=[['tout','Toutes les photos','Les 12 photos',0],['institut','L\'institut','Façade, accueil, boutique',1],['cabines','Les cabines','Cabines de soin, solarium',3],['soins','Les soins','Visage, corps, minceur',6]];
