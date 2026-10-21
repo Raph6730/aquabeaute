@@ -630,7 +630,7 @@ img($('#realCard'),IMG+'elementor/thumbs/IMG_79783-q98wqxlcbcnv5ahsuv63u1rzwd3n2
 img($('#aboutPhoto'),IMG+'2023/05/j-ai-teste-les-soins-du-visage-1b.webp',function(){this.style.display='none'});
 bg($('#hlLumiere'),IMG+'2023/05/image-17.png');
 bg($('#hlMinceur'),IMG+'2023/05/african-american-lady-having-skin-scrubbing-proced-2022-12-16-07-52-57-utc-2.png');
-const BRANDS=[['2022/12/Frame-6.png','Institut Esthederm'],['2022/12/image-4-1.png','Bernard Cassière'],['2022/12/Frame-5-1.png','Parisax'],['2022/12/Frame-2-1.png','Autour du Bain'],['2023/03/heromo-1.png','Hérôme'],['2023/03/Acorelle-1.png','Acorelle'],['2023/03/senteurs.png','Les Senteurs Gourmandes'],['2022/12/Frame-1-1.png','Cellutec'],['2023/05/image-17.png','Ariane Expert'],['2023/05/Group-93.png','Roxils · Parisax']];
+const BRANDS=[['2022/12/Frame-2-1.png','Institut Esthederm'],['2022/12/Frame-6.png','Bernard Cassière'],['2022/12/image-4-1.png','Parisax'],['2022/12/Frame-5-1.png','Autour du Bain'],['2023/03/heromo-1.png','Hérôme'],['2023/03/Acorelle-1.png','Acorelle'],['2023/03/senteurs.png','Les Senteurs Gourmandes'],['2022/12/Frame-3-1.png','Cellutec'],['2023/05/image-17.png','Ariane Expert'],['2023/05/Group-93.png','Roxils · Parisax']];
 $('#brandLogos').innerHTML=BRANDS.map(([u,n],i)=>`<div><img src="${IMG+u}" alt="${n}" loading="lazy" data-bi="${i}"></div>`).join('');
 $$('#brandLogos img').forEach(im=>im.onerror=()=>{im.parentNode.textContent=BRANDS[+im.dataset.bi][1];});
 
@@ -684,7 +684,7 @@ const CATS=[
    {g:'Cils & teintures',items:[S('Rehaussement de cils',50),S('Rehaussement + teinture de cils',56),S('Lash botox booster',15),S('Forfait rehaussement + teinture + booster',67),S('Teinture des cils',16),S('Teinture des sourcils',14)]},
    {g:'Maquillage professionnel',items:[S('Maquillage jour',25),S('Maquillage soirée',32),S('Forfait maquillage avec essai',40),S('Maquillage + conseils techniques',39),S('Cours de maquillage',42)]},
    {g:'Bonne mine & solarium',items:[S('Soin bonne mine visage',12,'10 min','Teint hâlé avec un activateur de mélanine végétal.'),S('Soin bonne mine corps complet',33),S('Solarium, la minute',0.8,'','Interdit aux moins de 18 ans. Lunettes de protection obligatoires (6 €).')]}]},
- {id:'minceur',name:'Minceur',short:'Cellutec G5, algues, presso esthétique.',logo:'2022/12/Frame-1-1.png',intro:'Diagnostic offert pour construire votre cure minceur personnalisée.',groups:[
+ {id:'minceur',name:'Minceur',short:'Cellutec G5, algues, presso esthétique.',logo:'2022/12/Frame-3-1.png',intro:'Diagnostic offert pour construire votre cure minceur personnalisée.',groups:[
    {g:'Cellutec G5 visage',items:[S('Soin visage anti-rides, remodelant',66,'1 h'),S('Cure de 5 séances',300,'','Au lieu de 330 €.')]},
    {g:'Cellutec G5 corps',items:[S('1 séance',48,'30 min'),S('10 séances + 1 d\'entretien offerte',480,'30 min'),S('1 séance',53,'40 min'),S('10 séances + 1 d\'entretien offerte',530,'40 min'),S('5 séances + 5 enveloppements d\'algues',430),S('5 séances + 5 presso esthétique',465)]},
    {g:'Soins & cures',items:[S('Cure Silhouette à l\'ananas',620,'8 × 1 h 30','Gommage, enveloppement ananas-thé vert-café, modelage aux ventouses. Gel minceur offert.'),S('Enveloppement d\'algues',39,'30 min','Reminéralisant et amincissant. Forfait 10 + 1 offerte : 390 €.'),S('Presso esthétique',46,'30 min','Drainage, jambes lourdes. Forfait 10 + 1 offerte : 460 €.')]}]}
