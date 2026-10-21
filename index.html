@@ -272,6 +272,25 @@ footer.site a{text-decoration:none;display:block;padding:3px 0}
 .toast{position:fixed;left:50%;bottom:90px;transform:translateX(-50%) translateY(20px);background:var(--ink);color:var(--bg);padding:10px 18px;border-radius:999px;font-size:.88rem;opacity:0;pointer-events:none;transition:all .25s;z-index:70;white-space:nowrap}
 .toast.on{opacity:1;transform:translateX(-50%)}
 @media(min-width:900px){.toast{bottom:30px}}
+/* vraies images de l'institut */
+.logo-img{height:34px;width:auto;max-width:190px;object-fit:contain}
+.brand.has-logo b,.brand.has-logo span{display:none}
+:root[data-theme="dark"] .logo-img{background:#F6F2EC;border-radius:8px;padding:3px 6px}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .logo-img{background:#F6F2EC;border-radius:8px;padding:3px 6px}}
+.hero-art img.real{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.news{display:grid;gap:24px;align-items:center}
+@media(min-width:860px){.news{grid-template-columns:1fr 1fr}}
+.news .flyer{width:100%;max-width:420px;justify-self:center;border-radius:var(--r);box-shadow:var(--shadow);background:var(--surface)}
+.gift-photo{width:100%;max-width:380px;justify-self:center;aspect-ratio:4/3;object-fit:cover;border-radius:18px;margin-bottom:-60px;position:relative;z-index:0}
+.gift-stack{display:grid;justify-items:center}
+.gift-stack .giftcard-visual{position:relative;z-index:1;width:85%}
+.portrait{position:relative}.portrait img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:1}
+.cat-photo{width:100%;aspect-ratio:21/9;object-fit:cover;border-radius:var(--r);margin-bottom:18px;background:var(--surface-2)}
+@media(max-width:640px){.cat-photo{aspect-ratio:16/9}}
+.brand-logos{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+@media(min-width:640px){.brand-logos{grid-template-columns:repeat(4,1fr)}}
+.brand-logos div{background:#fff;border:1px solid var(--line);border-radius:14px;height:86px;display:grid;place-items:center;padding:14px}
+.brand-logos img{max-width:100%;max-height:100%;object-fit:contain}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
 </style>
 </head>
@@ -281,7 +300,7 @@ footer.site a{text-decoration:none;display:block;padding:3px 0}
 
 <header class="top">
   <div class="wrap">
-    <a class="brand" href="#accueil"><b>Aqua Beauté</b><span>Institut · Mutzig</span></a>
+    <a class="brand has-logo" href="#accueil" aria-label="Aqua Beauté, accueil"><img class="logo-img" src="https://aquabeaute-esthetique.fr/wp-content/uploads/2022/12/LOGO-2.png" alt="Aqua Beauté" onerror="this.parentNode.classList.remove('has-logo');this.remove()"><b>Aqua Beauté</b><span>Institut · Mutzig</span></a>
     <nav class="main" aria-label="Menu principal">
       <a href="#accueil" data-nav="accueil">Accueil</a>
       <a href="#soins" data-nav="soins">Soins & tarifs</a>
@@ -327,8 +346,8 @@ footer.site a{text-decoration:none;display:block;padding:3px 0}
           <a class="btn btn-ghost" href="#boutique">Offrir une carte cadeau</a>
         </div>
       </div>
-      <div class="hero-art" aria-hidden="true">
-        <svg viewBox="0 0 400 500" preserveAspectRatio="xMidYMid slice">
+      <div class="hero-art">
+        <svg viewBox="0 0 400 500" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
           <defs>
             <linearGradient id="w1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#9FD1CC"/><stop offset="1" stop-color="#3F8F8C"/></linearGradient>
             <radialGradient id="sun" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#F7D9C8"/><stop offset="1" stop-color="#F7D9C8" stop-opacity="0"/></radialGradient>
@@ -352,6 +371,7 @@ footer.site a{text-decoration:none;display:block;padding:3px 0}
             <rect x="-14" y="24" width="28" height="22" rx="3" fill="#DDEDEA"/>
           </g>
         </svg>
+        <img class="real" src="https://aquabeaute-esthetique.fr/wp-content/uploads/elementor/thumbs/IMG_7978-q98wl5v0cyrhvgvjjvdk1074m7jitr1gru2ef9b4c8.png" alt="L'institut Aqua Beauté à Mutzig" onerror="this.remove()">
         <div class="hero-chip"><b>4,6 / 5</b>Note moyenne des clientes sur Google</div>
       </div>
     </div>
@@ -365,6 +385,18 @@ footer.site a{text-decoration:none;display:block;padding:3px 0}
         <div><b>3</b><span>cabines + espace manucure</span></div>
         <div><b>Offert</b><span>bilan et flash test lumière pulsée</span></div>
       </div>
+    </div>
+  </section>
+
+  <section id="actu">
+    <div class="wrap news">
+      <div>
+        <span class="eyebrow">En ce moment à l'institut</span>
+        <h2 style="font-size:clamp(2rem,5vw,2.8rem);margin:6px 0 12px">L'offre du moment</h2>
+        <p style="color:var(--ink-soft);margin:0 0 20px">Retrouvez ici les promotions et les nouveautés de l'institut. Pour en profiter, appelez Christelle ou offrez-la en carte cadeau.</p>
+        <div class="hero-ctas"><a class="btn btn-primary" href="tel:0388230098">J'en profite</a><a class="btn btn-ghost" href="#boutique">Offrir</a></div>
+      </div>
+      <img class="flyer" src="https://aquabeaute-esthetique.fr/wp-content/uploads/2026/01/Pink-and-Red-Modern-Valentines-Day-Document-A4-768x1086.png" alt="Affiche de l'offre du moment de l'institut Aqua Beauté" loading="lazy" onerror="document.getElementById('actu').remove()">
     </div>
   </section>
 
@@ -387,9 +419,12 @@ footer.site a{text-decoration:none;display:block;padding:3px 0}
             <a class="btn btn-ghost" style="color:inherit;border-color:rgba(255,255,255,.3)" href="#boutique/produits">Voir les produits</a>
           </div>
         </div>
-        <div class="giftcard-visual">
-          <div style="display:flex;justify-content:space-between;align-items:start"><b>Aqua Beauté</b><small>Carte cadeau</small></div>
-          <div><div class="amt">80 €</div><small>Valable 1 an · Mutzig</small></div>
+        <div class="gift-stack">
+          <img class="gift-photo" src="https://aquabeaute-esthetique.fr/wp-content/uploads/elementor/thumbs/IMG_79783-q98wqxlcbcnv5ahsuv63u1rzwd3n2uy58e8pher454.png" alt="" loading="lazy" onerror="this.remove()">
+          <div class="giftcard-visual">
+            <div style="display:flex;justify-content:space-between;align-items:start"><b>Aqua Beauté</b><small>Carte cadeau</small></div>
+            <div><div class="amt">80 €</div><small>Valable 1 an · Mutzig</small></div>
+          </div>
         </div>
       </div>
     </div>
@@ -410,7 +445,7 @@ footer.site a{text-decoration:none;display:block;padding:3px 0}
   <section style="padding-top:0">
     <div class="wrap">
       <div class="sec-head"><span class="eyebrow">Nos marques</span><h2>Des produits professionnels</h2></div>
-      <div class="brands"><span>Institut Esthederm</span><span>Bernard Cassière</span><span>Acorelle</span><span>Cellutec G5</span><span>Ariane Expert</span></div>
+      <div class="brand-logos"><div><img src="https://aquabeaute-esthetique.fr/wp-content/uploads/2022/12/Frame-6.png" alt="Logo d'une marque vendue à l'institut" loading="lazy" onerror="this.parentNode.remove()"></div><div><img src="https://aquabeaute-esthetique.fr/wp-content/uploads/2022/12/image-4-1.png" alt="Logo d'une marque vendue à l'institut" loading="lazy" onerror="this.parentNode.remove()"></div><div><img src="https://aquabeaute-esthetique.fr/wp-content/uploads/2022/12/Frame-5-1.png" alt="Logo d'une marque vendue à l'institut" loading="lazy" onerror="this.parentNode.remove()"></div><div><img src="https://aquabeaute-esthetique.fr/wp-content/uploads/2022/12/Frame-3-1.png" alt="Logo d'une marque vendue à l'institut" loading="lazy" onerror="this.parentNode.remove()"></div><div><img src="https://aquabeaute-esthetique.fr/wp-content/uploads/2022/12/Frame-2-1.png" alt="Logo d'une marque vendue à l'institut" loading="lazy" onerror="this.parentNode.remove()"></div><div><img src="https://aquabeaute-esthetique.fr/wp-content/uploads/2023/03/heromo-1.png" alt="Logo d'une marque vendue à l'institut" loading="lazy" onerror="this.parentNode.remove()"></div><div><img src="https://aquabeaute-esthetique.fr/wp-content/uploads/2023/03/Acorelle-1.png" alt="Logo d'une marque vendue à l'institut" loading="lazy" onerror="this.parentNode.remove()"></div><div><img src="https://aquabeaute-esthetique.fr/wp-content/uploads/2023/03/senteurs.png" alt="Logo d'une marque vendue à l'institut" loading="lazy" onerror="this.parentNode.remove()"></div></div>
     </div>
   </section>
 </div>
@@ -506,8 +541,9 @@ footer.site a{text-decoration:none;display:block;padding:3px 0}
 <div class="page" id="p-institut">
   <section>
     <div class="wrap about-grid">
-      <div class="portrait" aria-hidden="true">
-        <svg viewBox="0 0 300 300">
+      <div class="portrait">
+        <img src="https://aquabeaute-esthetique.fr/wp-content/uploads/elementor/thumbs/IMG_7978-q98wl5v0cyrhvgvjjvdk1074m7jitr1gru2ef9b4c8.png" alt="L'institut Aqua Beauté" onerror="this.remove()" style="display:block">
+        <svg viewBox="0 0 300 300" aria-hidden="true">
           <rect width="300" height="300" fill="var(--coral-soft)"/>
           <circle cx="150" cy="120" r="48" fill="#C9775D" opacity=".85"/>
           <path d="M60 300c6-62 44-100 90-100s84 38 90 100z" fill="#2A6A68"/>
@@ -635,7 +671,7 @@ paintStatus(); setInterval(paintStatus,60000);
 /* ---------- services data (tarifs du site actuel) ---------- */
 const S=(n,p,t,d)=>({n,p,t,d});
 const CATS=[
- {id:'visage',name:'Soins visage',short:'Hydratation, éclat, anti-âge, soins signature Esthederm.',
+ {id:'visage',photo:'https://aquabeaute-esthetique.fr/wp-content/uploads/2023/05/image-19.png',name:'Soins visage',short:'Hydratation, éclat, anti-âge, soins signature Esthederm.',
   icon:'<path d="M12 3c-4 0-7 3.5-7 8 0 5 3.5 10 7 10s7-5 7-10c0-4.5-3-8-7-8z"/><path d="M9 11h.01M15 11h.01M9.5 15.5c1.5 1 3.5 1 5 0"/>',
   groups:[
    {g:'Soins visage',items:[
@@ -691,7 +727,7 @@ const CATS=[
    {g:'Forfaits',items:[S('Demi-jambes + maillot + aisselles',38),S('Trois quarts jambes + maillot + aisselles',46),S('Demi-jambes + maillot intégral',42),S('Demi-jambes + maillot intégral + aisselles',51),S('Jambes entières + maillot',36),S('Jambes entières + maillot intégral',51),S('Jambes entières + maillot intégral + aisselles',57)]},
    {g:'Pour lui',items:[S('Torse',22),S('Ventre',12),S('Dos complet avec épaules',26),S('Dos + ventre + torse',52)]}
   ]},
- {id:'lumiere',name:'Lumière pulsée',short:'Épilation durable Ariane Expert. Bilan et flash test offerts.',
+ {id:'lumiere',photo:'https://aquabeaute-esthetique.fr/wp-content/uploads/2023/05/image-17.png',name:'Lumière pulsée',short:'Épilation durable Ariane Expert. Bilan et flash test offerts.',
   icon:'<circle cx="12" cy="12" r="4"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1L7 17M17 7l2.1-2.1"/>',
   intro:'Épilation définitive à 90 % pour femmes et hommes avec la technologie Ariane Expert. Fini les poils incarnés. Bilan initial et flash test offerts, paiement en 5 fois sans frais.',
   groups:[
@@ -713,7 +749,7 @@ const CATS=[
    {g:'Maquillage professionnel',items:[S('Maquillage jour',25),S('Maquillage soirée',32),S('Forfait maquillage avec essai',40),S('Maquillage + conseils techniques',39),S('Cours de maquillage',42)]},
    {g:'Bonne mine & solarium',items:[S('Soin bonne mine visage',12,'10 min','Teint hâlé avec un activateur de mélanine végétal.'),S('Soin bonne mine corps complet',33),S('Solarium, la minute',0.8,'','Interdit aux moins de 18 ans. Lunettes de protection obligatoires (6 €).')]}
   ]},
- {id:'minceur',name:'Minceur & Cellutec G5',short:'Vibration active, enveloppements, presso esthétique.',
+ {id:'minceur',photo:'https://aquabeaute-esthetique.fr/wp-content/uploads/2023/05/african-american-lady-having-skin-scrubbing-proced-2022-12-16-07-52-57-utc-2.png',name:'Minceur & Cellutec G5',short:'Vibration active, enveloppements, presso esthétique.',
   icon:'<path d="M8 3c0 6 2 8 2 11s-2 4-2 7M16 3c0 6-2 8-2 11s2 4 2 7"/>',
   intro:'Diagnostic offert pour construire votre cure minceur personnalisée.',
   groups:[
@@ -733,7 +769,7 @@ let curCat='visage';
 function renderSvc(){
   $('#svcTabs').innerHTML=CATS.map(c=>`<button class="tab ${c.id===curCat?'on':''}" data-cat="${c.id}" role="tab">${c.name}</button>`).join('');
   const c=CATS.find(x=>x.id===curCat);
-  $('#svcPanel').innerHTML=(c.intro?`<div class="note">${c.intro}</div>`:'')+c.groups.map(g=>`<div class="svc-group"><h3>${g.g}</h3>${g.items.map(it=>{
+  $('#svcPanel').innerHTML=(c.photo?`<img class="cat-photo" src="${c.photo}" alt="${c.name}" onerror="this.remove()">`:'')+(c.intro?`<div class="note">${c.intro}</div>`:'')+c.groups.map(g=>`<div class="svc-group"><h3>${g.g}</h3>${g.items.map(it=>{
     const giftable=it.p>=30&&it.p<=200&&c.id!=='lumiere';
     return `<div class="svc"><div class="n">${esc(it.n)}${it.t?` <span class="t">· ${it.t}</span>`:''}</div><div class="meta">${giftable?`<button class="gift" data-gift="${esc(it.n)}">Offrir</button>`:''}<span class="p">${eur(it.p)}</span></div>${it.d?`<div class="d">${esc(it.d)}</div>`:''}</div>`}).join('')}</div>`).join('')+
     `<a class="btn btn-primary" href="tel:0388230098">Réserver au 03 88 23 00 98</a>`;
