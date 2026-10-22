@@ -98,6 +98,9 @@ Avec un **compte acheteur de test** PayPal (developer.paypal.com → Sandbox →
 - [ ] Export Excel depuis l'onglet « Tous les bons »
 - [ ] Récapitulatif hebdomadaire (ouvrir l'adresse de l'étape 5 à la main)
 - [ ] E-mails pas classés en indésirables (Gmail, Outlook, Orange)
+- [ ] Paiement impossible sans cocher la case des CGV
+- [ ] Formulaire « Être rappelée » : e-mail reçu par l'institut
+- [ ] Pages Mentions légales, CGV et Confidentialité relues et complétées (plus aucun passage surligné en jaune)
 
 ## Étape 7 : passage aux vrais paiements
 

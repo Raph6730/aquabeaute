@@ -84,6 +84,7 @@ async function activePromo(env) {
 }
 
 function normalizeCart(body, promo) {
+  if (body?.cgv !== true) throw fail('Merci d\'accepter les conditions générales de vente.');
   const items = Array.isArray(body?.items) ? body.items : [];
   if (!items.length || items.length > 20) throw fail('Panier vide ou trop grand.');
   const out = items.map(it => {

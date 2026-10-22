@@ -15,7 +15,7 @@ ErrorDocument 404 /index.html
   RewriteRule ^bons-cadeaux/?$ /#bons-cadeaux [R=301,NE,L]
   RewriteRule ^a-propos/?$ / [R=301,L]
   RewriteRule ^accueil/?$ / [R=301,L]
-  RewriteRule ^mentions-legales/?$ /#contact [R=301,NE,L]
+  RewriteRule ^mentions-legales/?$ /#mentions-legales [R=301,NE,L]
 </IfModule>
 
 <IfModule mod_headers.c>

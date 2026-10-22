@@ -30,7 +30,7 @@ jobs:
         run: |
           set -e
           mkdir dist
-          cp -r index.html promos.json images js .htaccess dist/
+          cp -r index.html promos.json images js fonts .htaccess dist/
           cp -r api dist/api
           rm -rf dist/api/tests dist/api/.gitignore dist/api/config.php
           find dist/api/data -mindepth 1 ! -name .htaccess -delete

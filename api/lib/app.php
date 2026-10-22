@@ -11,6 +11,7 @@
  *  GET  /api/vouchers/{code}           détail d'un bon (PIN)
  *  POST /api/vouchers/{code}/use       marquer utilisé (PIN)          POST …/unuse  annuler (PIN)
  *  GET  /api/cron/recap?cle=…          récapitulatif + sauvegarde par e-mail (tâche planifiée)
+ *  POST /api/contact                   formulaire « Être rappelée » → e-mail à l'institut
  *  GET  /api/sante                     contrôle de bon fonctionnement
  */
 declare(strict_types=1);
@@ -62,6 +63,7 @@ final class App {
             if ($p === '/api/orders' && $method === 'POST') return self::withCors(self::createOrder(self::body($body)), $cors);
             if (preg_match('#^/api/orders/([A-Z0-9]+)/capture$#', $p, $m) && $method === 'POST') return self::withCors(self::json(self::captureOrder($m[1])), $cors);
             if ($p === '/api/paypal/webhook' && $method === 'POST') return self::webhook($headers, $body);
+            if ($p === '/api/contact' && $method === 'POST') return self::withCors(self::contact(self::body($body), $ip), $cors);
             if ($p === '/api/cron/recap' && $method === 'GET') return self::recap($query);
             if (str_starts_with($p, '/api/vouchers')) {
                 if ($r = self::checkPin($headers, $ip)) return $r;
@@ -147,6 +149,7 @@ final class App {
 
     /* ---------------- commande ---------------- */
     static function normalizeCart(array $body, ?array $promo): array {
+        if (($body['cgv'] ?? false) !== true) throw new Fail('Merci d\'accepter les conditions générales de vente.');
         $items = is_array($body['items'] ?? null) ? $body['items'] : [];
         if (!$items || count($items) > 20) throw new Fail('Panier vide ou trop grand.');
         $cat = self::catalog(); $out = [];
@@ -174,7 +177,7 @@ final class App {
         $b = $body['buyer'] ?? [];
         $buyer = ['name' => self::clean($b['name'] ?? '', 80), 'email' => mb_strtolower(self::clean($b['email'] ?? '', 120)), 'tel' => self::clean($b['tel'] ?? '', 30)];
         if ($buyer['name'] === '' || !filter_var($buyer['email'], FILTER_VALIDATE_EMAIL)) throw new Fail('Nom et e-mail valides obligatoires.');
-        return ['items' => $out, 'buyer' => $buyer];
+        return ['items' => $out, 'buyer' => $buyer, 'cgv_acceptees_le' => gmdate('c', self::now())];
     }
 
     static function createOrder(array $body): array {
@@ -294,7 +297,8 @@ final class App {
             . "<p>Votre paiement de <b>$tot €</b> est confirmé (commande {$o['ref']}).</p><ul style=\"padding-left:18px\">$list</ul>"
             . ($buyerPdfs ? '<p>' . (count($buyerPdfs) > 1 ? 'Vos bons cadeaux sont joints' : 'Votre bon cadeau est joint') . ' à cet e-mail en PDF : il suffit de l\'imprimer ou de l\'offrir tel quel. Le jour du rendez-vous, il se présente imprimé ou sur téléphone.</p>' : '')
             . ($papier ? '<p>' . (count($papier) > 1 ? 'Les bons imprimés vous attendent' : 'Le bon imprimé vous attend') . ' à l\'institut, dans sa jolie enveloppe, aux heures d\'ouverture.</p>' : '')
-            . '<p>Chaque bon est valable un an, sur rendez-vous au <b>03 88 23 00 98</b>.</p>');
+            . '<p>Chaque bon est valable un an, sur rendez-vous au <b>03 88 23 00 98</b>.</p>'
+            . '<p style="font-size:13px;color:#5B6470">Vous disposez d\'un droit de rétractation de 14 jours à compter de votre achat, en répondant simplement à cet e-mail avec votre numéro de commande. Conditions générales de vente : <a href="' . self::esc(rtrim((string) self::cfg('site_url', ''), '/') . '/#cgv') . '">' . self::esc(rtrim((string) self::cfg('site_url', ''), '/') . '/#cgv') . '</a></p>');
         Mail::send($b['email'], $b['name'], $buyerPdfs ? 'Votre bon cadeau Aqua Beauté 🎁' : 'Votre commande de bon cadeau Aqua Beauté', $html, $buyerPdfs);
         if (self::cfg('shop_email')) {
             $shop = Mail::layout('<h1 style="color:#B8006E;font-size:20px;margin:0 0 8px">Nouveau bon cadeau vendu</h1>'
@@ -306,6 +310,20 @@ final class App {
     }
     static function rowToVoucher(array $r): array {
         return ['code' => $r['code'], 'type' => $r['type'], 'soin' => $r['soin'], 'price' => $r['price'] + 0, 'design' => $r['design'], 'occasion' => $r['occasion'], 'to' => $r['to_name'], 'msg' => $r['msg'], 'untilFr' => self::frDate((int) $r['expires'])];
+    }
+
+    /* ---------------- formulaire « Être rappelée » ---------------- */
+    static function contact(array $b, string $ip): array {
+        if (trim((string) ($b['site'] ?? '')) !== '') return self::json(['ok' => true]);   // champ piège rempli : robot
+        $name = self::clean($b['name'] ?? '', 80); $tel = self::clean($b['tel'] ?? '', 30); $msg = self::clean($b['msg'] ?? '', 1000);
+        if ($name === '' || !preg_match('/^[0-9 +().-]{6,30}$/', $tel)) throw new Fail('Merci d\'indiquer votre nom et un numéro de téléphone valide.');
+        $key = 'c:' . $ip;
+        self::run('DELETE FROM ab_attempts WHERE ts < ?', [self::now() - 900]);
+        if ((int) (self::one('SELECT COUNT(*) AS n FROM ab_attempts WHERE ip = ?', [$key])['n'] ?? 0) >= 3) throw new Fail('Trop de demandes. Appelez directement le 03 88 23 00 98.', 429);
+        self::run('INSERT INTO ab_attempts (ip, ts) VALUES (?, ?)', [$key, self::now()]);
+        Mail::send((string) self::cfg('shop_email'), 'Aqua Beauté', 'Demande de rappel : ' . $name,
+            Mail::layout('<h1 style="color:#2B8DBB;font-size:20px;margin:0 0 8px">Demande de rappel</h1><p><b>' . self::esc($name) . '</b> · <a href="tel:' . self::esc(preg_replace('/[^0-9+]/', '', $tel)) . '">' . self::esc($tel) . '</a></p>' . ($msg !== '' ? '<p>' . nl2br(self::esc($msg)) . '</p>' : '') . '<p style="font-size:12px;color:#8A929C">Envoyé depuis le formulaire du site. À supprimer 3 ans après le dernier contact.</p>'));
+        return self::json(['ok' => true]);
     }
 
     /* ---------------- notifications PayPal ---------------- */

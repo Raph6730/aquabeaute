@@ -33,7 +33,7 @@ const call = async (method, path, body, headers = {}) => {
 const buyer = { name: 'Marc Test', email: 'marc@test.fr', tel: '0600000000' };
 
 /* 1. Le prix est recalculé côté moteur (le site ne peut pas tricher) */
-let r = await call('POST', '/api/orders', { buyer, items: [
+let r = await call('POST', '/api/orders', { cgv: true, buyer, items: [
   { type: 'montant', amount: 50, design: 'fete', occasion: 'Joyeux anniversaire', to: 'Julie', msg: 'Joyeux anniversaire ma belle ! 🎉', format: 'e', price: 1 },
   { type: 'soin', soin: 'Escapade au pays des sens', design: 'classique', to: 'Paul', format: 'papier', price: 1 }
 ] });
@@ -43,9 +43,9 @@ assert.equal(orders[r.data.id].purchase_units[0].amount.value, '115.00'); // 50 
 console.log('✓ commande créée, total recalculé : 115,00 €');
 
 /* 2. Montants et soins invalides refusés */
-assert.equal((await call('POST', '/api/orders', { buyer, items: [{ type: 'montant', amount: 5 }] })).status, 400);
-assert.equal((await call('POST', '/api/orders', { buyer, items: [{ type: 'soin', soin: 'Soin imaginaire' }] })).status, 400);
-assert.equal((await call('POST', '/api/orders', { buyer: { name: 'x', email: 'pas-un-email' }, items: [{ type: 'montant', amount: 50 }] })).status, 400);
+assert.equal((await call('POST', '/api/orders', { cgv: true, buyer, items: [{ type: 'montant', amount: 5 }] })).status, 400);
+assert.equal((await call('POST', '/api/orders', { cgv: true, buyer, items: [{ type: 'soin', soin: 'Soin imaginaire' }] })).status, 400);
+assert.equal((await call('POST', '/api/orders', { cgv: true, buyer: { name: 'x', email: 'pas-un-email' }, items: [{ type: 'montant', amount: 50 }] })).status, 400);
 console.log('✓ montants, soins et e-mails invalides refusés');
 
 /* 3. Encaissement → bons, PDF, e-mails */
@@ -69,7 +69,7 @@ assert.deepEqual(r.data.vouchers.map(v => v.code), [v1.code, v2.code]); assert.e
 console.log('✓ second encaissement ignoré (pas de doublon)');
 
 /* 5. Montant encaissé différent → refus */
-r = await call('POST', '/api/orders', { buyer, items: [{ type: 'montant', amount: 80 }] });
+r = await call('POST', '/api/orders', { cgv: true, buyer, items: [{ type: 'montant', amount: 80 }] });
 tamper = '1.00'; const bad = await call('POST', `/api/orders/${r.data.id}/capture`); tamper = null;
 assert.equal(bad.status, 402);
 console.log('✓ montant PayPal incohérent refusé');
@@ -100,10 +100,10 @@ console.log('✓ page /verifier servie');
 console.log('\nTous les tests passent.');
 
 /* ===== Nouveaux scénarios : types de bons, plafond 600 €, sécurité du paiement ===== */
-r = await call('POST', '/api/orders', { buyer, items: [{ type: 'accessoire', amount: 600, design: 'classique', format: 'e' }] });
+r = await call('POST', '/api/orders', { cgv: true, buyer, items: [{ type: 'accessoire', amount: 600, design: 'classique', format: 'e' }] });
 assert.equal(r.status, 200); assert.equal(orders[r.data.id].purchase_units[0].amount.value, '600.00');
 assert.match(orders[r.data.id].purchase_units[0].items[0].description, /\[Accessoires\]/);
-assert.equal((await call('POST', '/api/orders', { buyer, items: [{ type: 'montant', amount: 601 }] })).status, 400);
+assert.equal((await call('POST', '/api/orders', { cgv: true, buyer, items: [{ type: 'montant', amount: 601 }] })).status, 400);
 const accId = r.data.id;
 console.log('✓ bon accessoires 600 € accepté, 601 € refusé, type indiqué à PayPal');
 
@@ -116,7 +116,7 @@ assert.equal(vAcc.data.typeLabel, 'Accessoires');
 console.log('✓ deux encaissements simultanés : un seul bon', accCode);
 
 // carte refusée → le site doit relancer PayPal
-r = await call('POST', '/api/orders', { buyer, items: [{ type: 'montant', amount: 40 }] });
+r = await call('POST', '/api/orders', { cgv: true, buyer, items: [{ type: 'montant', amount: 40 }] });
 const realFetch = globalThis.fetch;
 globalThis.fetch = async (u, o) => String(u).endsWith('/capture') ? new Response(JSON.stringify({ name: 'UNPROCESSABLE_ENTITY', details: [{ issue: 'INSTRUMENT_DECLINED' }] }), { status: 422 }) : realFetch(u, o);
 let dec = await call('POST', `/api/orders/${r.data.id}/capture`);
@@ -164,10 +164,10 @@ const today = new Intl.DateTimeFormat('fr-CA', { timeZone: 'Europe/Paris' }).for
 env.SITE_URL = 'https://site.test/';
 const promosFile = { promos: [{ id: 'test', nom: 'Test', du: today, au: today, soins: { 'Escapade au pays des sens': 50, 'Soin du dos': 999 } }] };
 globalThis.fetch = async (u, o) => String(u) === 'https://site.test/promos.json' ? new Response(JSON.stringify(promosFile)) : realFetch(u, o);
-r = await call('POST', '/api/orders', { buyer, items: [{ type: 'soin', soin: 'Escapade au pays des sens' }, { type: 'soin', soin: 'Soin du dos' }] });
+r = await call('POST', '/api/orders', { cgv: true, buyer, items: [{ type: 'soin', soin: 'Escapade au pays des sens' }, { type: 'soin', soin: 'Soin du dos' }] });
 assert.equal(orders[r.data.id].purchase_units[0].amount.value, '100.00'); // 50 (promo) + 50 (prix normal : une "promo" plus chère est ignorée)
 promosFile.promos[0].du = '2000-01-01'; promosFile.promos[0].au = '2000-01-02';
-r = await call('POST', '/api/orders', { buyer, items: [{ type: 'soin', soin: 'Escapade au pays des sens' }] });
+r = await call('POST', '/api/orders', { cgv: true, buyer, items: [{ type: 'soin', soin: 'Escapade au pays des sens' }] });
 assert.equal(orders[r.data.id].purchase_units[0].amount.value, '65.00');
 globalThis.fetch = realFetch;
 console.log('✓ prix promotionnel appliqué uniquement pendant la période, jamais plus cher que le prix normal');

@@ -6,10 +6,14 @@
 <meta name="robots" content="noindex, nofollow">
 <title>Aqua Beauté Mutzig</title>
 <meta name="description" content="Institut de beauté à Mutzig : soins visage et corps, épilation, lumière pulsée, minceur, mains et pieds. Bons cadeaux en ligne payables par PayPal.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Parisienne&display=swap" rel="stylesheet">
+<link rel="preload" href="fonts/poppins-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
 <style>
+@font-face{font-family:Poppins;font-style:normal;font-weight:300;font-display:swap;src:url(fonts/poppins-latin-300-normal.woff2) format('woff2')}
+@font-face{font-family:Poppins;font-style:normal;font-weight:400;font-display:swap;src:url(fonts/poppins-latin-400-normal.woff2) format('woff2')}
+@font-face{font-family:Poppins;font-style:normal;font-weight:500;font-display:swap;src:url(fonts/poppins-latin-500-normal.woff2) format('woff2')}
+@font-face{font-family:Poppins;font-style:normal;font-weight:600;font-display:swap;src:url(fonts/poppins-latin-600-normal.woff2) format('woff2')}
+@font-face{font-family:Poppins;font-style:normal;font-weight:700;font-display:swap;src:url(fonts/poppins-latin-700-normal.woff2) format('woff2')}
+@font-face{font-family:Parisienne;font-style:normal;font-weight:400;font-display:swap;src:url(fonts/parisienne-latin-400-normal.woff2) format('woff2')}
 :root{
   --bg:#FFFFFF; --surface:#FFFFFF; --soft:#F4FAFD; --soft-2:#FCF1F7;
   --ink:#2A2A33; --ink-soft:#5B6470; --muted:#8A929C;
@@ -78,6 +82,7 @@ header.top{position:sticky;top:0;z-index:40;background:color-mix(in srgb,var(--b
 .brand.nologo .fallback{display:block}
 :root[data-theme="dark"] .logo-img{background:#fff;border-radius:10px;padding:4px 8px}
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .logo-img{background:#fff;border-radius:10px;padding:4px 8px}}
+@media(max-width:430px){.logo-img{height:32px;max-width:160px}.top-actions{gap:4px}.icon-btn{width:38px;height:38px}.top .wrap{gap:8px}}
 nav.main{display:none;gap:2px;align-items:center}
 nav.main a{text-decoration:none;padding:8px 13px;border-radius:999px;font-size:.9rem;color:var(--ink-soft);font-weight:500}
 nav.main a.on{color:var(--blue-deep);background:var(--blue-soft)}
@@ -241,6 +246,8 @@ section{padding:60px 0}
 @media(min-width:860px){.gc-head{grid-template-columns:1.2fr .8fr}}
 .gc-head-pic{width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:20px;box-shadow:var(--shadow)}
 .gc-builder{display:grid;gap:24px}
+.gc-builder>*{min-width:0}
+.seg .chip{min-width:0;overflow-wrap:anywhere}
 @media(min-width:900px){.gc-builder{grid-template-columns:.9fr 1.1fr;align-items:start}.gc-preview{position:sticky;top:90px}}
 .gc-preview{display:grid;gap:14px}
 .giftcard{aspect-ratio:1.6/1;border-radius:20px;background:linear-gradient(135deg,#FFFFFF 0%,#FBE8F2 55%,#E7F5FB 100%);border:1px solid #E6ECF0;color:#2A2A33;padding:22px;display:flex;flex-direction:column;justify-content:space-between;box-shadow:var(--shadow);position:relative;overflow:hidden}
@@ -390,6 +397,30 @@ section{padding:60px 0}
 .lb button{position:absolute;border:0;background:rgba(255,255,255,.14);color:#fff;width:48px;height:48px;border-radius:50%;font-size:1.4rem;display:grid;place-items:center}
 .lb .x{top:16px;right:16px}.lb .l{left:12px;top:50%}.lb .r{right:12px;top:50%}
 
+.legal-doc{max-width:820px}
+.legal-doc h2{font-size:clamp(1.7rem,4.4vw,2.3rem);margin:4px 0 4px}
+.legal-doc h3{font-size:1.08rem;margin:28px 0 8px;scroll-margin-top:90px}
+.legal-doc p,.legal-doc li{color:var(--ink-soft)}
+.legal-doc ul{padding-left:20px}.legal-doc li{margin-bottom:6px}
+.legal-doc .maj{font-size:.82rem;color:var(--muted);margin:0 0 18px}
+.legal-doc a{color:var(--blue-deep)}
+.toc{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 10px}
+.toc a{font-size:.8rem;text-decoration:none;border:1px solid var(--line);border-radius:999px;padding:5px 11px;color:var(--ink-soft)}
+.toc a:hover{border-color:var(--blue)}
+.form-type{border:1px dashed var(--line);border-radius:14px;padding:6px 16px;background:var(--soft)}
+.table-wrap{overflow-x:auto;margin:8px 0 12px}
+.legal-table{border-collapse:collapse;width:100%;min-width:620px;font-size:.86rem}
+.legal-table th,.legal-table td{border:1px solid var(--line);padding:9px 10px;text-align:left;vertical-align:top;color:var(--ink-soft)}
+.legal-table th{background:var(--soft);color:var(--ink)}
+mark.todo{background:#FFE58A;color:#3A2E00;padding:1px 4px;border-radius:4px}
+.cgv-check{display:flex;gap:10px;align-items:flex-start;font-size:.84rem;color:var(--ink-soft);margin-top:12px;line-height:1.45}
+.cgv-check input{width:20px;height:20px;flex:none;margin-top:1px;accent-color:var(--magenta)}
+.cgv-check a{color:var(--blue-deep)}
+.map-click{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;height:100%;min-height:260px;width:100%;border:0;cursor:pointer;
+  background:linear-gradient(135deg,var(--blue-soft),var(--soft));color:var(--ink);font:inherit;text-align:center;padding:16px}
+.map-click svg{width:40px;height:40px;color:var(--magenta)}
+.map-click small{color:var(--muted);font-size:.78rem;max-width:260px}
+.form-note{font-size:.76rem;color:var(--muted);margin:8px 0 0}
 footer.site{background:var(--soft);padding:40px 0 30px;font-size:.88rem;color:var(--ink-soft)}
 footer.site .wrap{display:grid;gap:24px}
 @media(min-width:760px){footer.site .wrap{grid-template-columns:1.2fr 1fr 1fr}}
@@ -586,7 +617,7 @@ footer.site a{text-decoration:none;display:block;padding:3px 0}
         <p style="margin:14px 0 4px"><b>Institut de beauté SPA</b><br>8 rue du Maréchal Foch<br>67190 Mutzig</p>
         <p style="font-size:.85rem;color:var(--muted)">Accès de plain-pied, stationnement à proximité.</p>
       </div>
-      <div class="map"><iframe title="Plan d'accès" loading="lazy" src="https://www.openstreetmap.org/export/embed.html?bbox=7.4524%2C48.5359%2C7.4624%2C48.5409&amp;layer=mapnik&amp;marker=48.5384%2C7.4574"></iframe></div>
+      <div class="map"><button class="map-click" type="button" data-map><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg><b>8 rue du Maréchal Foch, Mutzig</b><span>Afficher le plan</span><small>Le plan est fourni par OpenStreetMap : en l'affichant, votre adresse IP lui est transmise.</small></button></div>
     </div>
   </section>
 </div>
@@ -670,6 +701,179 @@ footer.site a{text-decoration:none;display:block;padding:3px 0}
   </section>
 </div>
 
+<!-- ===================== PAGES LÉGALES =====================
+     Les passages <mark class="todo"> sont à confirmer ou compléter par Christelle avant la mise en ligne.
+     Fichier source : outils/pages-legales.html (inséré dans index.html par outils/inserer-pages-legales.py). -->
+<div class="page" id="p-mentions-legales">
+  <section>
+    <div class="wrap legal-doc">
+      <span class="kicker">Informations légales</span>
+      <h2>Mentions légales</h2>
+      <p class="maj">Dernière mise à jour : 22 octobre 2026</p>
+
+      <h3>Éditeur du site</h3>
+      <p><b>AQUA BEAUTE</b>, société à responsabilité limitée (SARL) au capital de 7 000 €<br>
+      Siège social : 8 rue du Maréchal Foch, 67190 Mutzig<br>
+      Immatriculée au RCS de <mark class="todo">[ville du greffe à confirmer]</mark> sous le numéro 798 632 329<br>
+      SIRET : 798 632 329 00016 · Code NAF : 96.02B (soins de beauté)<br>
+      N° de TVA intracommunautaire : FR06 798 632 329<br>
+      Téléphone : <a href="tel:0388230098">03 88 23 00 98</a> · E-mail : <a href="mailto:contact@aquabeaute-esthetique.fr">contact@aquabeaute-esthetique.fr</a></p>
+
+      <h3>Directrice de la publication</h3>
+      <p>Christelle Bertin, gérante.</p>
+
+      <h3>Hébergement</h3>
+      <p>IONOS SARL, 7 place de la Gare, BP 70109, 57201 Sarreguemines Cedex · Téléphone : 09 70 80 89 11 · <a href="https://www.ionos.fr" target="_blank" rel="noopener">www.ionos.fr</a></p>
+
+      <h3>Conception et réalisation</h3>
+      <p><mark class="todo">[Nom du créateur du site, à compléter]</mark></p>
+
+      <h3>Propriété intellectuelle</h3>
+      <p>Les textes, photographies, le logo et la présentation de ce site sont la propriété d'AQUA BEAUTE ou sont utilisés avec l'autorisation de leurs auteurs. Toute reproduction, même partielle, sans autorisation écrite préalable est interdite. Les marques et logos des fabricants cités (Institut Esthederm, Bernard Cassière, etc.) appartiennent à leurs titulaires respectifs.</p>
+
+      <h3>Informations et tarifs</h3>
+      <p>Les informations et tarifs présentés sur ce site sont donnés à titre indicatif et peuvent évoluer. Les tarifs applicables aux soins sont ceux affichés à l'institut le jour de la prestation, sauf pour les bons cadeaux « soin précis », dont le prix est fixé au jour de l'achat (voir les <a href="#cgv">conditions générales de vente</a>).</p>
+
+      <h3>Données personnelles et cookies</h3>
+      <p>Voir la <a href="#confidentialite">politique de confidentialité</a>. Ce site n'utilise aucun cookie publicitaire ni outil de mesure d'audience.</p>
+
+      <h3>Médiation de la consommation</h3>
+      <p>Voir l'article 13 des <a href="#cgv">conditions générales de vente</a>.</p>
+    </div>
+  </section>
+</div>
+
+<div class="page" id="p-cgv">
+  <section>
+    <div class="wrap legal-doc">
+      <span class="kicker">Bons cadeaux</span>
+      <h2>Conditions générales de vente</h2>
+      <p class="maj">Dernière mise à jour : 22 octobre 2026</p>
+
+      <nav class="toc" aria-label="Sommaire">
+        <a href="#cgv" data-goto="cgv-1">1. Objet</a><a href="#cgv" data-goto="cgv-2">2. Les bons cadeaux</a><a href="#cgv" data-goto="cgv-3">3. Prix</a><a href="#cgv" data-goto="cgv-4">4. Commande</a><a href="#cgv" data-goto="cgv-5">5. Paiement</a><a href="#cgv" data-goto="cgv-6">6. Remise du bon</a><a href="#cgv" data-goto="cgv-7">7. Validité et utilisation</a><a href="#cgv" data-goto="cgv-8">8. Perte ou vol</a><a href="#cgv" data-goto="cgv-9">9. Droit de rétractation</a><a href="#cgv" data-goto="cgv-10">10. Remboursement</a><a href="#cgv" data-goto="cgv-11">11. Responsabilité</a><a href="#cgv" data-goto="cgv-12">12. Données personnelles</a><a href="#cgv" data-goto="cgv-13">13. Réclamations et médiation</a><a href="#cgv" data-goto="cgv-14">14. Droit applicable</a><a href="#cgv" data-goto="cgv-annexe">Formulaire de rétractation</a>
+      </nav>
+
+      <h3 id="cgv-1">1. Objet et vendeur</h3>
+      <p>Les présentes conditions s'appliquent à la vente à distance de bons cadeaux sur ce site, à des clients agissant en tant que consommateurs. Le vendeur est la SARL AQUA BEAUTE, 8 rue du Maréchal Foch, 67190 Mutzig, SIRET 798 632 329 00016, téléphone 03 88 23 00 98, <a href="mailto:contact@aquabeaute-esthetique.fr">contact@aquabeaute-esthetique.fr</a>.</p>
+      <p>Toute commande suppose l'acceptation des présentes conditions, que le client confirme en cochant la case prévue avant le paiement.</p>
+
+      <h3 id="cgv-2">2. Les bons cadeaux</h3>
+      <p>Trois types de bons sont proposés :</p>
+      <ul>
+        <li><b>Bon « montant »</b> : d'une valeur de 20 € à 600 €, valable sur toutes les prestations de l'institut.</li>
+        <li><b>Bon « soin précis »</b> : valable pour le soin désigné sur le bon.</li>
+        <li><b>Bon « accessoires »</b> : d'une valeur de 20 € à 600 €, valable sur les accessoires vendus à l'institut (sacs, bijoux, foulards…).</li>
+      </ul>
+      <p>Chaque bon porte un code unique et un QR code. Le prénom et le message choisis par l'acheteur sont personnels et décoratifs : le bon est <b>au porteur</b>, c'est-à-dire utilisable par la personne qui le présente.</p>
+
+      <h3 id="cgv-3">3. Prix</h3>
+      <p>Les prix sont indiqués en euros, toutes taxes comprises. Le prix d'un bon « soin précis » est celui affiché sur le site le jour de l'achat, y compris pendant une offre promotionnelle signalée comme telle et limitée dans le temps. Aucun frais de livraison n'est facturé.</p>
+
+      <h3 id="cgv-4">4. Commande</h3>
+      <p>Le client choisit le type de bon, son montant ou son soin, son design, le prénom du bénéficiaire, un message facultatif et le mode de remise. Il vérifie son panier, indique ses coordonnées, accepte les présentes conditions puis procède au paiement. La commande est définitive dès la confirmation du paiement par PayPal. Un e-mail de confirmation récapitulant la commande est alors envoyé au client.</p>
+
+      <h3 id="cgv-5">5. Paiement</h3>
+      <p>Le paiement s'effectue en ligne par l'intermédiaire de <b>PayPal</b>, avec un compte PayPal ou directement par carte bancaire. Les données bancaires sont saisies sur les pages sécurisées de PayPal : AQUA BEAUTE n'y a jamais accès. Lorsque PayPal place un paiement en vérification, le bon est émis dès la confirmation du paiement.</p>
+
+      <h3 id="cgv-6">6. Remise du bon</h3>
+      <ul>
+        <li><b>Par e-mail</b> : le bon est envoyé en PDF à l'adresse indiquée par le client, dès la confirmation du paiement. Il peut être imprimé ou présenté sur un téléphone.</li>
+        <li><b>À l'institut</b> : le bon imprimé est remis dans une enveloppe, à retirer aux heures d'ouverture <mark class="todo">[à partir du jour ouvrable suivant la commande, à confirmer]</mark>.</li>
+      </ul>
+
+      <h3 id="cgv-7">7. Validité et utilisation</h3>
+      <ul>
+        <li>Le bon est valable <b>12 mois</b> à compter de la date d'achat. La date limite figure sur le bon. Passé cette date, il ne peut plus être utilisé ni remboursé.</li>
+        <li>Les soins se réalisent sur rendez-vous, à prendre par téléphone au 03 88 23 00 98, en indiquant que le règlement se fera par bon cadeau.</li>
+        <li>Le bon (imprimé ou sur écran) doit être présenté à l'institut. Son code est vérifié et le bon est alors enregistré comme utilisé : il ne peut servir qu'une seule fois.</li>
+        <li>Bons « montant » et « accessoires » : si l'achat est supérieur à la valeur du bon, le complément est réglé sur place. <mark class="todo">[S'il est inférieur, la différence n'est ni remboursée ni reportée : à confirmer, ou prévoir une utilisation en plusieurs fois]</mark>.</li>
+        <li>Bon « soin précis » : si le soin n'est plus proposé au moment de l'utilisation, le bénéficiaire peut choisir une autre prestation de même valeur.</li>
+        <li><mark class="todo">[Rendez-vous non honoré ou annulé moins de 24 h à l'avance : préciser la règle de l'institut]</mark></li>
+        <li>Le bon ne peut être échangé contre des espèces.</li>
+      </ul>
+
+      <h3 id="cgv-8">8. Perte ou vol</h3>
+      <p>Le bon étant au porteur, AQUA BEAUTE ne peut être tenue responsable de son utilisation par un tiers qui en détiendrait le code. En cas de perte d'un bon non utilisé, l'acheteur peut demander un nouvel envoi du PDF à l'adresse e-mail utilisée lors de la commande.</p>
+
+      <h3 id="cgv-9">9. Droit de rétractation</h3>
+      <p>Conformément au Code de la consommation, le client dispose d'un délai de <b>14 jours</b> à compter de la date d'achat pour se rétracter, sans avoir à se justifier. Il lui suffit d'envoyer une déclaration claire, par exemple par e-mail à <a href="mailto:contact@aquabeaute-esthetique.fr">contact@aquabeaute-esthetique.fr</a> ou par courrier, en indiquant le numéro de commande. Le formulaire ci-dessous peut être utilisé.</p>
+      <p>Le remboursement intervient au plus tard dans les 14 jours suivant la réception de la demande, par le même moyen de paiement. Le bon correspondant est alors annulé.</p>
+      <p>Si le bénéficiaire utilise le bon avant la fin de ce délai, le client reconnaît avoir demandé l'exécution de la prestation avant l'expiration du délai : le droit de rétractation ne peut plus être exercé pour une prestation entièrement réalisée.</p>
+
+      <h3 id="cgv-10">10. Remboursement</h3>
+      <p>En dehors du droit de rétractation, les bons cadeaux ne sont ni remboursables ni échangeables. Si une prestation ne peut être réalisée pour une raison médicale ou de sécurité (contre-indication, solarium interdit aux moins de 18 ans, bilan préalable à la lumière pulsée…), le bénéficiaire peut choisir une autre prestation de même valeur.</p>
+
+      <h3 id="cgv-11">11. Responsabilité</h3>
+      <p>Les prestations sont réalisées avec soin, selon les règles de l'art. L'esthéticienne peut refuser ou adapter un soin en cas de contre-indication. AQUA BEAUTE ne saurait être tenue responsable d'une interruption temporaire du site ou du service de paiement de PayPal.</p>
+
+      <h3 id="cgv-12">12. Données personnelles</h3>
+      <p>Les données collectées lors de la commande sont nécessaires à son traitement. Leur utilisation est détaillée dans la <a href="#confidentialite">politique de confidentialité</a>.</p>
+
+      <h3 id="cgv-13">13. Réclamations et médiation</h3>
+      <p>Toute réclamation peut être adressée à l'institut par téléphone, par e-mail ou par courrier. En cas de désaccord persistant, et après une réclamation écrite restée sans solution, le client peut recourir gratuitement au médiateur de la consommation dont relève AQUA BEAUTE : <mark class="todo">[nom, adresse et site internet du médiateur à compléter]</mark>.</p>
+
+      <h3 id="cgv-14">14. Droit applicable</h3>
+      <p>Les présentes conditions sont soumises au droit français. À défaut de solution amiable, le litige sera porté devant la juridiction compétente selon les règles légales.</p>
+
+      <h3 id="cgv-annexe">Formulaire de rétractation</h3>
+      <div class="form-type">
+        <p>À l'attention de la SARL AQUA BEAUTE, 8 rue du Maréchal Foch, 67190 Mutzig, contact@aquabeaute-esthetique.fr :</p>
+        <p>Je vous notifie par la présente ma rétractation du contrat portant sur l'achat du bon cadeau ci-dessous :</p>
+        <p>Numéro de commande : ……………… · Commandé le : ………………<br>Nom du client : ……………………………… · Adresse e-mail : ………………………………<br>Date : ……………… · Signature (en cas d'envoi papier) :</p>
+      </div>
+    </div>
+  </section>
+</div>
+
+<div class="page" id="p-confidentialite">
+  <section>
+    <div class="wrap legal-doc">
+      <span class="kicker">Vos données</span>
+      <h2>Politique de confidentialité</h2>
+      <p class="maj">Dernière mise à jour : 22 octobre 2026</p>
+
+      <h3>Qui est responsable de vos données ?</h3>
+      <p>La SARL AQUA BEAUTE, 8 rue du Maréchal Foch, 67190 Mutzig, représentée par Christelle Bertin. Contact : <a href="mailto:contact@aquabeaute-esthetique.fr">contact@aquabeaute-esthetique.fr</a> · 03 88 23 00 98.</p>
+
+      <h3>Quelles données, pourquoi et combien de temps ?</h3>
+      <div class="table-wrap"><table class="legal-table">
+        <thead><tr><th>Situation</th><th>Données</th><th>Pourquoi (base légale)</th><th>Conservation</th></tr></thead>
+        <tbody>
+          <tr><td>Achat d'un bon cadeau</td><td>Nom, e-mail et téléphone de l'acheteur ; prénom du bénéficiaire et message ; contenu de la commande ; référence du paiement PayPal (jamais vos données bancaires)</td><td>Traiter la commande, envoyer le bon, le vérifier à l'institut (exécution du contrat) ; tenir la comptabilité (obligation légale)</td><td>10 ans (pièces comptables)</td></tr>
+          <tr><td>Utilisation du bon à l'institut</td><td>Date d'utilisation du bon</td><td>Éviter qu'un bon serve deux fois (exécution du contrat)</td><td>Avec la commande</td></tr>
+          <tr><td>Formulaire « Être rappelée »</td><td>Nom, téléphone, message</td><td>Vous rappeler à votre demande</td><td>3 ans après le dernier contact</td></tr>
+          <tr><td>Sécurité du site</td><td>Adresse IP lors de tentatives d'accès à l'espace réservé à l'institut ; journaux techniques de l'hébergeur</td><td>Protéger le site contre les abus (intérêt légitime)</td><td>15 minutes pour les tentatives ; durée limitée fixée par l'hébergeur pour les journaux</td></tr>
+        </tbody>
+      </table></div>
+      <p>Lorsque vous indiquez le prénom d'un bénéficiaire, celui-ci n'est utilisé que pour personnaliser le bon. Vos données ne sont jamais vendues ni utilisées pour de la publicité, et aucun e-mail commercial ne vous est envoyé sans votre accord.</p>
+
+      <h3>Qui reçoit vos données ?</h3>
+      <ul>
+        <li>L'équipe de l'institut Aqua Beauté.</li>
+        <li><b>IONOS</b> (hébergement du site et de la messagerie, en Europe), qui agit pour le compte de l'institut.</li>
+        <li><b>PayPal</b> (PayPal (Europe) S.à r.l. et Cie, S.C.A., 22-24 Boulevard Royal, L-2449 Luxembourg) pour le paiement. PayPal traite vos données de paiement selon sa propre <a href="https://www.paypal.com/fr/legalhub/privacy-full" target="_blank" rel="noopener">politique de confidentialité</a>.</li>
+      </ul>
+
+      <h3>Cookies et stockage</h3>
+      <ul>
+        <li>Ce site ne dépose <b>aucun cookie publicitaire ni de mesure d'audience</b>. Aucun bandeau de consentement n'est donc nécessaire.</li>
+        <li>Votre navigateur garde en mémoire votre panier et votre choix de thème clair ou sombre. Ces informations restent sur votre appareil et ne nous sont pas transmises.</li>
+        <li>Au moment du paiement, PayPal peut déposer les cookies nécessaires au bon déroulement et à la sécurité du paiement.</li>
+        <li>Le plan d'accès (OpenStreetMap) ne s'affiche que si vous cliquez dessus. Votre adresse IP est alors transmise à la Fondation OpenStreetMap.</li>
+        <li>Les polices de caractères sont hébergées sur le site lui-même : aucune donnée n'est envoyée à Google.</li>
+      </ul>
+
+      <h3>Vos droits</h3>
+      <p>Vous pouvez à tout moment demander l'accès à vos données, leur rectification, leur effacement (dans la limite des obligations comptables), la limitation de leur traitement, vous y opposer ou en recevoir une copie. Écrivez à <a href="mailto:contact@aquabeaute-esthetique.fr">contact@aquabeaute-esthetique.fr</a> : une réponse vous sera apportée dans un délai d'un mois. Si vous estimez que vos droits ne sont pas respectés, vous pouvez adresser une réclamation à la CNIL (<a href="https://www.cnil.fr" target="_blank" rel="noopener">www.cnil.fr</a>).</p>
+
+      <h3>Sécurité</h3>
+      <p>Le site est accessible uniquement en connexion sécurisée (HTTPS). L'espace de vérification des bons est réservé à l'institut et protégé par un code. Les données bancaires ne transitent jamais par le site.</p>
+    </div>
+  </section>
+</div>
+<!-- =================== FIN PAGES LÉGALES =================== -->
+
 <div class="page" id="p-contact">
   <section>
     <div class="wrap">
@@ -685,13 +889,15 @@ footer.site a{text-decoration:none;display:block;padding:3px 0}
         </div>
         <form class="card" id="contactForm">
           <h3 style="margin-bottom:12px">Être rappelée</h3>
-          <div class="field"><label for="cName">Nom et prénom</label><input id="cName" required></div>
+          <div class="field"><label for="cName">Nom et prénom</label><input id="cName" required maxlength="80"></div>
+          <input type="text" name="site" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px">
           <div class="field"><label for="cTel">Téléphone</label><input id="cTel" type="tel" required></div>
           <div class="field"><label for="cMsg">Votre message</label><textarea id="cMsg" placeholder="Ex. : je souhaite un bilan lumière pulsée"></textarea></div>
           <button class="btn btn-blue" style="width:100%">Envoyer</button>
+          <p class="form-note">Vos coordonnées servent uniquement à vous rappeler. <a href="#confidentialite">En savoir plus</a></p>
         </form>
         <div style="display:grid;gap:12px">
-          <div class="map"><iframe title="Plan d'accès" loading="lazy" src="https://www.openstreetmap.org/export/embed.html?bbox=7.4524%2C48.5359%2C7.4624%2C48.5409&amp;layer=mapnik&amp;marker=48.5384%2C7.4574"></iframe></div>
+          <div class="map"><button class="map-click" type="button" data-map><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg><b>8 rue du Maréchal Foch, Mutzig</b><span>Afficher le plan</span><small>Le plan est fourni par OpenStreetMap : en l'affichant, votre adresse IP lui est transmise.</small></button></div>
           <a class="btn btn-ghost" href="https://www.google.com/maps/search/?api=1&query=8+rue+du+Mar%C3%A9chal+Foch+67190+Mutzig" target="_blank" rel="noopener">Itinéraire Google Maps</a>
         </div>
       </div>
@@ -704,8 +910,8 @@ footer.site a{text-decoration:none;display:block;padding:3px 0}
   <div class="wrap">
     <div><h4>Aqua Beauté</h4>Institut de beauté SPA<br>8 rue du Maréchal Foch, 67190 Mutzig<br><a href="tel:0388230098">03 88 23 00 98</a><a href="mailto:contact@aquabeaute-esthetique.fr">contact@aquabeaute-esthetique.fr</a></div>
     <div><h4>Nos soins & services</h4><a href="#soins/visage">Soins visage</a><a href="#soins/corps">Soins corps</a><a href="#soins/epilation">Épilation</a><a href="#soins/lumiere">Lumière pulsée</a><a href="#soins/minceur">Méthodes amincissantes</a></div>
-    <div><h4>Boutique</h4><a href="#bons-cadeaux">Bons cadeaux</a><a href="#galerie">Photos de l'institut</a><a href="#contact">Retrait à l'institut</a><a href="#contact">Conditions de vente</a></div>
-    <div class="legal">© Aqua Beauté · SIREN 798 632 329 · Mentions légales · CGV · Confidentialité — Proposition de refonte, démonstration non contractuelle.</div>
+    <div><h4>Boutique</h4><a href="#bons-cadeaux">Bons cadeaux</a><a href="#galerie">Photos de l'institut</a><a href="#contact">Retrait à l'institut</a><a href="#cgv">Conditions de vente</a></div>
+    <div class="legal">© Aqua Beauté · SARL AQUA BEAUTE · SIRET 798 632 329 00016 · <a href="#mentions-legales" style="display:inline">Mentions légales</a> · <a href="#cgv" style="display:inline">CGV</a> · <a href="#confidentialite" style="display:inline">Confidentialité</a></div>
   </div>
 </footer>
 
@@ -1070,14 +1276,17 @@ function renderDrawer(){
   }else if(step===2){
     $('#drawerTitle').textContent='Paiement';
     C.innerHTML=bar()+cart.map(lineHTML).join('')+`<div class="pay-box" style="margin-top:16px">Le paiement se fait sur <b>PayPal</b>, en toute sécurité : avec votre compte PayPal, ou directement par carte bancaire sans créer de compte. Aucune donnée bancaire ne transite par ce site.</div>
-      <p style="font-size:.76rem;color:var(--muted);margin-top:12px">En payant, j'accepte les conditions générales de vente. Bons cadeaux valables 1 an, non remboursables.</p>`;
+      <label class="cgv-check"><input type="checkbox" id="cgvOk" ${buyer.cgv?'checked':''}> <span>J'ai lu et j'accepte les <a href="#cgv" target="_blank" rel="noopener">conditions générales de vente</a> (bon valable 12 mois, droit de rétractation de 14 jours).</span></label>`;
     F.innerHTML=totalsHTML()+`<div id="ppBox"></div><button class="btn btn-ghost" id="dBack">Retour</button>`;
     $('#dBack').onclick=()=>{step=1;renderDrawer();};
     const box=$('#ppBox');
+    const cgvBox=$('#cgvOk');cgvBox.onchange=()=>{buyer.cgv=cgvBox.checked;cgvBox.closest('.cgv-check').style.outline='';};
+    const cgvOk=()=>{if(cgvBox.checked)return true;const l=cgvBox.closest('.cgv-check');l.style.outline='2px solid #D2563F';l.style.outlineOffset='4px';l.style.borderRadius='8px';l.scrollIntoView({block:'center',behavior:'smooth'});toast('Merci d\'accepter les conditions de vente');return false;};
     if(LIVE){
       box.innerHTML='<p style="text-align:center;color:var(--muted);font-size:.85rem">Chargement de PayPal…</p>';
       loadPayPal().then(()=>{box.innerHTML='';window.paypal.Buttons({style:{layout:'vertical',color:'gold',shape:'rect',label:'paypal'},
-        createOrder:()=>apiPost('/api/orders',{buyer:{name:buyer.name,email:buyer.mail,tel:buyer.tel},
+        onClick:(d,actions)=>cgvOk()?actions.resolve():actions.reject(),
+        createOrder:()=>apiPost('/api/orders',{cgv:cgvBox.checked,buyer:{name:buyer.name,email:buyer.mail,tel:buyer.tel},
           items:cart.map(x=>({type:x.type,amount:x.price,soin:x.soin,design:x.design,occasion:x.occasion,to:x.to,msg:x.msg,format:x.format,qty:x.qty}))}).then(r=>r.id),
         onApprove:(d,actions)=>apiPost('/api/orders/'+d.orderID+'/capture').then(r=>{
           if(r.restart){toast(r.error);return actions.restart();}   // carte refusée : PayPal propose un autre moyen
@@ -1088,7 +1297,7 @@ function renderDrawer(){
       .catch(()=>{box.innerHTML='<p style="color:#D2563F;font-size:.85rem">PayPal est indisponible pour le moment. Appelez l\'institut au 03 88 23 00 98.</p>';});
     }else{
       box.innerHTML=`<div style="display:grid;gap:8px"><button class="pp-btn" id="dPay" aria-label="Payer avec PayPal (démonstration)"><span class="pp-logo" style="font-size:1.2rem"><span class="p1">Pay</span><span class="p2">Pal</span></span></button><button class="card-btn" id="dPayCard">Carte de débit ou de crédit</button><small style="text-align:center;color:var(--muted)">Démonstration : les vrais boutons PayPal s'afficheront ici</small></div>`;
-      $('#dPay').onclick=()=>done();$('#dPayCard').onclick=()=>done();
+      $('#dPay').onclick=()=>{if(cgvOk())done();};$('#dPayCard').onclick=()=>{if(cgvOk())done();};
     }
   }
 }
@@ -1097,10 +1306,20 @@ $('#drawerContent').addEventListener('click',e=>{const q=e.target.closest('[data
 /* divers */
 let tt;function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('on');clearTimeout(tt);tt=setTimeout(()=>t.classList.remove('on'),1800);}
 $('#menuBtn').onclick=()=>$('#mobileNav').classList.toggle('open');
-$('#contactForm').onsubmit=e=>{e.preventDefault();toast('Démonstration : message non envoyé');e.target.reset();};
+$('#contactForm').onsubmit=async e=>{e.preventDefault();const f=e.target,b=f.querySelector('button');
+  if(!LIVE){toast('Démonstration : message non envoyé');f.reset();return;}
+  b.disabled=true;
+  try{await apiPost('/api/contact',{name:$('#cName').value,tel:$('#cTel').value,msg:$('#cMsg').value,site:f.querySelector('[name=site]').value});toast('Merci ! Christelle vous rappelle rapidement.');f.reset();}
+  catch(err){toast(err.message);}
+  b.disabled=false;};
+/* plan d'accès : chargé seulement au clic (données envoyées à OpenStreetMap) */
+document.addEventListener('click',e=>{const m=e.target.closest('[data-map]');if(!m)return;
+  m.parentNode.innerHTML='<iframe title="Plan d\'accès" loading="lazy" src="https://www.openstreetmap.org/export/embed.html?bbox=7.4524%2C48.5359%2C7.4624%2C48.5409&amp;layer=mapnik&amp;marker=48.5384%2C7.4574"></iframe>';});
+/* sommaire des CGV */
+document.addEventListener('click',e=>{const a=e.target.closest('[data-goto]');if(!a)return;e.preventDefault();const t=document.getElementById(a.dataset.goto);if(t)t.scrollIntoView({behavior:'smooth'});});
 
 /* navigation */
-const PAGES=['accueil','soins','bons-cadeaux','galerie','contact'];
+const PAGES=['accueil','soins','bons-cadeaux','galerie','contact','mentions-legales','cgv','confidentialite'];
 function route(){
   const h=(location.hash.slice(1)||'accueil').split('/');
   const page=PAGES.includes(h[0])?h[0]:(['boutique','produits'].includes(h[0])?'bons-cadeaux':'accueil');

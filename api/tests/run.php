@@ -44,7 +44,7 @@ $pin = ['X-Staff-Pin' => '246810'];
 $buyer = ['name' => 'Marc Test', 'email' => 'marc@test.fr', 'tel' => '0600000000'];
 
 /* 1. prix recalculé par le moteur */
-$r = $call('POST', '/api/orders', ['buyer' => $buyer, 'items' => [
+$r = $call('POST', '/api/orders', ['cgv' => true, 'buyer' => $buyer, 'items' => [
     ['type' => 'montant', 'amount' => 50, 'design' => 'fete', 'occasion' => 'Joyeux anniversaire', 'to' => 'Julie', 'msg' => 'Joyeux anniversaire ma belle ! 🎉', 'format' => 'e', 'price' => 1],
     ['type' => 'soin', 'soin' => 'Escapade au pays des sens', 'design' => 'classique', 'to' => 'Paul', 'format' => 'papier', 'price' => 1]]]);
 $ok($r['status'] === 200, 'création de commande ' . $r['raw']);
@@ -53,10 +53,10 @@ $ok($orders[$r['data']['id']]['purchase_units'][0]['amount']['value'] === '115.0
 echo "✓ commande créée, total recalculé : 115,00 €\n";
 
 /* 2. refus */
-$ok($call('POST', '/api/orders', ['buyer' => $buyer, 'items' => [['type' => 'montant', 'amount' => 5]]])['status'] === 400, 'montant trop bas');
-$ok($call('POST', '/api/orders', ['buyer' => $buyer, 'items' => [['type' => 'montant', 'amount' => 601]]])['status'] === 400, 'montant trop haut');
-$ok($call('POST', '/api/orders', ['buyer' => $buyer, 'items' => [['type' => 'soin', 'soin' => 'Soin imaginaire']]])['status'] === 400, 'soin inconnu');
-$ok($call('POST', '/api/orders', ['buyer' => ['name' => 'x', 'email' => 'pas-un-email'], 'items' => [['type' => 'montant', 'amount' => 50]]])['status'] === 400, 'e-mail invalide');
+$ok($call('POST', '/api/orders', ['cgv' => true, 'buyer' => $buyer, 'items' => [['type' => 'montant', 'amount' => 5]]])['status'] === 400, 'montant trop bas');
+$ok($call('POST', '/api/orders', ['cgv' => true, 'buyer' => $buyer, 'items' => [['type' => 'montant', 'amount' => 601]]])['status'] === 400, 'montant trop haut');
+$ok($call('POST', '/api/orders', ['cgv' => true, 'buyer' => $buyer, 'items' => [['type' => 'soin', 'soin' => 'Soin imaginaire']]])['status'] === 400, 'soin inconnu');
+$ok($call('POST', '/api/orders', ['cgv' => true, 'buyer' => ['name' => 'x', 'email' => 'pas-un-email'], 'items' => [['type' => 'montant', 'amount' => 50]]])['status'] === 400, 'e-mail invalide');
 echo "✓ montants (20 à 600 €), soins et e-mails invalides refusés\n";
 
 /* 3. encaissement → bons, PDF, e-mails */
@@ -81,7 +81,7 @@ $ok(count($res['vouchers']) === 2 && count(Mail::$outbox) === 2, 'finalisation c
 echo "✓ second encaissement ou traitement simultané : pas de bon en double, pas d'e-mail en double\n";
 
 /* 5. montant incohérent */
-$r = $call('POST', '/api/orders', ['buyer' => $buyer, 'items' => [['type' => 'montant', 'amount' => 80]]]);
+$r = $call('POST', '/api/orders', ['cgv' => true, 'buyer' => $buyer, 'items' => [['type' => 'montant', 'amount' => 80]]]);
 $tamper = '1.00'; $bad = $call('POST', "/api/orders/{$r['data']['id']}/capture"); $tamper = null;
 $ok($bad['status'] === 402, 'montant incohérent refusé');
 echo "✓ montant PayPal incohérent refusé\n";
@@ -110,14 +110,14 @@ $ok($s === 200 && str_contains($b, 'Vérifier un bon') && str_contains($b, 'Expo
 echo "✓ page de vérification servie (avec export Excel)\n";
 
 /* 9. accessoires 600 € */
-$r = $call('POST', '/api/orders', ['buyer' => $buyer, 'items' => [['type' => 'accessoire', 'amount' => 600, 'format' => 'e']]]);
+$r = $call('POST', '/api/orders', ['cgv' => true, 'buyer' => $buyer, 'items' => [['type' => 'accessoire', 'amount' => 600, 'format' => 'e']]]);
 $ok($orders[$r['data']['id']]['purchase_units'][0]['amount']['value'] === '600.00' && str_contains($orders[$r['data']['id']]['purchase_units'][0]['items'][0]['description'], '[Accessoires]'), 'accessoires');
 $acc = $call('POST', "/api/orders/{$r['data']['id']}/capture")['data']['vouchers'][0];
 $ok($call('GET', "/api/vouchers/{$acc['code']}", null, $pin)['data']['typeLabel'] === 'Accessoires', 'type accessoires');
 echo "✓ bon accessoires de 600 € : type indiqué à PayPal et en caisse\n";
 
 /* 10. carte refusée */
-$r = $call('POST', '/api/orders', ['buyer' => $buyer, 'items' => [['type' => 'montant', 'amount' => 40]]]);
+$r = $call('POST', '/api/orders', ['cgv' => true, 'buyer' => $buyer, 'items' => [['type' => 'montant', 'amount' => 40]]]);
 $mode = 'declined'; $dec = $call('POST', "/api/orders/{$r['data']['id']}/capture"); $mode = 'normal';
 $ok($dec['status'] === 422 && $dec['data']['restart'] === true, 'carte refusée');
 echo "✓ carte refusée : le client peut choisir un autre moyen de paiement\n";
@@ -148,10 +148,10 @@ echo "✓ fausse notification PayPal rejetée\n";
 /* 14. promotions */
 $today = (new DateTime('now', new DateTimeZone('Europe/Paris')))->format('Y-m-d');
 file_put_contents($promoFile, json_encode(['promos' => [['id' => 't', 'du' => $today, 'au' => $today, 'soins' => ['Escapade au pays des sens' => 50, 'Soin du dos' => 999]]]]));
-$r = $call('POST', '/api/orders', ['buyer' => $buyer, 'items' => [['type' => 'soin', 'soin' => 'Escapade au pays des sens'], ['type' => 'soin', 'soin' => 'Soin du dos']]]);
+$r = $call('POST', '/api/orders', ['cgv' => true, 'buyer' => $buyer, 'items' => [['type' => 'soin', 'soin' => 'Escapade au pays des sens'], ['type' => 'soin', 'soin' => 'Soin du dos']]]);
 $ok($orders[$r['data']['id']]['purchase_units'][0]['amount']['value'] === '100.00', 'promo appliquée');
 file_put_contents($promoFile, json_encode(['promos' => [['id' => 't', 'du' => '2000-01-01', 'au' => '2000-01-02', 'soins' => ['Escapade au pays des sens' => 50]]]]));
-$r = $call('POST', '/api/orders', ['buyer' => $buyer, 'items' => [['type' => 'soin', 'soin' => 'Escapade au pays des sens']]]);
+$r = $call('POST', '/api/orders', ['cgv' => true, 'buyer' => $buyer, 'items' => [['type' => 'soin', 'soin' => 'Escapade au pays des sens']]]);
 $ok($orders[$r['data']['id']]['purchase_units'][0]['amount']['value'] === '65.00', 'promo expirée');
 echo "✓ prix promotionnel appliqué uniquement pendant la période, jamais plus cher que le prix normal\n";
 
@@ -167,6 +167,19 @@ $ok($r['status'] === 200 && count(Mail::$outbox) === $n + 1 && $last['to'] === '
 file_put_contents("$out/recap.html", $last['html']);
 echo "✓ export Excel et récapitulatif hebdomadaire avec sauvegarde jointe\n";
 
-/* 16. santé */
+/* 16. CGV obligatoires et formulaire de rappel */
+$r = $call('POST', '/api/orders', ['buyer' => $buyer, 'items' => [['type' => 'montant', 'amount' => 50]]]);
+$ok($r['status'] === 400 && str_contains($r['data']['error'], 'conditions générales'), 'CGV obligatoires');
+$ok(str_contains(Mail::$outbox[0]['html'], '#cgv') && str_contains(Mail::$outbox[0]['html'], '14 jours'), 'e-mail avec CGV et rétractation');
+$n = count(Mail::$outbox);
+$ok($call('POST', '/api/contact', ['name' => 'Julie', 'tel' => 'abc'])['status'] === 400, 'téléphone invalide');
+$ok($call('POST', '/api/contact', ['name' => 'Robot', 'tel' => '0600000000', 'site' => 'spam'])['status'] === 200 && count(Mail::$outbox) === $n, 'robot ignoré');
+$ok($call('POST', '/api/contact', ['name' => 'Julie', 'tel' => '06 12 34 56 78', 'msg' => 'Bilan lumière pulsée'], [], '5.5.5.5')['status'] === 200, 'rappel');
+$last = end(Mail::$outbox); $ok($last['to'] === 'contact@aquabeaute-esthetique.fr' && str_contains($last['html'], 'Julie'), 'e-mail de rappel');
+$call('POST', '/api/contact', ['name' => 'J', 'tel' => '0600000000'], [], '5.5.5.5'); $call('POST', '/api/contact', ['name' => 'J', 'tel' => '0600000000'], [], '5.5.5.5');
+$ok($call('POST', '/api/contact', ['name' => 'J', 'tel' => '0600000000'], [], '5.5.5.5')['status'] === 429, 'limite de demandes');
+echo "✓ CGV obligatoires, e-mail avec CGV et rétractation, formulaire de rappel (anti-robots, limite)\n";
+
+/* 17. santé */
 $ok($call('GET', '/api/sante')['data']['ok'] === true, 'santé');
 echo "✓ contrôle de bon fonctionnement\n\nTous les tests du moteur PHP passent.\n";

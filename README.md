@@ -14,6 +14,12 @@ Proposition de refonte du site de l'institut Aqua Beauté, 8 rue du Maréchal Fo
 - **Photos** : menu déroulant, carrousel sur l'accueil et page avec toutes les photos de l'institut.
 - **L'institut** et **Contact** : horaires, plan d'accès, demande de rappel.
 
+## Pages légales
+- **Mentions légales**, **conditions générales de vente des bons cadeaux** et **politique de confidentialité** : pages `#mentions-legales`, `#cgv`, `#confidentialite` (texte source : `outils/pages-legales.html`, à réinsérer avec `python3 outils/inserer-pages-legales.py`).
+- Les passages **surlignés en jaune** sont à confirmer par Christelle avant la mise en ligne (ville du greffe, médiateur de la consommation, règles d'utilisation des bons, créateur du site).
+- La case « J'accepte les CGV » est obligatoire avant le paiement, et vérifiée aussi par le moteur.
+- Aucun cookie publicitaire ni outil d'audience ; polices hébergées sur le site ; plan OpenStreetMap chargé seulement au clic.
+
 ## Bons cadeaux automatiques
 Le dossier `api/` contient le moteur (PHP + MySQL, pour l'hébergement IONOS) qui encaisse les paiements PayPal, crée les bons (code unique + QR code), les envoie par e-mail depuis la boîte de l'institut, permet de les vérifier à l'institut, et sauvegarde le registre (export Excel + récapitulatif hebdomadaire). Mise en service : **[INSTALLATION-IONOS.md](INSTALLATION-IONOS.md)**. Envoi automatique vers IONOS : `.github/workflows/envoi-ionos.yml`.
 
