@@ -45,7 +45,7 @@ final class Mail {
             . '<div style="max-width:560px;margin:0 auto;padding:24px 16px"><div style="background:#fff;border-radius:16px;padding:28px 24px;border:1px solid #E6ECF0">'
             . '<div style="font-family:Georgia,serif;font-style:italic;font-size:28px;color:#B8006E;margin-bottom:16px">Aqua Beauté</div>'
             . '<div style="font-size:15px;line-height:1.6">' . $body . '</div></div>'
-            . '<p style="font-size:12px;color:#8A929C;text-align:center;margin-top:16px">Aqua Beauté · Institut de beauté SPA · 8 rue du Maréchal Foch, 67190 Mutzig · 03 88 23 00 98</p>'
+            . '<p style="font-size:12px;color:#8A929C;text-align:center;margin-top:16px">Aqua Beauté · Institut de beauté SPA · 8 rue du Maréchal Foch, 67190 Mutzig · 03 88 23 00 98<br>SARL AQUA BEAUTE au capital de 7 000 € · SIRET 798 632 329 00016 · TVA FR06 798 632 329</p>'
             . '</div></body></html>';
     }
 }

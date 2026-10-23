@@ -420,15 +420,41 @@ final class App {
         }
         return $s;
     }
+    /* ---------------- durées de conservation (RGPD) ----------------
+       - commande jamais payée : supprimée après 30 jours ;
+       - 3 ans après l'achat : e-mail, téléphone, prénom du bénéficiaire et message effacés
+         (le bon, valable 12 mois, est alors expiré depuis longtemps) ;
+       - 10 ans après l'achat : tout est supprimé (fin de l'obligation comptable).
+       Appelée par la tâche planifiée hebdomadaire (recap). */
+    static function purge(int $now): array {
+        $day = 86400; $abandon = $now - 30 * $day; $anon = $now - 3 * 365 * $day; $end = $now - 10 * 365 * $day;
+        $n = ['commandes_abandonnees' => 0, 'anonymisees' => 0, 'supprimees' => 0];
+        $n['commandes_abandonnees'] = self::run("DELETE FROM ab_orders WHERE status = 'créée' AND created < ?", [$abandon]);
+        self::run('DELETE FROM ab_vouchers WHERE created < ?', [$end]);
+        $n['supprimees'] = self::run('DELETE FROM ab_orders WHERE created < ?', [$end]);
+        self::run("UPDATE ab_vouchers SET buyer_email = '', buyer_tel = '', to_name = '', msg = '' WHERE created < ? AND (buyer_email <> '' OR buyer_tel <> '' OR to_name <> '' OR msg <> '')", [$anon]);
+        $s = self::db()->prepare('SELECT id, data FROM ab_orders WHERE created < ?'); $s->execute([$anon]);
+        foreach ($s->fetchAll() as $o) {
+            $d = json_decode($o['data'], true); if (!is_array($d)) continue;
+            if (($d['buyer']['email'] ?? '') === '' && ($d['buyer']['tel'] ?? '') === '' && !array_filter($d['items'] ?? [], fn($i) => ($i['to'] ?? '') !== '' || ($i['msg'] ?? '') !== '')) continue;
+            $d['buyer']['email'] = ''; $d['buyer']['tel'] = '';
+            foreach ($d['items'] ?? [] as $k => $i) { $d['items'][$k]['to'] = ''; $d['items'][$k]['msg'] = ''; }
+            self::run('UPDATE ab_orders SET data = ? WHERE id = ?', [json_encode($d, JSON_UNESCAPED_UNICODE), $o['id']]);
+            $n['anonymisees']++;
+        }
+        return $n;
+    }
+
     static function recap(array $q): array {
         $key = (string) self::cfg('cron_key', '');
         if ($key === '' || !hash_equals($key, (string) ($q['cle'] ?? ''))) return self::json(['error' => 'Clé incorrecte'], 403);
+        $purge = self::purge(self::now());
         $s = self::stats(); $f = fn($n) => number_format($n, 2, ',', ' ');
         $html = Mail::layout('<h1 style="color:#2B8DBB;font-size:20px;margin:0 0 8px">Récapitulatif des bons cadeaux</h1>'
             . "<p>Ces 7 derniers jours : <b>{$s['semaine_n']}</b> bon(s) vendu(s) pour <b>{$f($s['semaine_eur'])} €</b>, <b>{$s['utilises_semaine']}</b> utilisé(s) à l'institut.</p>"
             . "<p>En tout : <b>{$s['vendus']}</b> bons vendus, dont <b>{$s['valables']}</b> encore à utiliser (<b>{$f($s['restant'])} €</b> de prestations dues).</p>"
             . '<p>Le fichier joint est la sauvegarde complète du registre des bons (s\'ouvre avec Excel). Conservez ces e-mails.</p>');
         Mail::send((string) self::cfg('shop_email'), 'Aqua Beauté', 'Récapitulatif et sauvegarde des bons cadeaux', $html, [['name' => 'bons-cadeaux-' . date('Y-m-d') . '.csv', 'data' => self::csv(), 'type' => 'text/csv']]);
-        return self::json(['ok' => true] + $s);
+        return self::json(['ok' => true] + $s + ['purge' => $purge]);
     }
 }

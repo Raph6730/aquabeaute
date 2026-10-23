@@ -167,6 +167,25 @@ $ok($r['status'] === 200 && count(Mail::$outbox) === $n + 1 && $last['to'] === '
 file_put_contents("$out/recap.html", $last['html']);
 echo "✓ export Excel et récapitulatif hebdomadaire avec sauvegarde jointe\n";
 
+/* 15 bis. durées de conservation */
+$now = time(); $y = 365 * 86400;
+$od = fn($e) => json_encode(['buyer' => ['name' => 'Ancienne', 'email' => $e, 'tel' => '0600000000'], 'items' => [['to' => 'Zoé', 'msg' => 'Bon anniv']]]);
+App::run("INSERT INTO ab_orders (id, ref, total, status, data, created, updated) VALUES ('OLD-ABANDON','AB-X','50.00','créée',?,?,?)", [$od('a@x.fr'), $now - 40 * 86400, $now]);
+App::run("INSERT INTO ab_orders (id, ref, total, status, data, created, updated) VALUES ('OLD-4ANS','AB-Y','50.00','payée',?,?,?)", [$od('b@x.fr'), $now - 4 * $y, $now]);
+App::run("INSERT INTO ab_orders (id, ref, total, status, data, created, updated) VALUES ('OLD-11ANS','AB-Z','50.00','payée',?,?,?)", [$od('c@x.fr'), $now - 11 * $y, $now]);
+App::run("INSERT INTO ab_vouchers (code, order_id, type, price, design, to_name, msg, format, buyer_name, buyer_email, buyer_tel, created, expires, status) VALUES ('OLD4','OLD-4ANS','montant',50,'classique','Zoé','Bon anniv','e','Ancienne','b@x.fr','0600000000',?,?,'utilisé')", [$now - 4 * $y, $now - 3 * $y]);
+App::run("INSERT INTO ab_vouchers (code, order_id, type, price, design, format, buyer_name, buyer_email, created, expires, status) VALUES ('OLD11','OLD-11ANS','montant',50,'classique','e','Ancienne','c@x.fr',?,?,'utilisé')", [$now - 11 * $y, $now - 10 * $y]);
+$p = App::purge($now);
+$ok(App::one("SELECT id FROM ab_orders WHERE id = 'OLD-ABANDON'") === null, 'commande abandonnée supprimée');
+$ok(App::one("SELECT id FROM ab_orders WHERE id = 'OLD-11ANS'") === null && App::one("SELECT code FROM ab_vouchers WHERE code = 'OLD11'") === null, 'données de plus de 10 ans supprimées');
+$v = App::one("SELECT * FROM ab_vouchers WHERE code = 'OLD4'");
+$ok($v['buyer_email'] === '' && $v['buyer_tel'] === '' && $v['to_name'] === '' && $v['msg'] === '' && $v['buyer_name'] === 'Ancienne' && (float) $v['price'] === 50.0, 'bon de 4 ans anonymisé, montant gardé');
+$d = json_decode(App::one("SELECT data FROM ab_orders WHERE id = 'OLD-4ANS'")['data'], true);
+$ok($d['buyer']['email'] === '' && $d['buyer']['tel'] === '' && $d['items'][0]['msg'] === '' && $d['buyer']['name'] === 'Ancienne', 'commande de 4 ans anonymisée');
+$ok(App::one('SELECT COUNT(*) AS n FROM ab_vouchers WHERE created > ? AND buyer_email <> ""', [$now - $y])['n'] > 0, 'bons récents intacts');
+$ok(App::purge($now)['anonymisees'] === 0, 'purge idempotente');
+echo "✓ durées de conservation : abandon 30 j, coordonnées effacées à 3 ans, suppression à 10 ans\n";
+
 /* 16. CGV obligatoires et formulaire de rappel */
 $r = $call('POST', '/api/orders', ['buyer' => $buyer, 'items' => [['type' => 'montant', 'amount' => 50]]]);
 $ok($r['status'] === 400 && str_contains($r['data']['error'], 'conditions générales'), 'CGV obligatoires');

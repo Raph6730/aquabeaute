@@ -30,7 +30,7 @@ jobs:
         run: |
           set -e
           mkdir dist
-          cp -r index.html promos.json images js fonts .htaccess dist/
+          cp -r index.html promos.json images js fonts .htaccess robots.txt sitemap.xml llms.txt dist/
           cp -r api dist/api
           rm -rf dist/api/tests dist/api/.gitignore dist/api/config.php
           find dist/api/data -mindepth 1 ! -name .htaccess -delete
@@ -44,6 +44,8 @@ jobs:
           if live == 'oui':   # mise en ligne définitive : visible par Google, sans bandeau de démonstration
               s = s.replace('<meta name="robots" content="noindex, nofollow">\n', '', 1)
               s = re.sub(r'<div class="demo">.*?</div>\n', '', s, count=1)
+          else:              # avant la mise en ligne : on demande aux robots de ne rien explorer
+              open('dist/robots.txt', 'w').write('User-agent: *\nDisallow: /\n')
           open(p, 'w', encoding='utf-8').write(s)
           PY
 

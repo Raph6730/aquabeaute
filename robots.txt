@@ -1,0 +1,6 @@
+# Site de l'institut Aqua Beauté : ouvert aux moteurs de recherche et aux assistants IA.
+User-agent: *
+Disallow: /api/
+Allow: /
+
+Sitemap: https://www.aquabeaute-esthetique.fr/sitemap.xml
