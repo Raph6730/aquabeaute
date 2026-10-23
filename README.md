@@ -37,3 +37,7 @@ Tests : `php api/tests/run.php` (moteur PHP) et `cd worker && npm test` (version
 
 ## Suivre les mises à jour
 Cliquez sur **Watch** en haut de cette page (puis « All Activity ») pour recevoir un e-mail à chaque nouvelle version du site.
+
+## Essai d'une version épurée (à part)
+
+`essai-epure/` contient une variante plus sobre du site, pour comparer. Elle a les mêmes fonctions et réutilise les images, polices et scripts du dossier principal. **Ce n'est pas la version livrée** : elle n'est pas envoyée sur IONOS. Elle est régénérée depuis `index.html` avec `python3 outils/fabriquer-essai-epure.py`.
